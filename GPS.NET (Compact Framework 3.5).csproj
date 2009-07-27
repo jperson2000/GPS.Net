@@ -1,0 +1,189 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B5CAEF84-E71C-4CD1-AF26-6CBFD793FBFD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GeoFramework.Gps</RootNamespace>
+    <AssemblyName>GeoFramework.Gps.PocketPC</AssemblyName>
+    <ProjectTypeGuids>{4D628B5B-2FBC-4AA6-8C16-197242AEB884};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <PlatformFamilyName>PocketPC</PlatformFamilyName>
+    <PlatformID>4118C335-430C-497f-BE48-11C3316B135E</PlatformID>
+    <OSVersion>5.1</OSVersion>
+    <DeployDirSuffix>SmartDeviceProject2</DeployDirSuffix>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <NativePlatformName>Windows Mobile 5.0 Pocket PC SDK</NativePlatformName>
+    <FormFactorID>
+    </FormFactorID>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>GeoFrameworks.snk</AssemblyOriginatorKeyFile>
+    <SccProjectName>SurroundSCMScci</SccProjectName>
+    <SccLocalPath>.</SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>MSSCCI:Surround SCM</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\CF35\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;PocketPC;Framework20;Framework30;Licensing</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <FileAlignment>512</FileAlignment>
+    <WarningLevel>4</WarningLevel>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\CF35\</OutputPath>
+    <DefineConstants>TRACE;PocketPC;Framework20;Framework30;Licensing</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <FileAlignment>512</FileAlignment>
+    <WarningLevel>4</WarningLevel>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="GeoFramework.Drawing.PocketPC, Version=1.0.0.0, Culture=neutral, PublicKeyToken=3ed3cdf4fdda3400, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\GeoFramework Drawing\1.0.0\bin\Debug\CF35\GeoFramework.Drawing.PocketPC.dll</HintPath>
+    </Reference>
+    <Reference Include="GeoFramework.PocketPC, Version=2.0.0.0, Culture=neutral, PublicKeyToken=3ed3cdf4fdda3400, processorArchitecture=MSIL">
+      <HintPath>..\..\GeoFramework\2.0.0\bin\Debug\CF35\GeoFramework.PocketPC.dll</HintPath>
+    </Reference>
+    <Reference Include="mscorlib, Version=3.5.0.0, Culture=neutral, PublicKeyToken=969db8053d3322ac, processorArchitecture=MSIL" />
+    <Reference Include="System, Version=3.5.0.0, Culture=neutral, PublicKeyToken=969db8053d3322ac, processorArchitecture=MSIL" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml, Version=3.5.0.0, Culture=neutral, PublicKeyToken=969db8053d3322ac, processorArchitecture=MSIL" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BinaryPacket.cs" />
+    <Compile Include="Controls\Altimeter.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\Blip.cs" />
+    <Compile Include="Controls\Clock.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\Compass.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\CompassBase.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\Disk.cs" />
+    <Compile Include="Controls\Hands.cs" />
+    <Compile Include="Controls\Needles.cs" />
+    <Compile Include="Controls\Radar.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\SatelliteSignalBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\SatelliteSignalStrengthColorInterpolation.cs" />
+    <Compile Include="Controls\SatelliteViewer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\SignalBar.cs" />
+    <Compile Include="Controls\Speedometer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\Tick.cs" />
+    <Compile Include="Controls\TickText.cs" />
+    <Compile Include="Devices.cs" />
+    <Compile Include="Devices\BluetoothAddress.cs" />
+    <Compile Include="Devices\BluetoothDevice.cs" />
+    <Compile Include="Devices\BluetoothEndPoint.cs" />
+    <Compile Include="Devices\BluetoothRadio.cs" />
+    <Compile Include="Devices\Device.cs" />
+    <Compile Include="Devices\GpsIntermediateDriver.cs" />
+    <Compile Include="Devices\NativeMethods.cs" />
+    <Compile Include="Devices\NetworkDevice.cs" />
+    <Compile Include="Devices\SerialDevice.cs" />
+    <Compile Include="Devices\SerialStream.cs" />
+    <Compile Include="Diagnostics.cs" />
+    <Compile Include="DilutionOfPrecision.cs" />
+    <Compile Include="Emulators\Emulator.cs" />
+    <Compile Include="Emulators\NmeaEmulator.cs" />
+    <Compile Include="Devices\VirtualDevice.cs" />
+    <Compile Include="Enumerations.cs" />
+    <Compile Include="EventArguments.cs" />
+    <Compile Include="Filters\Filter.cs" />
+    <Compile Include="Filters\KalmanFilter.cs" />
+    <Compile Include="Filters\PositionAverageFilter.cs" />
+    <Compile Include="Interpreter.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Licensing\LicenseRoot.cs" />
+    <Compile Include="Nmea\GpggaSentence.cs" />
+    <Compile Include="Nmea\GpggkSentence.cs" />
+    <Compile Include="Nmea\GpgllSentence.cs" />
+    <Compile Include="Nmea\GpgsaSentence.cs" />
+    <Compile Include="Nmea\GpgsvSentence.cs" />
+    <Compile Include="Nmea\GprmcSentence.cs" />
+    <Compile Include="Nmea\GpvtgSentence.cs" />
+    <Compile Include="Nmea\Interfaces.cs" />
+    <Compile Include="Nmea\NmeaInterpreter.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Nmea\NmeaSentence.cs" />
+    <Compile Include="Nmea\NmeaReader.cs" />
+    <Compile Include="Nmea\PgrmfSentence.cs" />
+    <Compile Include="Packet.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Satellite.cs" />
+    <Compile Include="SignalToNoiseRatio.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Design-Time Attributes\DilutionOfPrecision.xmta" />
+    <None Include="Design-Time Attributes\Interpreter.xmta" />
+    <None Include="Design-Time Attributes\NmeaInterpreter.xmta" />
+    <None Include="Design-Time Attributes\SignalToNoiseRatio.xmta" />
+    <None Include="GeoFrameworks.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Interpreter.resx">
+      <DependentUpon>Interpreter.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="GeoFramework.Gps.Interpreter.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="GeoFramework.Gps.Emulators.Emulator.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="GeoFramework.Gps.Controls.Altimeter.bmp" />
+    <EmbeddedResource Include="GeoFramework.Gps.Controls.Clock.bmp" />
+    <EmbeddedResource Include="GeoFramework.Gps.Controls.Compass.bmp" />
+    <EmbeddedResource Include="GeoFramework.Gps.Controls.SatelliteSignalBar.bmp" />
+    <EmbeddedResource Include="GeoFramework.Gps.Controls.SatelliteViewer.bmp" />
+    <EmbeddedResource Include="GeoFramework.Gps.Controls.Speedometer.bmp" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}">
+        <HostingProcess disable="1" />
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

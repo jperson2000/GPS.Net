@@ -1,0 +1,172 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{372725DA-DB6A-44B4-BA24-29EE53E90BC8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GeoFramework.Gps</RootNamespace>
+    <AssemblyName>GeoFramework.Gps.PocketPC</AssemblyName>
+    <ProjectTypeGuids>{4D628B5B-2FBC-4AA6-8C16-197242AEB884};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <PlatformFamilyName>PocketPC</PlatformFamilyName>
+    <PlatformID>3C41C503-53EF-4c2a-8DD4-A8217CAD115E</PlatformID>
+    <OSVersion>4.20</OSVersion>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FormFactorID>
+    </FormFactorID>
+    <SccProjectName>SurroundSCMScci</SccProjectName>
+    <SccLocalPath>.</SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>MSSCCI:Surround SCM</SccProvider>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>GeoFrameworks.snk</AssemblyOriginatorKeyFile>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\CF20\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;PocketPC;Framework20;Licensing</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <FileAlignment>512</FileAlignment>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DocumentationFile>
+    </DocumentationFile>
+    <GenerateSerializationAssemblies>off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\CF20\</OutputPath>
+    <DefineConstants>TRACE;PocketPC;Framework20;Licensing;GpsDotNet</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <FileAlignment>512</FileAlignment>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <DocumentationFile>
+    </DocumentationFile>
+    <GenerateSerializationAssemblies>off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="BinaryPacket.cs" />
+    <Compile Include="Controls\Altimeter.cs">
+    </Compile>
+    <Compile Include="Controls\Clock.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\ColorInterpolator.cs" />
+    <Compile Include="Controls\Compass.cs" />
+    <Compile Include="Controls\DoubleBufferedControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\PolarControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\PolarCoordinate.cs" />
+    <Compile Include="Controls\PolarGraphics.cs" />
+    <Compile Include="Controls\SatelliteSignalBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\SatelliteSignalStrengthColorInterpolation.cs" />
+    <Compile Include="Controls\SatelliteViewer.cs" />
+    <Compile Include="Controls\Speedometer.cs">
+    </Compile>
+    <Compile Include="Devices.cs" />
+    <Compile Include="Devices\BluetoothAddress.cs" />
+    <Compile Include="Devices\BluetoothDevice.cs" />
+    <Compile Include="Devices\BluetoothEndPoint.cs" />
+    <Compile Include="Devices\BluetoothRadio.cs" />
+    <Compile Include="Devices\Device.cs" />
+    <Compile Include="Devices\GpsIntermediateDriver.cs" />
+    <Compile Include="Devices\NativeMethods.cs" />
+    <Compile Include="Devices\NetworkDevice.cs" />
+    <Compile Include="Devices\SerialDevice.cs" />
+    <Compile Include="Devices\SerialStream.cs" />
+    <Compile Include="Devices\VirtualDevice.cs" />
+    <Compile Include="Diagnostics.cs" />
+    <Compile Include="DilutionOfPrecision.cs" />
+    <Compile Include="Emulators\Emulator.cs" />
+    <Compile Include="Emulators\NmeaEmulator.cs" />
+    <Compile Include="Enumerations.cs" />
+    <Compile Include="EventArguments.cs" />
+    <Compile Include="Filters\Filter.cs" />
+    <Compile Include="Filters\KalmanFilter.cs" />
+    <Compile Include="Filters\PositionAverageFilter.cs" />
+    <Compile Include="Interpreter.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Licensing\LicenseRoot.cs" />
+    <Compile Include="Nmea\GpggaSentence.cs" />
+    <Compile Include="Nmea\GpggkSentence.cs" />
+    <Compile Include="Nmea\GpgllSentence.cs" />
+    <Compile Include="Nmea\GpgsaSentence.cs" />
+    <Compile Include="Nmea\GpgsvSentence.cs" />
+    <Compile Include="Nmea\GprmcSentence.cs" />
+    <Compile Include="Nmea\Interfaces.cs" />
+    <Compile Include="Nmea\NmeaInterpreter.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Nmea\NmeaReader.cs" />
+    <Compile Include="Nmea\NmeaSentence.cs" />
+    <Compile Include="Nmea\PgrmfSentence.cs" />
+    <Compile Include="Packet.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Satellite.cs" />
+    <Compile Include="SignalToNoiseRatio.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GeoFrameworks.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="GeoFramework.Drawing.PocketPC, Version=1.0.0.0, Culture=neutral, PublicKeyToken=3ed3cdf4fdda3400, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\GeoFramework Drawing\1.0.0\bin\Debug\CF20\GeoFramework.Drawing.PocketPC.dll</HintPath>
+    </Reference>
+    <Reference Include="GeoFramework.PocketPC, Version=2.0.0.0, Culture=neutral, PublicKeyToken=3ed3cdf4fdda3400, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\GeoFramework\2.0.0\bin\Debug\CF20\GeoFramework.PocketPC.dll</HintPath>
+    </Reference>
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="GeoFramework.Gps.Interpreter.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\Altimeter.bmp" />
+    <EmbeddedResource Include="Controls\Clock.bmp" />
+    <EmbeddedResource Include="Controls\Compass.bmp" />
+    <EmbeddedResource Include="Controls\SatelliteSignalBar.bmp" />
+    <EmbeddedResource Include="Controls\Speedometer.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Emulators\Emulator.bmp" />
+  </ItemGroup>
+  <Import Condition="'$(TargetFrameworkVersion)' == 'v1.0'" Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.v1.targets" />
+  <Import Condition="'$(TargetFrameworkVersion)' == 'v2.0'" Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}">
+        <HostingProcess disable="1" />
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+</Project>

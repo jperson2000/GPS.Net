@@ -32,12 +32,6 @@ namespace GeoFramework.Gps
         private bool _IsFixed;
         private DateTime _LastSignalReceived;
 
-        #region Licensing
-
-        static Satellite() { LicenseRoot.Activate(); }
-
-        #endregion
-
         #region Constructors
 
         /// <summary>

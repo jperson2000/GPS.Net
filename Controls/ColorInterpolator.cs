@@ -1,8 +1,5 @@
 using System;
 using System.Drawing;
-#if Licensing
-using GeoFramework.Licensing;
-#endif
 #if !PocketPC || DesignTime
 using System.ComponentModel;
 #endif
@@ -63,12 +60,8 @@ namespace GeoFramework
     [ImmutableObject(false)]
     [Serializable()]
 #endif
-	//[CLSCompliant(false)]
 	public sealed class ColorInterpolator
     {
-        // Check licensing
-        static ColorInterpolator() { GeoFramework.Gps.LicenseRoot.Activate(); }
-
 #if !PocketPC
 		private Interpolator A = new Interpolator();
 #endif

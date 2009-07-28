@@ -7,10 +7,10 @@ using System.Windows.Forms;
 #if !PocketPC || DesignTime || Framework20
 using System.ComponentModel;
 #endif
-#if Licensing
+using GeoFramework.Drawing;
+#if PocketPC
 using GeoFramework.Licensing;
 #endif
-using GeoFramework.Drawing;
 
 namespace GeoFramework.Gps.Controls
 {

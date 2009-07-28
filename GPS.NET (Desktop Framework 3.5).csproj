@@ -14,11 +14,14 @@
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>CodePlex.snk</AssemblyOriginatorKeyFile>
-    <SccProjectName>SurroundSCMScci</SccProjectName>
-    <SccLocalPath>.</SccLocalPath>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
     <SccAuxPath>
     </SccAuxPath>
-    <SccProvider>MSSCCI:Surround SCM</SccProvider>
+    <SccProvider>
+    </SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -91,6 +94,7 @@
     <Compile Include="Filters\Filter.cs" />
     <Compile Include="Filters\KalmanFilter.cs" />
     <Compile Include="Filters\PositionAverageFilter.cs" />
+    <Compile Include="Filters\SquareMatrix3D.cs" />
     <Compile Include="Interpreter.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -99,7 +103,6 @@
     <Compile Include="Devices.cs" />
     <Compile Include="Devices\SerialDevice.cs">
     </Compile>
-    <Compile Include="Licensing\LicenseRoot.cs" />
     <Compile Include="Nmea\GpggaSentence.cs" />
     <Compile Include="Nmea\GpggkSentence.cs" />
     <Compile Include="Nmea\GpgllSentence.cs" />
@@ -121,7 +124,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="CodePlex.snk" />
-    <None Include="GeoFrameworks.snk" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Controls\Altimeter.bmp" />
@@ -132,7 +134,7 @@
     <Content Include="Controls\Speedometer.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\GeoFramework\2.0.0\GeoFramework %28Desktop Framework 3.5%29.csproj">
+    <ProjectReference Include="..\..\GeoFramework\2.0.0 Open Source\GeoFramework %28Desktop Framework 3.5%29.csproj">
       <Project>{26E18588-B04D-4987-BF36-8206A7E36FF9}</Project>
       <Name>GeoFramework %28Desktop Framework 3.5%29</Name>
     </ProjectReference>

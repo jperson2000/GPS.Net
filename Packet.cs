@@ -10,12 +10,6 @@ namespace GeoFramework.Gps
     /// </summary>
     public abstract class Packet : IFormattable
     {
-        #region Licensing
-
-        static Packet() { LicenseRoot.Activate(); }
-
-        #endregion
-
         #region Abstract Properties
 
         /// <summary>

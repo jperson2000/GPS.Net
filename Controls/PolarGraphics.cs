@@ -3,9 +3,6 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
 using GeoFramework;
-#if Licensing
-using GeoFramework.Licensing;
-#endif
 #if !PocketPC || DesignTime
 using System.ComponentModel;
 #endif
@@ -25,9 +22,6 @@ namespace GeoFramework.Drawing
 #endif
 	public sealed class PolarGraphics 
 	{
-        // Check licensing
-        static PolarGraphics() { GeoFramework.Gps.LicenseRoot.Activate(); }
-
         private Graphics g;
 		private Angle pRotation;
 		private Azimuth pOrigin;
@@ -132,7 +126,8 @@ namespace GeoFramework.Drawing
 		/// <summary>Converts a polar coordinate to a pixel coordinate.</summary>
 		public Point ToPoint(PolarCoordinate coordinate)
 		{
-			return (Point)ToPointD(coordinate);
+            PointD point = ToPointD(coordinate);
+			return new Point((int)point.X, (int)point.Y);
 		}
 
 		/// <summary>Converts a polar coordinate to a highly-precise pixel coordinate.</summary>
@@ -144,14 +139,16 @@ namespace GeoFramework.Drawing
 
 		public PolarCoordinate ToPolarCoordinate(Point point)
 		{
-			return ToPolarCoordinate((PointD)point);
+            PointD pointD = new PointD((double)point.X, (double)point.Y);
+            return ToPolarCoordinate(pointD);
 		}
 
 #if !PocketPC
 		public PolarCoordinate ToPolarCoordinate(PointF point)
 		{
-			return ToPolarCoordinate((PointD)point);
-		}
+            PointD pointD = new PointD((double)point.X, (double)point.Y);
+            return ToPolarCoordinate(pointD);
+        }
 #endif
 
 		public PolarCoordinate ToPolarCoordinate(PointD point)
@@ -184,11 +181,17 @@ namespace GeoFramework.Drawing
 		/// <summary>Converts a polar coordinate to a precise pixel coordinate.</summary>
 		public PointF ToPointF(PolarCoordinate coordinate)
 		{
-			return (PointF)ToPointD(coordinate);
+            return ToPointF(coordinate);
 		}
+        
+        public PointF ToPointF(PointD pointD)
+        {
+            return new PointF((float)pointD.X, (float)pointD.Y);
+        }
 #endif
 
-		/// <summary>
+
+        /// <summary>
 		/// Returns the compass direction which matches zero degrees.
 		/// </summary>
 		public Azimuth Origin
@@ -245,7 +248,7 @@ namespace GeoFramework.Drawing
             g.DrawLine(pen, (int)start.X, (int)start.Y, (int)end.X, (int)end.Y);
 #else
                 // Convert to pixel coordinates
-                g.DrawLine(pen, (PointF)ToPointD(pt1), (PointF)ToPointD(pt2));
+                g.DrawLine(pen, ToPointF(ToPointD(pt1)), ToPointF(ToPointD(pt2)));
 #endif
 		}
 
@@ -262,7 +265,7 @@ namespace GeoFramework.Drawing
 #if PocketPC
             g.DrawString(s, font, brush, new RectangleF((float)Location.X, (float)Location.Y, 240.0f, 320.0f));
 #else
-			g.DrawString(s, font, brush, (PointF)Location);
+			g.DrawString(s, font, brush, ToPointF(Location));
 #endif
 		}
 
@@ -272,7 +275,7 @@ namespace GeoFramework.Drawing
             PointD StartPoint = ToPointD(point);
             SizeF StringSize = g.MeasureString(s, font);
             PointD NewStart = new PointD(StartPoint.X - StringSize.Width * 0.5, StartPoint.Y - StringSize.Height * 0.5);
-			g.DrawString(s, font, brush, (PointF)NewStart, format);
+			g.DrawString(s, font, brush, ToPointF(NewStart), format);
         }
 #endif
         public void DrawCenteredString(string s, Font font, SolidBrush brush, PolarCoordinate point)
@@ -283,7 +286,7 @@ namespace GeoFramework.Drawing
 #if PocketPC
             g.DrawString(s, font, brush, (float)NewStart.X, (float)NewStart.Y); //, StringSize.Width, StringSize.Height));
 #else
-			g.DrawString(s, font, brush, (PointF)NewStart);
+			g.DrawString(s, font, brush, ToPointF(NewStart));
 #endif
 		}
 
@@ -438,10 +441,9 @@ namespace GeoFramework.Drawing
         public Point[] ToPointArray(PolarCoordinate[] points)
 		{
 			// Convert to an array of PointF objects
-			//int Count = points.Length;
 			Point[] Result = new Point[points.Length];
 			for(int index = 0; index < points.Length; index++)
-				Result[index] = (Point)ToPointD(points[index]);
+				Result[index] = ToPoint(points[index]);
 			return Result;
 		}
 
@@ -456,7 +458,7 @@ namespace GeoFramework.Drawing
 			//int Count = points.Length;
 			PointF[] Result = new PointF[points.Length];
 			for(int index = 0; index < points.Length; index++)
-				Result[index] = (PointF)ToPointD(points[index]);
+				Result[index] = ToPointF(ToPointD(points[index]));
 			return Result;
 		}
 #endif

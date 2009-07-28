@@ -23,12 +23,6 @@ namespace GeoFramework.Gps.IO
         private NativeMethods.COMMSTAT _CommStat = new NativeMethods.COMMSTAT();
         private FileAccess _Access;
 
-        #region Licensing
-
-        static SerialStream() { GeoFramework.Gps.LicenseRoot.Activate(); }
-
-        #endregion
-
         #region Constructors
 
         /// <summary>

@@ -9,10 +9,10 @@ using GeoFramework.Gps;
 #if !PocketPC || DesignTime || Framework20
 using System.ComponentModel;
 #endif
-#if Licensing
+using GeoFramework.Drawing;
+#if PocketPC
 using GeoFramework.Licensing;
 #endif
-using GeoFramework.Drawing;
 
 
 namespace GeoFramework.Gps.Controls
@@ -1152,13 +1152,13 @@ namespace GeoFramework.Gps.Controls
                     PointF[] SatelliteIcon = new PointF[Icon.Length];
                     for (int iconIndex = 0; iconIndex < Icon.Length; iconIndex++)
                     {
-                        SatelliteIcon[iconIndex] = (PointF)Icon[iconIndex];
+                        SatelliteIcon[iconIndex] = new PointF((float)Icon[iconIndex].X, (float)Icon[iconIndex].Y);
                     }
 
                     using (Matrix y = new Matrix())
                     {
                         y.RotateAt(Convert.ToSingle(satellite.Azimuth.DecimalDegrees - f.Rotation.DecimalDegrees + Origin.DecimalDegrees),
-                            (PointF)IconCenter, MatrixOrder.Append);
+                            new PointF((float)IconCenter.X, (float)IconCenter.Y), MatrixOrder.Append);
                         y.TransformPoints(SatelliteIcon);
                     }
 
@@ -1234,9 +1234,11 @@ namespace GeoFramework.Gps.Controls
 					Point[] SatelliteIcon = new Point[Icon.Length];
 					for (int index2 = 0; index2 < Icon.Length; index2++)
 					{
-						SatelliteIcon[index2] = (Point)Icon[index2]
+						 PointD point = Icon[index2]
 							.RotateAt(satellite.Azimuth.DecimalDegrees - Rotation.DecimalDegrees + Origin.DecimalDegrees, IconCenter)
 							.Add(CenterPoint.X - IconCenter.X, CenterPoint.Y - IconCenter.Y);
+
+                         SatelliteIcon[index2] = new Point((int)point.X, (int)point.Y);
 					}
 
 					Color SatelliteColor = GetFillColor(satellite.SignalToNoiseRatio);
@@ -1254,11 +1256,12 @@ namespace GeoFramework.Gps.Controls
                     PointF[] SatelliteIcon = new PointF[Icon.Length];
                     for (int iconIndex = 0; iconIndex < Icon.Length; index++)
                     {
-                        SatelliteIcon[iconIndex] = (PointF)Icon[iconIndex];
+                        SatelliteIcon[iconIndex] = new PointF((float)Icon[iconIndex].X, (float)Icon[iconIndex].Y);
                     }
 
                     Matrix y = new Matrix();
-                    y.RotateAt(Convert.ToSingle(satellite.Azimuth.DecimalDegrees - f.Rotation.DecimalDegrees + Origin.DecimalDegrees), (PointF)IconCenter, MatrixOrder.Append);
+                    y.RotateAt(Convert.ToSingle(satellite.Azimuth.DecimalDegrees - f.Rotation.DecimalDegrees + Origin.DecimalDegrees),
+                        new PointF((float)IconCenter.X, (float)IconCenter.Y), MatrixOrder.Append);
                     y.TransformPoints(SatelliteIcon);
                     y.Dispose();
 

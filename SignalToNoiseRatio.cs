@@ -23,12 +23,6 @@ namespace GeoFramework.Gps
     {
         private readonly int _Value;
 
-        #region Licensing
-
-        static SignalToNoiseRatio() { LicenseRoot.Activate(); }
-
-        #endregion
-
         #region Fields
 
         /// <summary>Represents a value signifying a signal which is completely obscured.</summary>

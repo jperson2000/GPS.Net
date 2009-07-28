@@ -10,10 +10,9 @@ using System.ComponentModel;
 #if !PocketPC
 using System.Drawing.Text;
 #endif
-#if Licensing
+#if PocketPC
 using GeoFramework.Licensing;
 #endif
-using GeoFramework.Drawing;
 
 namespace GeoFramework.Drawing
 {
@@ -117,12 +116,6 @@ namespace GeoFramework.Drawing
 #endif
     public abstract class DoubleBufferedControl : Control
     {
-        // Verify licensing
-        static DoubleBufferedControl()
-        {
-            GeoFramework.Gps.LicenseRoot.Activate();
-        }
-
         private Bitmap _OffScreenBitmap = new Bitmap(1, 1);
         internal Graphics _OffScreenGraphics;
         private Size _OffScreenBitmapSize = new Size(1, 1);

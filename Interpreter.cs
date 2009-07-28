@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Threading;
-using GeoFramework.Geodesy;
 using GeoFramework.Gps.Filters;
 using GeoFramework.Gps.IO;
 #if !PocketPC
@@ -57,9 +56,6 @@ namespace GeoFramework.Gps
         private DilutionOfPrecision _VerticalDOP;
         private DilutionOfPrecision _MeanDOP;
         private List<Satellite> _Satellites = new List<Satellite>(16);
-
-        // Coordinate conversion
-        private CoordinateSystemTransformation _coordinateSystem;
 
         // Filtering
         private PrecisionFilter _Filter = KalmanFilter.Default;
@@ -123,12 +119,6 @@ namespace GeoFramework.Gps
         /// Represents a synchronization object which is locked during state changes to recording.
         /// </summary>
         protected readonly object RecordingSyncRoot = new object();
-
-        #region Licensing
-
-        static Interpreter() { LicenseRoot.Activate(); }
-
-        #endregion
 
         #region Events
 
@@ -667,22 +657,6 @@ namespace GeoFramework.Gps
         public Azimuth Bearing
         {
             get { return _Bearing; }
-        }
-
-        /// <summary>
-        /// Controls the transform used to convert WGS84 GPS coordinates to a local system.
-        /// </summary>
-#if !PocketPC
-        [Category("Behavior")]
-        [Description("Controls the transform used to convert WGS84 GPS coordinates to a local system.")]
-        [Browsable(true)]
-        [EditorBrowsable(EditorBrowsableState.Always)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-#endif
-        public CoordinateSystemTransformation CoordinateSystem
-        {
-            get { return _coordinateSystem; }
-            set { _coordinateSystem = value; }
         }
 
         /// <summary>
@@ -1488,10 +1462,6 @@ namespace GeoFramework.Gps
             if (value.IsInvalid)
                 return;
 
-            // Do we need coordinate conversion?
-            if (this.CoordinateSystem != null)
-                value = this.CoordinateSystem.FromWGS84(value);
-
             // Change the devices class
             Devices.Position = _Position;
 
@@ -1829,7 +1799,6 @@ namespace GeoFramework.Gps
                     #region Dispose of managed resources
 
                     _RecordingStream = null;
-                    _coordinateSystem = null;
                     _ParsingThread = null;
                     _PausedWaitHandle = null;
                     _Device = null;

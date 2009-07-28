@@ -10,8 +10,10 @@ using System.Drawing.Drawing2D;
 using System.ComponentModel;
 #endif
 using GeoFramework;
-using GeoFramework.Licensing;
 using GeoFramework.Drawing;
+#if PocketPC
+using GeoFramework.Licensing;
+#endif
 
 namespace GeoFramework.Gps.Controls
 {

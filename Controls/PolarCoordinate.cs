@@ -10,7 +10,6 @@ using System.Security.Permissions;
 using System.Runtime.Serialization;
 using System.ComponentModel;
 #endif
-using GeoFramework.Licensing;
 using System.Reflection;
 
 namespace GeoFramework
@@ -134,21 +133,6 @@ namespace GeoFramework
             Radian Adj = ToOrientation(Azimuth.East, PolarCoordinateOrientation.Counterclockwise).Theta.ToRadians();
             return new PointD(R * Adj.Cosine().Value, -R * Adj.Sine().Value);
         }
-
-        /// <summary>Converts the current instance to a Cartesian coordinate.</summary>
-        ////[CLSCompliant(false)]
-        public Point ToCartesianPoint()
-        {
-            return (Point)ToPointD();
-        }
-
-#if !PocketPC
-        /// <summary>Converts the current instance to a precise Cartesian coordinate.</summary>
-        public PointF ToCartesianPointF()
-        {
-            return (PointF)ToPointD();
-        }
-#endif
 
         /// <summary>Converts the current instance to a highly-precise Cartesian coordinate.</summary>
         public PointD ToCartesianPointD()

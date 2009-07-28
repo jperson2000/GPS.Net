@@ -19,12 +19,15 @@
     <FormFactorID>
     </FormFactorID>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>GeoFrameworks.snk</AssemblyOriginatorKeyFile>
-    <SccProjectName>SurroundSCMScci</SccProjectName>
-    <SccLocalPath>.</SccLocalPath>
+    <AssemblyOriginatorKeyFile>CodePlex.snk</AssemblyOriginatorKeyFile>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
     <SccAuxPath>
     </SccAuxPath>
-    <SccProvider>MSSCCI:Surround SCM</SccProvider>
+    <SccProvider>
+    </SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -52,13 +55,6 @@
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GeoFramework.Drawing.PocketPC, Version=1.0.0.0, Culture=neutral, PublicKeyToken=3ed3cdf4fdda3400, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\GeoFramework Drawing\1.0.0\bin\Debug\CF35\GeoFramework.Drawing.PocketPC.dll</HintPath>
-    </Reference>
-    <Reference Include="GeoFramework.PocketPC, Version=2.0.0.0, Culture=neutral, PublicKeyToken=3ed3cdf4fdda3400, processorArchitecture=MSIL">
-      <HintPath>..\..\GeoFramework\2.0.0\bin\Debug\CF35\GeoFramework.PocketPC.dll</HintPath>
-    </Reference>
     <Reference Include="mscorlib, Version=3.5.0.0, Culture=neutral, PublicKeyToken=969db8053d3322ac, processorArchitecture=MSIL" />
     <Reference Include="System, Version=3.5.0.0, Culture=neutral, PublicKeyToken=969db8053d3322ac, processorArchitecture=MSIL" />
     <Reference Include="System.Data" />
@@ -71,35 +67,31 @@
     <Compile Include="Controls\Altimeter.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\Blip.cs" />
     <Compile Include="Controls\Clock.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\ColorInterpolator.cs" />
     <Compile Include="Controls\Compass.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\CompassBase.cs">
+    <Compile Include="Controls\DoubleBufferedControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\Disk.cs" />
-    <Compile Include="Controls\Hands.cs" />
-    <Compile Include="Controls\Needles.cs" />
-    <Compile Include="Controls\Radar.cs">
+    <Compile Include="Controls\GraphicsSettings.cs" />
+    <Compile Include="Controls\PolarControl.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\PolarCoordinate.cs" />
+    <Compile Include="Controls\PolarGraphics.cs" />
     <Compile Include="Controls\SatelliteSignalBar.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\SatelliteSignalStrengthColorInterpolation.cs" />
     <Compile Include="Controls\SatelliteViewer.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\SignalBar.cs" />
     <Compile Include="Controls\Speedometer.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\Tick.cs" />
-    <Compile Include="Controls\TickText.cs" />
     <Compile Include="Devices.cs" />
     <Compile Include="Devices\BluetoothAddress.cs" />
     <Compile Include="Devices\BluetoothDevice.cs" />
@@ -121,10 +113,10 @@
     <Compile Include="Filters\Filter.cs" />
     <Compile Include="Filters\KalmanFilter.cs" />
     <Compile Include="Filters\PositionAverageFilter.cs" />
+    <Compile Include="Filters\SquareMatrix3D.cs" />
     <Compile Include="Interpreter.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Licensing\LicenseRoot.cs" />
     <Compile Include="Nmea\GpggaSentence.cs" />
     <Compile Include="Nmea\GpggkSentence.cs" />
     <Compile Include="Nmea\GpgllSentence.cs" />
@@ -145,6 +137,7 @@
     <Compile Include="SignalToNoiseRatio.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="CodePlex.snk" />
     <None Include="Design-Time Attributes\DilutionOfPrecision.xmta" />
     <None Include="Design-Time Attributes\Interpreter.xmta" />
     <None Include="Design-Time Attributes\NmeaInterpreter.xmta" />
@@ -158,18 +151,16 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="GeoFramework.Gps.Interpreter.bmp" />
+    <Content Include="Controls\Clock.bmp" />
+    <Content Include="Controls\Compass.bmp" />
+    <Content Include="Controls\SatelliteSignalBar.bmp" />
+    <Content Include="Controls\Speedometer.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="GeoFramework.Gps.Emulators.Emulator.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="GeoFramework.Gps.Controls.Altimeter.bmp" />
-    <EmbeddedResource Include="GeoFramework.Gps.Controls.Clock.bmp" />
-    <EmbeddedResource Include="GeoFramework.Gps.Controls.Compass.bmp" />
-    <EmbeddedResource Include="GeoFramework.Gps.Controls.SatelliteSignalBar.bmp" />
-    <EmbeddedResource Include="GeoFramework.Gps.Controls.SatelliteViewer.bmp" />
-    <EmbeddedResource Include="GeoFramework.Gps.Controls.Speedometer.bmp" />
+    <ProjectReference Include="..\..\GeoFramework\2.0.0 Open Source\GeoFramework %28Compact Framework 3.5%29.csproj">
+      <Project>{75C52FE9-4E96-4994-A34E-EC9DF0367C43}</Project>
+      <Name>GeoFramework %28Compact Framework 3.5%29</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
   <ProjectExtensions>

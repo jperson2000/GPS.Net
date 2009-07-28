@@ -20,12 +20,6 @@ namespace GeoFramework.Gps.Nmea
         private Stream _Stream;
         private StreamReader _Reader;
 
-        #region Licensing
-
-        static NmeaReader() { LicenseRoot.Activate(); }
-
-        #endregion
-
         #region Constants
 
         /* The "ideal buffer size" is very important.  It controls the size of buffers and amounts of bytes

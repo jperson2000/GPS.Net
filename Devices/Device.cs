@@ -58,12 +58,6 @@ namespace GeoFramework.Gps.IO
         protected Device()
         { }
 
-        static Device()
-        {
-            // Validate licensing.
-            GeoFramework.Gps.LicenseRoot.Activate();
-        }
-
         ~Device()
         {
             Dispose(false);

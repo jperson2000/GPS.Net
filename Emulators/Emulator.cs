@@ -131,12 +131,6 @@ namespace GeoFramework.Gps.Emulators
 
         #region Constructors
 
-        static Emulator()
-        {
-            // Licensing
-            GeoFramework.Gps.LicenseRoot.Activate();
-        }
-
         protected Emulator()
             : this(@"GPS.NET NMEA-0183 Emulator (http://www.geoframeworks.com)")
         { }

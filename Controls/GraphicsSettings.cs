@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿#if !PocketPC
+
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
@@ -185,3 +187,5 @@ namespace GeoFramework.Drawing
 
     }
 }
+
+#endif

@@ -112,10 +112,7 @@ namespace GeoFramework.Gps.IO
         #region Constructors
 
         static Devices()
-        {
-            // Licensing
-            GeoFramework.Gps.LicenseRoot.Activate();
-            
+        {           
             // Get notified when a BT device is discovered
             BluetoothDevice.DeviceDiscovered += new EventHandler<DeviceEventArgs>(BluetoothDevice_DeviceDiscovered);
 

@@ -16,13 +16,16 @@
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FormFactorID>
     </FormFactorID>
-    <SccProjectName>SurroundSCMScci</SccProjectName>
-    <SccLocalPath>.</SccLocalPath>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
     <SccAuxPath>
     </SccAuxPath>
-    <SccProvider>MSSCCI:Surround SCM</SccProvider>
+    <SccProvider>
+    </SccProvider>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>GeoFrameworks.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>CodePlex.snk</AssemblyOriginatorKeyFile>
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -59,12 +62,15 @@
   <ItemGroup>
     <Compile Include="BinaryPacket.cs" />
     <Compile Include="Controls\Altimeter.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\Clock.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\ColorInterpolator.cs" />
-    <Compile Include="Controls\Compass.cs" />
+    <Compile Include="Controls\Compass.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\DoubleBufferedControl.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -76,9 +82,11 @@
     <Compile Include="Controls\SatelliteSignalBar.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\SatelliteSignalStrengthColorInterpolation.cs" />
-    <Compile Include="Controls\SatelliteViewer.cs" />
+    <Compile Include="Controls\SatelliteViewer.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\Speedometer.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Devices.cs" />
     <Compile Include="Devices\BluetoothAddress.cs" />
@@ -101,10 +109,10 @@
     <Compile Include="Filters\Filter.cs" />
     <Compile Include="Filters\KalmanFilter.cs" />
     <Compile Include="Filters\PositionAverageFilter.cs" />
+    <Compile Include="Filters\SquareMatrix3D.cs" />
     <Compile Include="Interpreter.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Licensing\LicenseRoot.cs" />
     <Compile Include="Nmea\GpggaSentence.cs" />
     <Compile Include="Nmea\GpggkSentence.cs" />
     <Compile Include="Nmea\GpgllSentence.cs" />
@@ -124,25 +132,14 @@
     <Compile Include="SignalToNoiseRatio.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="GeoFrameworks.snk" />
+    <None Include="CodePlex.snk" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="GeoFramework.Drawing.PocketPC, Version=1.0.0.0, Culture=neutral, PublicKeyToken=3ed3cdf4fdda3400, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\GeoFramework Drawing\1.0.0\bin\Debug\CF20\GeoFramework.Drawing.PocketPC.dll</HintPath>
-    </Reference>
-    <Reference Include="GeoFramework.PocketPC, Version=2.0.0.0, Culture=neutral, PublicKeyToken=3ed3cdf4fdda3400, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\GeoFramework\2.0.0\bin\Debug\CF20\GeoFramework.PocketPC.dll</HintPath>
-    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="GeoFramework.Gps.Interpreter.bmp" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Controls\Altimeter.bmp" />
@@ -152,7 +149,16 @@
     <EmbeddedResource Include="Controls\Speedometer.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Emulators\Emulator.bmp" />
+    <EmbeddedResource Include="Interpreter.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\SatelliteViewer.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\GeoFramework\2.0.0 Open Source\GeoFramework %28Compact Framework 2.0%29.csproj">
+      <Project>{A445D94C-0C66-421A-BCEA-F68F8072F6F9}</Project>
+      <Name>GeoFramework %28Compact Framework 2.0%29</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Condition="'$(TargetFrameworkVersion)' == 'v1.0'" Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.v1.targets" />
   <Import Condition="'$(TargetFrameworkVersion)' == 'v2.0'" Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />

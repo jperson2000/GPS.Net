@@ -13,12 +13,15 @@
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>GeoFrameworks.snk</AssemblyOriginatorKeyFile>
-    <SccProjectName>SurroundSCMScci</SccProjectName>
-    <SccLocalPath>.</SccLocalPath>
+    <AssemblyOriginatorKeyFile>CodePlex.snk</AssemblyOriginatorKeyFile>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
     <SccAuxPath>
     </SccAuxPath>
-    <SccProvider>MSSCCI:Surround SCM</SccProvider>
+    <SccProvider>
+    </SccProvider>
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -43,10 +46,6 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GeoFramework.Design, Version=1.0.50727.0, Culture=neutral, PublicKeyToken=3ed3cdf4fdda3400, processorArchitecture=MSIL">
-      <HintPath>..\..\GeoFramework\1.4.7\bin\Debug\VS2008 Designers\GeoFramework.Design.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
@@ -57,7 +56,13 @@
     <Compile Include="Type Converters\SignalToNoiseRatioConverter.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="GeoFrameworks.snk" />
+    <None Include="CodePlex.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\GeoFramework\2.0.0 Open Source\GeoFramework %28VS2008 Designers%29.csproj">
+      <Project>{7F9F4CB4-F86D-45F0-8FA0-00C5E19B72A0}</Project>
+      <Name>GeoFramework %28VS2008 Designers%29</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

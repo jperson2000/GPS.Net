@@ -726,12 +726,6 @@ namespace GeoFramework.Gps.IO
                     // Each subkey is a device
                     foreach (string subKeyName in existingDevicesKey.GetSubKeyNames())
                     {
-                        // Open the subkey
-                        RegistryKey subKey = existingDevicesKey.OpenSubKey(subKeyName, false);
-                        string name = ASCIIEncoding.ASCII.GetString((byte[])subKey.GetValue("Name")).Replace("\0", "");
-                        int cod = (int)subKey.GetValue("COD");
-                        subKey.Close();
-
                         // The subkey name is an address
                         int count = subKeyName.Length / 2;
 

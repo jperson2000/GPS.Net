@@ -134,11 +134,11 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\GeoFramework\2.0.0 Open Source\GeoFramework %28Compact Framework 3.5%29.csproj">
+    <ProjectReference Include="..\..\..\..\..\GeoFramework\2.0.0 Open Source\GeoFramework %28Compact Framework 3.5%29.csproj">
       <Project>{75C52FE9-4E96-4994-A34E-EC9DF0367C43}</Project>
       <Name>GeoFramework %28Compact Framework 3.5%29</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\GPS.NET\3.0.0 Open Source\GPS.NET %28Compact Framework 3.5%29.csproj">
+    <ProjectReference Include="..\..\..\GPS.NET %28Compact Framework 3.5%29.csproj">
       <Project>{B5CAEF84-E71C-4CD1-AF26-6CBFD793FBFD}</Project>
       <Name>GPS.NET %28Compact Framework 3.5%29</Name>
     </ProjectReference>

@@ -88,11 +88,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\GeoFramework\2.0.0 Open Source\GeoFramework %28Desktop Framework 3.5%29.csproj">
+    <ProjectReference Include="..\..\..\..\..\GeoFramework\2.0.0 Open Source\GeoFramework %28Desktop Framework 3.5%29.csproj">
       <Project>{26E18588-B04D-4987-BF36-8206A7E36FF9}</Project>
       <Name>GeoFramework %28Desktop Framework 3.5%29</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\GPS.NET\3.0.0 Open Source\GPS.NET %28Desktop Framework 3.5%29.csproj">
+    <ProjectReference Include="..\..\..\GPS.NET %28Desktop Framework 3.5%29.csproj">
       <Project>{D4245DD6-79F6-466A-98D3-4AF15D8C39A9}</Project>
       <Name>GPS.NET %28Desktop Framework 3.5%29</Name>
     </ProjectReference>

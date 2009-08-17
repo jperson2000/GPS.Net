@@ -148,11 +148,11 @@
     <Content Include="Resources\Warning Shield.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\GeoFramework\2.0.0 Open Source\GeoFramework %28Compact Framework 2.0%29.csproj">
+    <ProjectReference Include="..\..\..\..\..\GeoFramework\2.0.0 Open Source\GeoFramework %28Compact Framework 2.0%29.csproj">
       <Project>{A445D94C-0C66-421A-BCEA-F68F8072F6F9}</Project>
       <Name>GeoFramework %28Compact Framework 2.0%29</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\GPS.NET\3.0.0 Open Source\GPS.NET %28Compact Framework 2.0%29.csproj">
+    <ProjectReference Include="..\..\..\GPS.NET %28Compact Framework 2.0%29.csproj">
       <Project>{372725DA-DB6A-44B4-BA24-29EE53E90BC8}</Project>
       <Name>GPS.NET %28Compact Framework 2.0%29</Name>
     </ProjectReference>

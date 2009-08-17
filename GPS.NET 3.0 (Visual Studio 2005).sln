@@ -1,0 +1,56 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeoFramework (Compact Framework 2.0)", "..\..\GeoFramework\2.0.0 Open Source\GeoFramework (Compact Framework 2.0).csproj", "{A445D94C-0C66-421A-BCEA-F68F8072F6F9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GPS.NET (Compact Framework 2.0)", "GPS.NET (Compact Framework 2.0).csproj", "{372725DA-DB6A-44B4-BA24-29EE53E90BC8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{8198BBAB-39C4-4732-B5A6-BC15728FCF72}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Compact Framework 2.0", "Compact Framework 2.0", "{71C4D8B2-E14B-44F4-ADBF-DF2F1DEB92C0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{6F634521-8A1A-489B-8C45-EAFEB235EF8B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GPS Diagnostics (CSharp)", "Examples\Compact Framework 2.0\C#\GPS Diagnostics (CSharp).csproj", "{D8D28E36-AF99-4B3D-91A2-F0A42755B2BB}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "GPS Diagnostics (VB.NET)", "Examples\Compact Framework 2.0\VB.NET\GPS Diagnostics (VB.NET).vbproj", "{4975CBBA-71E0-442E-BF92-B6A2799BADEA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A445D94C-0C66-421A-BCEA-F68F8072F6F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A445D94C-0C66-421A-BCEA-F68F8072F6F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A445D94C-0C66-421A-BCEA-F68F8072F6F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A445D94C-0C66-421A-BCEA-F68F8072F6F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{372725DA-DB6A-44B4-BA24-29EE53E90BC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{372725DA-DB6A-44B4-BA24-29EE53E90BC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{372725DA-DB6A-44B4-BA24-29EE53E90BC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{372725DA-DB6A-44B4-BA24-29EE53E90BC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8D28E36-AF99-4B3D-91A2-F0A42755B2BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8D28E36-AF99-4B3D-91A2-F0A42755B2BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8D28E36-AF99-4B3D-91A2-F0A42755B2BB}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{D8D28E36-AF99-4B3D-91A2-F0A42755B2BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8D28E36-AF99-4B3D-91A2-F0A42755B2BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8D28E36-AF99-4B3D-91A2-F0A42755B2BB}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{4975CBBA-71E0-442E-BF92-B6A2799BADEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4975CBBA-71E0-442E-BF92-B6A2799BADEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4975CBBA-71E0-442E-BF92-B6A2799BADEA}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{4975CBBA-71E0-442E-BF92-B6A2799BADEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4975CBBA-71E0-442E-BF92-B6A2799BADEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4975CBBA-71E0-442E-BF92-B6A2799BADEA}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A445D94C-0C66-421A-BCEA-F68F8072F6F9} = {8198BBAB-39C4-4732-B5A6-BC15728FCF72}
+		{8198BBAB-39C4-4732-B5A6-BC15728FCF72} = {71C4D8B2-E14B-44F4-ADBF-DF2F1DEB92C0}
+		{372725DA-DB6A-44B4-BA24-29EE53E90BC8} = {71C4D8B2-E14B-44F4-ADBF-DF2F1DEB92C0}
+		{6F634521-8A1A-489B-8C45-EAFEB235EF8B} = {71C4D8B2-E14B-44F4-ADBF-DF2F1DEB92C0}
+		{D8D28E36-AF99-4B3D-91A2-F0A42755B2BB} = {6F634521-8A1A-489B-8C45-EAFEB235EF8B}
+		{4975CBBA-71E0-442E-BF92-B6A2799BADEA} = {6F634521-8A1A-489B-8C45-EAFEB235EF8B}
+	EndGlobalSection
+EndGlobal

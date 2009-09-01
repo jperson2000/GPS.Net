@@ -435,7 +435,15 @@ namespace GeoFramework.Gps.IO
                 try
                 {
                     // Read the buffer in
-                    bytesRead = BaseStream.Read(buffer, 0, NmeaReader.IdealNmeaBufferSize);
+                    while (bytesRead < NmeaReader.IdealNmeaBufferSize)
+                    {
+                        int read = BaseStream.Read(buffer, bytesRead, NmeaReader.IdealNmeaBufferSize - bytesRead);
+                        if (read == 0)
+                        {
+                            break;
+                        }
+                        bytesRead += read;
+                    }
                 }
 #if PocketPC
                 catch (IOException ex)

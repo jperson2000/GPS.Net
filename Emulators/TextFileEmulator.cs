@@ -49,7 +49,11 @@ namespace GeoFramework.Gps.Emulators
             ReadBuffer.AddRange(ASCIIEncoding.ASCII.GetBytes(line));
 
             // Sleep
+#if PocketPC
+            Thread.Sleep((int)_ReadInterval.TotalMilliseconds);
+#else
             Thread.Sleep(_ReadInterval);
+#endif
         }
 
         // TODO: We should be able to get rid of this. Not used internally anymore.

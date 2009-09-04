@@ -115,9 +115,8 @@ namespace GeoFramework.Gps.Emulators
             {
                 using (StreamReader reader = new StreamReader(stream))
                 {
-                    // Split the file into an array of lines (ignoring any blank lines)
-                    string[] lines = reader.ReadToEnd().Split(
-                        Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                    // Split the file into an array of lines
+                    string[] lines = reader.ReadToEnd().Split(Environment.NewLine.ToCharArray());
 
                     // Determine the order to read the lines
                     int start = reverse ? lines.Length - 1 : 0;

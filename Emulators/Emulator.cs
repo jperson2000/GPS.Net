@@ -24,7 +24,6 @@ namespace GeoFramework.Gps.Emulators
         private List<byte> _WriteBuffer;
         
         private Thread _Thread;
-        private TimeSpan _EmulationInterval = new TimeSpan(0, 0, 1);
         private ManualResetEvent _EmulationIntervalWaitHandle;
         
         // Default timeouts for reading and writing
@@ -214,7 +213,7 @@ namespace GeoFramework.Gps.Emulators
                      * hang for the length of the interval during shutdown.
                      */
 
-                    _EmulationIntervalWaitHandle.WaitOne((int)_EmulationInterval.TotalMilliseconds, false);
+                    _EmulationIntervalWaitHandle.WaitOne((int)Interval.TotalMilliseconds, false);
                 }
             }
             catch (ThreadAbortException)
@@ -259,7 +258,7 @@ namespace GeoFramework.Gps.Emulators
                 Distance toWaypoint = _CurrentPosition.DistanceTo(_CurrentDestination);
 
                 // Is the distance to the waypoint small?
-                if (toWaypoint.ToMeters().Value < _Speed.ToMetersPerSecond().Value)
+                if (toWaypoint.ToMeters().Value < _Speed.ToDistance(Interval).ToMeters().Value)
                 {
                     // Close enough to "snap" to the waypoint
                     _CurrentPosition = _CurrentDestination;
@@ -272,7 +271,11 @@ namespace GeoFramework.Gps.Emulators
                     // Set the next destination point
                     _CurrentDestination = _Route[_RouteIndex];
                 }
-
+                else
+                {
+                    _CurrentPosition = _CurrentPosition.TranslateTo(_Bearing, distanceMoved);
+                }
+ 
                 // Get the bearing to the next destination
                 _Bearing = _CurrentPosition.BearingTo(_CurrentDestination);
             }
@@ -322,16 +325,6 @@ namespace GeoFramework.Gps.Emulators
         #endregion
 
         #region Public Members
-
-        /// <summary>
-        /// Gets or sets the pulse of emulated data. Emulated data is served once per
-        /// interval.
-        /// </summary>
-        public TimeSpan EmulationInterval
-        {
-            get { return _EmulationInterval; }
-            set { this.EmulationInterval = value; }
-        }
 
         /// <summary>
         /// Indicates whether enough satellite signals exist to determine the current location.

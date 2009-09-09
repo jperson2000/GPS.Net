@@ -124,19 +124,25 @@ namespace GeoFramework.Gps.Emulators
 
                     for (int i = start; i != end;)
                     {
-                        // Convert the line to a Position struct
-                        Position position = new Position(lines[i]);
+                        string line = lines[i];
 
-                        if (i == start)
+                        // Ignore blank lines
+                        if (!String.IsNullOrEmpty(line))
                         {
-                            // Set the CurrentPosition and CurrentDestination properties
-                            // Note: This must be done *before* populating the Route property, or an exception will occur
-                            CurrentPosition = position;
-                            CurrentDestination = position;
-                        }
+                            // Convert the line to a Position struct
+                            Position position = new Position(line);
 
-                        // Add this point to the route
-                        Route.Add(position);
+                            if (i == start)
+                            {
+                                // Set the CurrentPosition and CurrentDestination properties
+                                // Note: This must be done *before* populating the Route property, or an exception will occur
+                                CurrentPosition = position;
+                                CurrentDestination = position;
+                            }
+
+                            // Add this point to the route
+                            Route.Add(position);
+                        }
 
                         // Move to the next (or previous) line
                         i += reverse ? -1 : 1;

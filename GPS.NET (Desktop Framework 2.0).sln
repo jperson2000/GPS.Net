@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GPS.NET (Desktop Framework 2.0)", "GPS.NET (Desktop Framework 2.0).csproj", "{B2D3411A-1B47-4D67-95C7-ABADA9AB7A19}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B2D3411A-1B47-4D67-95C7-ABADA9AB7A19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2D3411A-1B47-4D67-95C7-ABADA9AB7A19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2D3411A-1B47-4D67-95C7-ABADA9AB7A19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2D3411A-1B47-4D67-95C7-ABADA9AB7A19}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,138 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B2D3411A-1B47-4D67-95C7-ABADA9AB7A19}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GeoFramework.Gps</RootNamespace>
+    <AssemblyName>GeoFramework.Gps</AssemblyName>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\DF20\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;Framework20</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\DF20\</OutputPath>
+    <DefineConstants>TRACE;Framework20</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controls\Altimeter.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\Clock.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\ColorInterpolator.cs" />
+    <Compile Include="Controls\Compass.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\DoubleBufferedControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\GraphicsSettings.cs" />
+    <Compile Include="Controls\PolarControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\PolarCoordinate.cs" />
+    <Compile Include="Controls\PolarGraphics.cs" />
+    <Compile Include="Controls\SatelliteSignalBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\SatelliteViewer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\Speedometer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Devices\BluetoothAddress.cs" />
+    <Compile Include="Devices\BluetoothDevice.cs" />
+    <Compile Include="Devices\BluetoothEndPoint.cs" />
+    <Compile Include="Devices\BluetoothRadio.cs" />
+    <Compile Include="Devices\NetworkDevice.cs" />
+    <Compile Include="Devices\VirtualDevice.cs" />
+    <Compile Include="DilutionOfPrecision.cs" />
+    <Compile Include="Emulators\Emulator.cs" />
+    <Compile Include="Emulators\NmeaEmulator.cs" />
+    <Compile Include="Emulators\RouteFileEmulator.cs" />
+    <Compile Include="Emulators\TextFileEmulator.cs" />
+    <Compile Include="Enumerations.cs" />
+    <Compile Include="EventArguments.cs" />
+    <Compile Include="Devices\NativeMethods.cs" />
+    <Compile Include="Filters\Filter.cs" />
+    <Compile Include="Filters\KalmanFilter.cs" />
+    <Compile Include="Filters\PositionAverageFilter.cs" />
+    <Compile Include="Filters\SquareMatrix3D.cs" />
+    <Compile Include="Interpreter.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="BinaryPacket.cs" />
+    <Compile Include="Devices\Device.cs" />
+    <Compile Include="Devices.cs" />
+    <Compile Include="Devices\SerialDevice.cs">
+    </Compile>
+    <Compile Include="Nmea\GpggaSentence.cs" />
+    <Compile Include="Nmea\GpggkSentence.cs" />
+    <Compile Include="Nmea\GpgllSentence.cs" />
+    <Compile Include="Nmea\GpgsaSentence.cs" />
+    <Compile Include="Nmea\GpgsvSentence.cs" />
+    <Compile Include="Nmea\GprmcSentence.cs" />
+    <Compile Include="Nmea\GpvtgSentence.cs" />
+    <Compile Include="Nmea\Interfaces.cs" />
+    <Compile Include="Nmea\NmeaInterpreter.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Nmea\NmeaReader.cs" />
+    <Compile Include="Nmea\NmeaSentence.cs" />
+    <Compile Include="Nmea\PgrmfSentence.cs" />
+    <Compile Include="Packet.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Satellite.cs" />
+    <Compile Include="SignalToNoiseRatio.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CodePlex.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Controls\Altimeter.bmp" />
+    <Content Include="Controls\Clock.bmp" />
+    <Content Include="Controls\Compass.bmp" />
+    <Content Include="Controls\SatelliteSignalBar.bmp" />
+    <Content Include="Controls\SatelliteViewer.bmp" />
+    <Content Include="Controls\Speedometer.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\GeoFramework\2.0.0 Open Source\GeoFramework %28Desktop Framework 2.0%29.csproj">
+      <Project>{534026C6-B3FF-4709-8ECC-0099611DE183}</Project>
+      <Name>GeoFramework %28Desktop Framework 2.0%29</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

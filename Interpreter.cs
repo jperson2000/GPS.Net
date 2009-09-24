@@ -1512,12 +1512,17 @@ namespace GeoFramework.Gps
                 // Is the async result null or finished?
                 && (_positionChangedAsyncResult == null || _positionChangedAsyncResult.IsCompleted))
             {
-                // Does the call need to be completed?
-                if (_positionChangedAsyncResult != null)
-                    PositionChanged.EndInvoke(_positionChangedAsyncResult);
-
-                // Invoke the event
-                _positionChangedAsyncResult = PositionChanged.BeginInvoke(this, new PositionEventArgs(_Position), null, null);
+                try
+                {
+                    // Does the call need to be completed?
+                    if (_positionChangedAsyncResult != null)
+                        PositionChanged.EndInvoke(_positionChangedAsyncResult);
+                }
+                finally
+                {
+                    // Invoke the new event, even if an exception occurred while completing the previous event
+                    _positionChangedAsyncResult = PositionChanged.BeginInvoke(this, new PositionEventArgs(_Position), null, null);
+                }
             }
 #endif
         }

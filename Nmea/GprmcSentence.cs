@@ -208,7 +208,7 @@ namespace GeoFramework.Gps.Nmea
                 int utcSeconds = int.Parse(utcTimeWord.Substring(4, 2), NmeaCultureInfo);               // CC
                 int utcMilliseconds = 0;
                 if(utcTimeWord.Length > 6)
-                    utcMilliseconds = Convert.ToInt32(float.Parse(utcTimeWord.Substring(6)) * 1000, NmeaCultureInfo);    // DDDD
+                    utcMilliseconds = Convert.ToInt32(float.Parse(utcTimeWord.Substring(6), NmeaCultureInfo) * 1000, NmeaCultureInfo);    // DDDD
 
                 #endregion
 

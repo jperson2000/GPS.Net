@@ -10,7 +10,7 @@ using System.Runtime.ConstrainedExecution;
 #endif
 
 /* These assembly attributes will be the same regardless of the product. */
-[assembly: CLSCompliant(false)]
+[assembly: CLSCompliant(true)]
 [assembly: ComVisible(false)]
 [assembly: AssemblyCompany("GeoFrameworks, LLC")]
 [assembly: AssemblyCopyright("Copyright© 2003-2009  GeoFrameworks, LLC")]

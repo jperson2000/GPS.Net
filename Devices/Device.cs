@@ -633,7 +633,9 @@ namespace GeoFramework.Gps.IO
             }
         }
 
-        // Forces a device to a closed state without disposing the underlying stream.
+        /// <summary>
+        /// Forces a device to a closed state without disposing the underlying stream.
+        /// </summary>
         public virtual void Reset()
         {
             if (!_IsOpen)
@@ -657,6 +659,9 @@ namespace GeoFramework.Gps.IO
         {
             // Cancel any active detection
             CancelDetection();
+
+            // Reset the failed detection counter
+            SetFailedDetectionCount(0);
 
             // And clear its flags
             _IsGpsDevice = false;

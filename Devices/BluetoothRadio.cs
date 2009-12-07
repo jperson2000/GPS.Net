@@ -29,35 +29,44 @@ namespace GeoFramework.Gps.IO
 
         static BluetoothRadio()
         {
-            // Make generic parameters for the search
-            NativeMethods.BLUETOOTH_FIND_RADIO_PARAMS radio = new NativeMethods.BLUETOOTH_FIND_RADIO_PARAMS();
-
-            // Make a handle for the radio itself
-            IntPtr phRadio = IntPtr.Zero;
-
-            // Search for the first radio 
-            IntPtr findHandle = NativeMethods.BluetoothFindFirstRadio(radio, ref phRadio);
-
-            // Was a radio found?
-            if (findHandle == IntPtr.Zero)
+            try
             {
-                int errorCode = Marshal.GetLastWin32Error();
-                switch (errorCode)
+                // Make generic parameters for the search
+                NativeMethods.BLUETOOTH_FIND_RADIO_PARAMS radio = new NativeMethods.BLUETOOTH_FIND_RADIO_PARAMS();
+
+                // Make a handle for the radio itself
+                IntPtr phRadio = IntPtr.Zero;
+
+                // Search for the first radio 
+                IntPtr findHandle = NativeMethods.BluetoothFindFirstRadio(radio, ref phRadio);
+
+                // Was a radio found?
+                if (findHandle == IntPtr.Zero)
                 {
-                    case 259:
-                        // No more data
-                        return;
-                    default:
-                        throw new Win32Exception(Marshal.GetLastWin32Error());
+                    int errorCode = Marshal.GetLastWin32Error();
+                    switch (errorCode)
+                    {
+                        case 259:
+                            // No more data
+                            return;
+                        default:
+                            throw new Win32Exception(Marshal.GetLastWin32Error());
+                    }
                 }
+
+                //  Yes.  Close the search
+                NativeMethods.BluetoothFindRadioClose(findHandle);            
+
+                // If we have a radio, turn it into an object
+                if (phRadio != IntPtr.Zero)
+                    _Current = new BluetoothRadio(phRadio);
             }
-
-            //  Yes.  Close the search
-            NativeMethods.BluetoothFindRadioClose(findHandle);            
-
-            // If we have a radio, turn it into an object
-            if (phRadio != IntPtr.Zero)
-                _Current = new BluetoothRadio(phRadio);
+            catch (Win32Exception ex)
+            {
+                // Note: Do not allow exceptions to be thrown in a static constructor.
+                // Instead, raise the DeviceDetectionAttemptFailed event to allow the exception to be handled
+                Devices.OnDeviceDetectionAttemptFailed(new DeviceDetectionException(null, ex));
+            }
         }
 
         internal BluetoothRadio(IntPtr handle)

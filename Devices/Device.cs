@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Globalization;
 using System.IO;
@@ -927,6 +928,8 @@ namespace GeoFramework.Gps.IO
 
         private void DetectionThreadProc()
         {
+            Debug.WriteLine("Device detection attempt started for " + Name, Devices.DebugCategory);
+            
             // Signal that the thread has started
             _DetectionStartedWaitHandle.Set();
 
@@ -951,14 +954,17 @@ namespace GeoFramework.Gps.IO
             }
             catch (DeviceDetectionException ex)
             {
+                Debug.WriteLine("Device detection failed for " + Name, Devices.DebugCategory);
                 Devices.OnDeviceDetectionAttemptFailed(ex);
             }
             catch (ThreadAbortException ex)
             {
+                Debug.WriteLine("Device detection failed for " + Name, Devices.DebugCategory);
                 Devices.OnDeviceDetectionAttemptFailed(new DeviceDetectionException(this, ex));
             }
             catch (Exception ex)
             {
+                Debug.WriteLine("Device detection failed for " + Name, Devices.DebugCategory);
                 Devices.OnDeviceDetectionAttemptFailed(new DeviceDetectionException(this, ex));
             }
             finally
@@ -980,6 +986,8 @@ namespace GeoFramework.Gps.IO
                 // If it is, register it.
                 if (_IsGpsDevice)
                 {
+                    Debug.WriteLine(Name + " is a valid GPS device", Devices.DebugCategory);
+                    
                     // Raise an event for this 
                     Devices.Add(this);
 
@@ -991,6 +999,8 @@ namespace GeoFramework.Gps.IO
                 }
                 else
                 {
+                    Debug.WriteLine(Name + " is not a valid GPS device", Devices.DebugCategory);
+                    
                     // Increase the failure statistic
                     _FailedDetectionCount++;
                 }

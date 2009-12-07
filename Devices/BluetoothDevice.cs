@@ -1115,6 +1115,7 @@ namespace GeoFramework.Gps.IO
              */
 
             // Signal that we've started
+            Debug.WriteLine("Starting Bluetooth device discovery", Devices.DebugCategory);
             _DiscoveryStartedWaitHandle.Set();
 
 #if !PocketPC
@@ -1339,11 +1340,15 @@ namespace GeoFramework.Gps.IO
             }
             catch (ThreadAbortException)
             {
+                Debug.WriteLine("Bluetooth device discovery has been canceled", Devices.DebugCategory);
+                
                 // Abort immediately
                 return;
             }
             catch
             {
+                Debug.WriteLine("Bluetooth device discovery failed", Devices.DebugCategory);
+
                 // A legitimate error occurred.  This probably means that the Bluetooth stack isn't supported.                
                 return;
             }
@@ -1371,6 +1376,8 @@ namespace GeoFramework.Gps.IO
 
                 // And signal we're done
                 _IsDeviceDiscoveryInProgress = false;
+
+                Debug.WriteLine("Bluetooth device discovery has completed", Devices.DebugCategory);
             }
 
 

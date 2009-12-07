@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Collections.Generic;
 using System.IO;
@@ -13,6 +14,8 @@ namespace GeoFramework.Gps.IO
     /// </summary>
     public static class Devices
     {
+        internal const string DebugCategory = "GPS.Net";
+        
         private static List<ManualResetEvent> _CurrentlyDetectingWaitHandles = new List<ManualResetEvent>(16);
         private static List<SerialDevice> _SerialDevices;
         private static List<BluetoothDevice> _BluetoothDevices;
@@ -957,6 +960,7 @@ namespace GeoFramework.Gps.IO
             try
             {
                 // Signal that it started
+                Debug.WriteLine("Starting GPS device detection", DebugCategory);
                 OnDeviceDetectionStarted();
 
                 // Monitor this thread up to the timeout, then quit
@@ -991,6 +995,8 @@ namespace GeoFramework.Gps.IO
                 // Is Bluetooth supported and turned on?
                 if (IsBluetoothSupported && IsBluetoothEnabled)
                 {
+                    Debug.WriteLine("Detecting Bluetooth devices", DebugCategory);
+
                     // Start bluetooth detection for each device
                     count = _BluetoothDevices.Count;
                     for (int index = 0; index < count; index++)
@@ -1003,6 +1009,8 @@ namespace GeoFramework.Gps.IO
 
                 if (AllowSerialConnections)
                 {
+                    Debug.WriteLine("Detecting serial devices", DebugCategory);
+
                     count = SerialDevices.Count;
                     for (int index = 0; index < count; index++)
                         _SerialDevices[index].BeginDetection();
@@ -1015,6 +1023,8 @@ namespace GeoFramework.Gps.IO
 
                     if (_AllowExhaustiveSerialPortScanning)
                     {
+                        Debug.WriteLine("Scanning all serial ports", DebugCategory);
+
                         // Try all ports from COM0: up to the maximum port number
                         for (int index = 0; index < _MaximumSerialPortNumber; index++)
                         {
@@ -1040,6 +1050,7 @@ namespace GeoFramework.Gps.IO
 
                             // This is a new device.  Scan it
                             SerialDevice exhaustivePort = new SerialDevice("COM" + index.ToString() + ":");
+                            Debug.WriteLine("Checking COM" + index + " for GPS device", DebugCategory);
                             exhaustivePort.BeginDetection();
                         }
                     }
@@ -1069,6 +1080,7 @@ namespace GeoFramework.Gps.IO
 #endif
 
                     // Begin searching for brand new devices
+                    Debug.WriteLine("Discovering new Bluetooth devices", DebugCategory);
                     BluetoothDevice.DiscoverDevices(true);
 
                     // Block until that search completes
@@ -1082,6 +1094,7 @@ namespace GeoFramework.Gps.IO
                 /* A list holds the wait handles of devices being detected.  When it is empty, 
                  * detection has finished on all threads.
                  */
+                Debug.WriteLine("Waiting for device detection to finish", DebugCategory);
                 while (_CurrentlyDetectingWaitHandles.Count != 0)
                 {
                     try
@@ -1154,10 +1167,13 @@ namespace GeoFramework.Gps.IO
 #endif
 
                 // Signal completion
+                Debug.WriteLine("Device detection has completed", DebugCategory);
                 OnDeviceDetectionCompleted();
             }
             catch (ThreadAbortException)
             {
+                Debug.WriteLine("Device detection has been canceled.", DebugCategory);
+
                 #region Abort detection for all devices
 #if PocketPC
                 // Stop detection for the GPSID

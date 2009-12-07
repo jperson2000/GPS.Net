@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Text;
 using System.IO;
@@ -14,9 +15,6 @@ using System.Runtime.ConstrainedExecution;
 #endif
 using System.Runtime.CompilerServices;
 using Microsoft.Win32;
-#if DEBUG
-using System.Diagnostics;
-#endif
 using GeoFramework.Gps.Nmea;
 
 namespace GeoFramework.Gps.IO

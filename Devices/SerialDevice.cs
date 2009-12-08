@@ -157,7 +157,8 @@ namespace GeoFramework.Gps.IO
         {
             get
             {
-                StringBuilder numericPortion = new StringBuilder(4);
+                // Start with a zero in case there is no numeric portion
+                StringBuilder numericPortion = new StringBuilder("0", 4);
 
                 // Extract numeric digits from the name
 #if !PocketPC
@@ -329,7 +330,7 @@ namespace GeoFramework.Gps.IO
             }
 
             // Have we reached the maximum allowed failures?
-            if (SuccessfulDetectionCount == 0 && FailedDetectionCount >= 100)
+            if (SuccessfulDetectionCount == 0 && MaximumAllowedFailures > 0 && FailedDetectionCount > MaximumAllowedFailures)
             {
                 Devices.OnDeviceDetectionAttemptFailed(
                    new DeviceDetectionException(this, Name + " will not be tested because it has failed detection over " + MaximumAllowedFailures.ToString(CultureInfo.CurrentCulture) + " times with no success."));

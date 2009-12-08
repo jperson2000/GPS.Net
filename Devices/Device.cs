@@ -519,6 +519,7 @@ namespace GeoFramework.Gps.IO
                 catch (Exception ex)
                 {
                     // Report the error
+                    Debug.WriteLine(Name + " could not be opened due to the following error: " + ex, Devices.DebugCategory);
                     Devices.OnDeviceDetectionAttemptFailed(
                         new DeviceDetectionException(this, "The device '" + Name + "' could not be identified as a GPS device because a connection could not be opened.  See InnerException for details.", ex));
 
@@ -543,6 +544,7 @@ namespace GeoFramework.Gps.IO
             }
             catch (Exception ex)
             {
+                Debug.WriteLine(Name + " could not be tested for GPS data due to the following error: " + ex, Devices.DebugCategory);
                 Devices.OnDeviceDetectionAttemptFailed(
                     new DeviceDetectionException(this, "The device '" + Name + "' could not be tested for GPS data.  See Inner Exception for details.", ex));
 

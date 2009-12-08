@@ -406,6 +406,7 @@ namespace GeoFramework.Gps.IO
             // If no connections are allowed, exit
             if (!AllowConnections)
             {
+                Debug.WriteLine(Name + " will not be tested because connections are disabled", Devices.DebugCategory);
                 Devices.OnDeviceDetectionAttemptFailed(
                     new DeviceDetectionException(this, "Connections are not allowed to " + Name));
                 return false;
@@ -415,6 +416,7 @@ namespace GeoFramework.Gps.IO
             if (Class == DeviceClass.Computer
                 || Class == DeviceClass.Phone)
             {
+                Debug.WriteLine(Name + " will not be tested because it is a computer", Devices.DebugCategory);
                 Devices.OnDeviceDetectionAttemptFailed(
                     new DeviceDetectionException(this, Name + " will not be tested because it is a computer."));
                 return false;
@@ -423,6 +425,7 @@ namespace GeoFramework.Gps.IO
             // If the device is an epic fail, don't even test it anymore
             if (SuccessfulDetectionCount == 0 && MaximumAllowedFailures > 0 && FailedDetectionCount > MaximumAllowedFailures)
             {
+                Debug.WriteLine(Name + " will not be tested because it has failed over " + MaximumAllowedFailures + " times", Devices.DebugCategory);
                 Devices.OnDeviceDetectionAttemptFailed(
                     new DeviceDetectionException(this, Name + " has never been successfully detected and has exceeded the maximum allowed number of failures."));
                 return false;
@@ -460,6 +463,7 @@ namespace GeoFramework.Gps.IO
                 endPoint.FailedDetectionCount++;
 
                 // No endpoints succeeded
+                Debug.WriteLine("A connection was made to " + Name + " but no valid GPS data was found", Devices.DebugCategory);
                 Devices.OnDeviceDetectionAttemptFailed(
                     new DeviceDetectionException(this, "A connection was made to " + Name + " but no valid GPS data was found."));
                 return false;

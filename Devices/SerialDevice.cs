@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Text;
 using System.Collections.Generic;
 using System.Globalization;
@@ -296,6 +297,7 @@ namespace GeoFramework.Gps.IO
             // If no connections are allowed, exit
             if (!AllowConnections)
             {
+                Debug.WriteLine(Name + " will not be tested because connections are disabled", Devices.DebugCategory);
                 Devices.OnDeviceDetectionAttemptFailed(
                     new DeviceDetectionException(this, Name + " is excluded from testing."));
                 return false;
@@ -314,6 +316,7 @@ namespace GeoFramework.Gps.IO
             if (!Devices.AllowBluetoothConnections
                 && Name.IndexOf("Bluetooth", StringComparison.OrdinalIgnoreCase) != -1)
             {
+                Debug.WriteLine(Name + " will not be tested because Bluetooth connections are disabled", Devices.DebugCategory);
                 Devices.OnDeviceDetectionAttemptFailed(
                    new DeviceDetectionException(this, Name + " will not be tested because Bluetooth devices are currently excluded."));
                 return false;
@@ -324,6 +327,7 @@ namespace GeoFramework.Gps.IO
                 && Name.IndexOf("Bluetooth", StringComparison.OrdinalIgnoreCase) != -1
                 && !Devices.IsBluetoothEnabled)
             {
+                Debug.WriteLine(Name + " will not be tested because Bluetooth is turned off", Devices.DebugCategory);
                 Devices.OnDeviceDetectionAttemptFailed(
                    new DeviceDetectionException(this, Name + " will not be tested because Bluetooth is turned off."));
                 return false;
@@ -332,6 +336,7 @@ namespace GeoFramework.Gps.IO
             // Have we reached the maximum allowed failures?
             if (SuccessfulDetectionCount == 0 && MaximumAllowedFailures > 0 && FailedDetectionCount > MaximumAllowedFailures)
             {
+                Debug.WriteLine(Name + " will not be tested because it has failed over " + MaximumAllowedFailures + " times", Devices.DebugCategory);
                 Devices.OnDeviceDetectionAttemptFailed(
                    new DeviceDetectionException(this, Name + " will not be tested because it has failed detection over " + MaximumAllowedFailures.ToString(CultureInfo.CurrentCulture) + " times with no success."));
                 return false;
@@ -350,9 +355,12 @@ namespace GeoFramework.Gps.IO
             catch (InvalidOperationException)
             {
                 // According to MSDN docs, this means the port is already open!  So, continue.
+                Debug.WriteLine(Name + " appears to already be open", Devices.DebugCategory);
             }
             catch (ArgumentOutOfRangeException ex)
             {
+                Debug.WriteLine(Name + " could not be opened due to the following error: " + ex, Devices.DebugCategory);
+
                 // One of the parameters of the port is incorrect.  Flag the error
                 Devices.OnDeviceDetectionAttemptFailed(
                     new DeviceDetectionException(this, Name + " could not be opened because of an invalid parameter.  GPS connections should be using at least a 4800,8,N,1,None connection to work properly.", ex));
@@ -360,6 +368,8 @@ namespace GeoFramework.Gps.IO
             }
             catch (ArgumentException ex)
             {
+                Debug.WriteLine(Name + " could not be opened due to the following error: " + ex, Devices.DebugCategory);
+
                 // The port name doesn't begin with "COM" or the file type of the port is not supported.
                 Devices.OnDeviceDetectionAttemptFailed(
                     new DeviceDetectionException(this, Name + " does not appear to exist.", ex));
@@ -367,6 +377,8 @@ namespace GeoFramework.Gps.IO
             }
             catch (UnauthorizedAccessException ex)
             {
+                Debug.WriteLine(Name + " could not be opened due to the following error: " + ex, Devices.DebugCategory);
+
                 // Security may have denied the connection
                 Devices.OnDeviceDetectionAttemptFailed(
                     new DeviceDetectionException(this, "A security PIN entered for " + Name + " was incorrect.  The device should be re-paired in the Bluetooth Manager.", ex));
@@ -374,6 +386,7 @@ namespace GeoFramework.Gps.IO
             }
             catch (Exception ex)
             {
+                Debug.WriteLine(Name + " could not be opened due to the following error: " + ex, Devices.DebugCategory);
                 Devices.OnDeviceDetectionAttemptFailed(
                     new DeviceDetectionException(this, ex));
                 return false;
@@ -470,6 +483,8 @@ namespace GeoFramework.Gps.IO
                     }
                     catch
                     {
+                        Debug.WriteLine(Name + " could not be opened due to the following error: " + ex, Devices.DebugCategory);
+
                         // Failure.  Abort all testing.
                         Devices.OnDeviceDetectionAttemptFailed(
                             new DeviceDetectionException(this, Name + " could not be opened.", ex));
@@ -479,6 +494,7 @@ namespace GeoFramework.Gps.IO
                 catch (TimeoutException)
                 {
                     // No love at this baud rate.  Step down to a lower speed
+                    Debug.WriteLine(Name + " could not be opened at " + _BaudRatesToTest[index] + " baud", Devices.DebugCategory);
                     continue;
                 }
 
@@ -534,6 +550,7 @@ namespace GeoFramework.Gps.IO
                     }
                     catch (TimeoutException ex)
                     {
+                        Debug.WriteLine(Name + " did not respond to an attempt to read data", Devices.DebugCategory);
                         Devices.OnDeviceDetectionAttemptFailed(
                             new DeviceDetectionException(this, Name + " did not respond to an attempt to read data.", ex));
                         return false;
@@ -564,6 +581,7 @@ namespace GeoFramework.Gps.IO
             }
 
             /* The device did not return any detectable data. */
+            Debug.WriteLine(Name + " was tested at multiple baud rates, but no GPS data was found", Devices.DebugCategory);
             Devices.OnDeviceDetectionAttemptFailed(
                 new DeviceDetectionException(this, Name + " was tested at multiple baud rates but no GPS data was found."));
             return false;

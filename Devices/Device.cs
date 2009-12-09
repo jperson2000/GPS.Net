@@ -996,6 +996,9 @@ namespace GeoFramework.Gps.IO
                     // Increase the success statistic
                     _SuccessfulDetectionCount++;
 
+                    // RESET the failure count.  We're only interested in CONSECUTIVE failures.
+                    _FailedDetectionCount = 0;
+
                     // Update the date last detected
                     _DateDetected = DateTime.Now;
                 }

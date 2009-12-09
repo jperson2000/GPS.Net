@@ -28,7 +28,7 @@ namespace GeoFramework.Gps.IO
 
         #region Constants
 
-        private const string RootKeyName = @"SOFTWARE\GeoFrameworks\GPS.NET\3.0\Devices\Network\";
+        private const string RootKeyName = Devices.RootKeyName + @"Network\";
 
         #endregion
 
@@ -308,7 +308,13 @@ namespace GeoFramework.Gps.IO
             catch (UnauthorizedAccessException)
             { }
             finally
-            { }
+            {
+                // Reset the cache properties
+                SetSuccessfulDetectionCount(0);
+                SetFailedDetectionCount(0);
+                SetDateDetected(DateTime.MinValue);
+                SetDateConnected(DateTime.MinValue);
+            }
         }
 
         protected override void OnCacheWrite()

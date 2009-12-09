@@ -61,7 +61,7 @@ namespace GeoFramework.Gps.IO
 
         #region Constants
 
-        private const string RootKeyName = @"SOFTWARE\GeoFrameworks\GPS.NET\3.0\Devices\Serial\";
+        private const string RootKeyName = Devices.RootKeyName + @"Serial\";
 
         #endregion
 
@@ -630,21 +630,15 @@ namespace GeoFramework.Gps.IO
 
         protected override void OnCacheWrite()
         {
-#if !PocketPC
-            // In rare cases I get a NullReferenceException for the _Port
+            // If we don't have a port name, then we can't get the registry key
             if (_Port == null)
                 return;
-#endif
 
             // Save device stats
             RegistryKey deviceKey = null;
             try
             {
-#if !PocketPC
-                deviceKey = Registry.LocalMachine.CreateSubKey(RootKeyName + _Port.PortName);
-#else
-                deviceKey = Registry.LocalMachine.CreateSubKey(RootKeyName + _Port);
-#endif
+                deviceKey = Registry.LocalMachine.CreateSubKey(RootKeyName + Port);
 
                 if (deviceKey != null)
                 {
@@ -681,24 +675,36 @@ namespace GeoFramework.Gps.IO
 
         protected override void OnCacheRemove()
         {
-            //Delete the entire key for this port
-            Registry.LocalMachine.DeleteSubKeyTree(RootKeyName + 
-#if !PocketPC
-                _Port.PortName
-#else
-                _Port
-#endif
-            );
+            // If we don't have a port name, then we can't get the registry key
+            if (_Port == null)
+                return;
+
+            try
+            {
+                //Delete the entire key for this port
+                Registry.LocalMachine.DeleteSubKeyTree(RootKeyName + Port);
+            }
+            catch (UnauthorizedAccessException)
+            { }
+            finally
+            {
+                // Reset the cache properties
+                SetSuccessfulDetectionCount(0);
+                SetFailedDetectionCount(0);
+                SetDateDetected(DateTime.MinValue);
+                SetDateConnected(DateTime.MinValue);
+            }
         }
 
         protected override void OnCacheRead()
         {
+            // If we don't have a port name, then we can't get the registry key
+            if (_Port == null)
+                return;
+
             // Save device stats
-#if !PocketPC
-            RegistryKey deviceKey = Registry.LocalMachine.OpenSubKey(RootKeyName + _Port.PortName, false);
-#else
-            RegistryKey deviceKey = Registry.LocalMachine.OpenSubKey(RootKeyName + _Port, false);
-#endif
+            RegistryKey deviceKey = Registry.LocalMachine.OpenSubKey(RootKeyName + Port, false);
+
             if (deviceKey == null)
                 return;
 
@@ -796,7 +802,7 @@ namespace GeoFramework.Gps.IO
                 List<SerialDevice> devices = new List<SerialDevice>();
 
                 // Add virtual ports for Bluetooth devices
-                IList<BluetoothDevice> cache = BluetoothDevice.Cache;
+                IList<BluetoothDevice> cache = Devices.BluetoothDevices;
                 for (int index = 0; index < cache.Count; index++)
                 {
                     // Get the device

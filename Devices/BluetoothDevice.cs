@@ -61,7 +61,7 @@ namespace GeoFramework.Gps.IO
 
         #region Constants
 
-        private const string RootKeyName = @"SOFTWARE\GeoFrameworks\GPS.NET\3.0\Devices\Bluetooth\";
+        private const string RootKeyName = Devices.RootKeyName + @"Bluetooth\";
         private const AddressFamily BluetoothFamily = (AddressFamily)32;
         private const ProtocolType RFComm = (ProtocolType)0x0003;
 
@@ -515,6 +515,25 @@ namespace GeoFramework.Gps.IO
         }
 
 #endif
+
+        protected override void OnCacheRemove()
+        {
+            try
+            {
+                Registry.LocalMachine.DeleteSubKeyTree(RootKeyName + _Address.ToString());
+            }
+            catch (UnauthorizedAccessException)
+            { }
+            finally
+            {
+                // Reset the cache properties
+                SetSuccessfulDetectionCount(0);
+                SetFailedDetectionCount(0);
+                SetDateDetected(DateTime.MinValue);
+                SetDateConnected(DateTime.MinValue);
+                SetTotalConnectionTime(TimeSpan.Zero);
+            }
+        }
 
         protected override void OnCacheWrite()
         {

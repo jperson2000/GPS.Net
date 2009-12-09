@@ -6,6 +6,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 using GeoFramework.Gps.IO;
+using Microsoft.Win32;
 
 namespace GeoFramework.Gps.IO
 {
@@ -14,8 +15,6 @@ namespace GeoFramework.Gps.IO
     /// </summary>
     public static class Devices
     {
-        internal const string DebugCategory = "GPS.Net";
-        
         private static List<ManualResetEvent> _CurrentlyDetectingWaitHandles = new List<ManualResetEvent>(16);
         private static List<SerialDevice> _SerialDevices;
         private static List<BluetoothDevice> _BluetoothDevices;
@@ -45,6 +44,13 @@ namespace GeoFramework.Gps.IO
         private static bool _AllowInfraredConnections = false;
         private static bool _IsDetectionThreadAlive;
 #endif
+
+        #region Constants
+
+        internal const string DebugCategory = "GPS.Net";
+        internal const string RootKeyName = @"SOFTWARE\GeoFrameworks\GPS.NET\3.0\Devices\";
+
+        #endregion
 
         #region Events
 
@@ -121,8 +127,6 @@ namespace GeoFramework.Gps.IO
 
             // Reset everything
             _GpsDevices = new List<Device>();
-            _BluetoothDevices = new List<BluetoothDevice>(BluetoothDevice.Cache);
-            _SerialDevices = new List<SerialDevice>(SerialDevice.Cache);
         }
 
         #endregion
@@ -401,6 +405,9 @@ namespace GeoFramework.Gps.IO
         {
             get
             {
+                if (_BluetoothDevices == null)
+                    _BluetoothDevices = new List<BluetoothDevice>(BluetoothDevice.Cache);
+
                 return _BluetoothDevices;
             }
         }
@@ -412,6 +419,9 @@ namespace GeoFramework.Gps.IO
         {
             get
             {
+                if (_SerialDevices == null)
+                    _SerialDevices = new List<SerialDevice>(SerialDevice.Cache);
+
                 return _SerialDevices;
             }
         }
@@ -830,14 +840,12 @@ namespace GeoFramework.Gps.IO
         }
 
         /// <summary>
-        /// Removes any cached information about known GPS devices.
+        /// Cancels detection and removes any cached information about known devices.
+        /// Use the <see cref="BeginDetection"/> method to re-detect devices and re-create the device cache.
         /// </summary>
         public static void Undetect()
         {
-            /* In some cases, a user may need to remove information about previously-detected 
-             * devices.  Reset the "IsGpsDevice" flag, and clear the list of known devices.
-             */
-            _GpsDevices.Clear();
+            // Undetect all devices (even non-GPS devices) and clear their cache
             foreach (Device device in _BluetoothDevices)
                 device.Undetect();
             foreach (Device device in _SerialDevices)
@@ -847,6 +855,22 @@ namespace GeoFramework.Gps.IO
             if (GpsIntermediateDriver.Current != null)
                 GpsIntermediateDriver.Current.Undetect();
 #endif
+
+            try
+            {
+                // Clear any remaining entries in the device cache by deleting the root registry key
+                Registry.LocalMachine.DeleteSubKeyTree(RootKeyName);
+            }
+            catch (UnauthorizedAccessException) 
+            { }
+
+            // Clear the lists of Bluetooth/Serial devices. This will allow new devices to be detected the next
+            // time the SerialDevice.Cache or BluetoothDevice.Cache is read.
+            _BluetoothDevices = null;
+            _SerialDevices = null;
+
+            // Clear the list of known GPS devices. This will be repopulated as new GPS devices are detected.
+            _GpsDevices.Clear();
         }
 
         /// <summary>

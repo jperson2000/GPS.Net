@@ -656,18 +656,22 @@ namespace GeoFramework.Gps.IO
         }
 
         /// <summary>
-        /// Cancels detection and marks this device as undetected.
+        /// Cancels detection and removes any cached information about the device.
+        /// Use the <see cref="BeginDetection"/> method to re-detect the device and re-add it to the device cache.
         /// </summary>
         public void Undetect()
         {
             // Cancel any active detection
             CancelDetection();
 
-            // Reset the failed detection counter
-            SetFailedDetectionCount(0);
+            // Remove the device from the detection cache
+            OnCacheRemove();
 
-            // And clear its flags
+            // And clear all flags
             _IsGpsDevice = false;
+            _IsDetectionCompleted = false;
+            _IsOpen = false;
+            _ConnectionStarted = DateTime.MinValue;
         }
 
         /// <summary>
@@ -926,6 +930,10 @@ namespace GeoFramework.Gps.IO
             {
                 _DetectionThread.Abort();
             }
+
+            _DetectionThread = null;
+            _DetectionStartedWaitHandle.Reset();
+            _DetectionCompleteWaitHandle.Reset();
         }
 
         private void DetectionThreadProc()
@@ -1195,16 +1203,7 @@ namespace GeoFramework.Gps.IO
         protected virtual void Dispose(bool disposing)
         {
             // Shut down any detection
-            if (_DetectionThread != null
-#if PocketPC
-                && _IsDetectionThreadAlive 
-#else
-                && _DetectionThread.IsAlive 
-#endif
-                )
-            {
-                _DetectionThread.Abort();
-            }
+            CancelDetection();
 
             // Close any open connection
             Close();

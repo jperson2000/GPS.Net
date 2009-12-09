@@ -97,6 +97,17 @@ namespace WindowsFormsApplication1
         {
             BeginInvoke(new MethodInvoker(delegate()
             {
+                undetectButton.Enabled = true;
+
+                foreach (ListViewItem existingItem in devicesListView.Items)
+                {
+                    if (object.ReferenceEquals(existingItem.Tag, e.Device))
+                    {
+                        existingItem.SubItems[1].Text = "Detecting...";
+                        return;
+                    }
+                }
+
                 ListViewItem item = new ListViewItem();
                 item.Text = e.Device.Name;
                 item.ImageIndex = 2;
@@ -272,6 +283,13 @@ namespace WindowsFormsApplication1
             Devices.CancelDetection();
         }
 
+        private void undetectButton_Click(object sender, EventArgs e)
+        {
+            Devices.Undetect();
+            devicesListView.Items.Clear();
+            undetectButton.Enabled = false;
+        }
+
         private void startButton_Click(object sender, EventArgs e)
         {
             try
@@ -301,6 +319,28 @@ namespace WindowsFormsApplication1
 
         #endregion
 
+        #region Context Menu Events
+
+        private void deviceContextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = devicesListView.SelectedItems.Count == 0;
+        }
+
+        private void redetectMenuItem_Click(object sender, EventArgs e)
+        {
+            Device device = (Device)devicesListView.SelectedItems[0].Tag;
+            device.Undetect();
+            device.BeginDetection();
+        }
+
+        private void resetMenuItem_Click(object sender, EventArgs e)
+        {
+            Device device = (Device)devicesListView.SelectedItems[0].Tag;
+            device.Reset();
+        }
+
+        #endregion
+
         #region Other Form Control Events
 
         private void devicesListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
@@ -311,6 +351,12 @@ namespace WindowsFormsApplication1
         private void serialCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             Devices.AllowSerialConnections = serialCheckBox.Checked;
+            exhaustiveCheckBox.Enabled = serialCheckBox.Checked;
+        }
+
+        private void exhaustiveCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Devices.AllowExhaustiveSerialPortScanning = exhaustiveCheckBox.Checked;
         }
 
         private void bluetoothCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -319,7 +365,6 @@ namespace WindowsFormsApplication1
         }
 
         #endregion
-
     }
 
 }

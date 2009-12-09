@@ -8,12 +8,14 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("SmartDeviceProject2")>
-<Assembly: AssemblyDescription("")>
-<Assembly: AssemblyCompany("Microsoft")>
-<Assembly: AssemblyProduct("SmartDeviceProject2")>
-<Assembly: AssemblyCopyright("Copyright © Microsoft 2009")>
-<Assembly: AssemblyTrademark("")>
+<Assembly: AssemblyTitle("GPS Diagnostics")> 
+<Assembly: AssemblyDescription("Searches for GPS devices and helps solve connectivity issues.")> 
+<Assembly: AssemblyConfiguration("Public Release")> 
+<Assembly: AssemblyCompany("GeoFrameworks, LLC")> 
+<Assembly: AssemblyProduct("GPS Diagnostics")> 
+<Assembly: AssemblyCopyright("This utility is released to the public domain.")> 
+<Assembly: AssemblyTrademark("")> 
+<Assembly: AssemblyCulture("")> 
 
 <Assembly: CLSCompliant(False)> 
 

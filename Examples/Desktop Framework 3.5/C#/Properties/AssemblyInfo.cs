@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("WindowsFormsApplication1")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("WindowsFormsApplication1")]
-[assembly: AssemblyCopyright("Copyright ©  2008")]
+[assembly: AssemblyTitle("GPS Diagnostics")]
+[assembly: AssemblyDescription("Searches for GPS devices and helps solve connectivity issues.")]
+[assembly: AssemblyConfiguration("Public Release")]
+[assembly: AssemblyCompany("GeoFrameworks, LLC")]
+[assembly: AssemblyProduct("GPS Diagnostics")]
+[assembly: AssemblyCopyright("This utility is released to the public domain.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

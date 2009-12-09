@@ -53,6 +53,9 @@
             this.devicesListView = new System.Windows.Forms.ListView();
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
+            this.deviceContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.redetectMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.resetMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
@@ -74,6 +77,9 @@
             this.serialCheckBox = new System.Windows.Forms.CheckBox();
             this.bluetoothCheckBox = new System.Windows.Forms.CheckBox();
             this.nmeaInterpreter1 = new GeoFramework.Gps.Nmea.NmeaInterpreter();
+            this.exhaustiveCheckBox = new System.Windows.Forms.CheckBox();
+            this.undetectButton = new System.Windows.Forms.Button();
+            this.deviceContextMenu.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.devicesTab.SuspendLayout();
@@ -88,7 +94,7 @@
             // startButton
             // 
             this.startButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.startButton.Location = new System.Drawing.Point(578, 85);
+            this.startButton.Location = new System.Drawing.Point(578, 121);
             this.startButton.Name = "startButton";
             this.startButton.Size = new System.Drawing.Size(98, 23);
             this.startButton.TabIndex = 0;
@@ -100,7 +106,7 @@
             // 
             this.stopButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.stopButton.Enabled = false;
-            this.stopButton.Location = new System.Drawing.Point(578, 114);
+            this.stopButton.Location = new System.Drawing.Point(578, 150);
             this.stopButton.Name = "stopButton";
             this.stopButton.Size = new System.Drawing.Size(98, 23);
             this.stopButton.TabIndex = 1;
@@ -112,7 +118,7 @@
             // 
             this.pauseButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pauseButton.Enabled = false;
-            this.pauseButton.Location = new System.Drawing.Point(578, 156);
+            this.pauseButton.Location = new System.Drawing.Point(578, 192);
             this.pauseButton.Name = "pauseButton";
             this.pauseButton.Size = new System.Drawing.Size(98, 23);
             this.pauseButton.TabIndex = 2;
@@ -124,7 +130,7 @@
             // 
             this.resumeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.resumeButton.Enabled = false;
-            this.resumeButton.Location = new System.Drawing.Point(578, 186);
+            this.resumeButton.Location = new System.Drawing.Point(578, 222);
             this.resumeButton.Name = "resumeButton";
             this.resumeButton.Size = new System.Drawing.Size(98, 23);
             this.resumeButton.TabIndex = 3;
@@ -259,6 +265,7 @@
             this.devicesListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2});
+            this.devicesListView.ContextMenuStrip = this.deviceContextMenu;
             this.devicesListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.devicesListView.LargeImageList = this.imageList1;
             this.devicesListView.Location = new System.Drawing.Point(0, 0);
@@ -279,6 +286,29 @@
             // 
             this.columnHeader2.Text = "Status";
             this.columnHeader2.Width = 641;
+            // 
+            // deviceContextMenu
+            // 
+            this.deviceContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.redetectMenuItem,
+            this.resetMenuItem});
+            this.deviceContextMenu.Name = "deviceContextMenu";
+            this.deviceContextMenu.Size = new System.Drawing.Size(130, 48);
+            this.deviceContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.deviceContextMenu_Opening);
+            // 
+            // redetectMenuItem
+            // 
+            this.redetectMenuItem.Name = "redetectMenuItem";
+            this.redetectMenuItem.Size = new System.Drawing.Size(129, 22);
+            this.redetectMenuItem.Text = "Redetect";
+            this.redetectMenuItem.Click += new System.EventHandler(this.redetectMenuItem_Click);
+            // 
+            // resetMenuItem
+            // 
+            this.resetMenuItem.Name = "resetMenuItem";
+            this.resetMenuItem.Size = new System.Drawing.Size(129, 22);
+            this.resetMenuItem.Text = "Reset";
+            this.resetMenuItem.Click += new System.EventHandler(this.resetMenuItem_Click);
             // 
             // imageList1
             // 
@@ -460,7 +490,7 @@
             this.serialCheckBox.AutoSize = true;
             this.serialCheckBox.Checked = true;
             this.serialCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.serialCheckBox.Location = new System.Drawing.Point(578, 234);
+            this.serialCheckBox.Location = new System.Drawing.Point(578, 270);
             this.serialCheckBox.Name = "serialCheckBox";
             this.serialCheckBox.Size = new System.Drawing.Size(86, 17);
             this.serialCheckBox.TabIndex = 12;
@@ -474,7 +504,7 @@
             this.bluetoothCheckBox.AutoSize = true;
             this.bluetoothCheckBox.Checked = true;
             this.bluetoothCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.bluetoothCheckBox.Location = new System.Drawing.Point(578, 257);
+            this.bluetoothCheckBox.Location = new System.Drawing.Point(578, 316);
             this.bluetoothCheckBox.Name = "bluetoothCheckBox";
             this.bluetoothCheckBox.Size = new System.Drawing.Size(110, 17);
             this.bluetoothCheckBox.TabIndex = 13;
@@ -499,24 +529,51 @@
             this.nmeaInterpreter1.Paused += new System.EventHandler(this.nmeaInterpreter1_Paused);
             this.nmeaInterpreter1.PositionChanged += new System.EventHandler<GeoFramework.PositionEventArgs>(this.nmeaInterpreter1_PositionChanged);
             // 
+            // exhaustiveCheckBox
+            // 
+            this.exhaustiveCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.exhaustiveCheckBox.AutoSize = true;
+            this.exhaustiveCheckBox.Location = new System.Drawing.Point(578, 293);
+            this.exhaustiveCheckBox.Name = "exhaustiveCheckBox";
+            this.exhaustiveCheckBox.Size = new System.Drawing.Size(107, 17);
+            this.exhaustiveCheckBox.TabIndex = 15;
+            this.exhaustiveCheckBox.Text = "Exhaustive Scan";
+            this.exhaustiveCheckBox.UseVisualStyleBackColor = true;
+            this.exhaustiveCheckBox.CheckedChanged += new System.EventHandler(this.exhaustiveCheckBox_CheckedChanged);
+            // 
+            // undetectButton
+            // 
+            this.undetectButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.undetectButton.Enabled = false;
+            this.undetectButton.Location = new System.Drawing.Point(578, 71);
+            this.undetectButton.Name = "undetectButton";
+            this.undetectButton.Size = new System.Drawing.Size(98, 23);
+            this.undetectButton.TabIndex = 16;
+            this.undetectButton.Text = "Undetect";
+            this.undetectButton.UseVisualStyleBackColor = true;
+            this.undetectButton.Click += new System.EventHandler(this.undetectButton_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(688, 528);
-            this.Controls.Add(this.bluetoothCheckBox);
-            this.Controls.Add(this.serialCheckBox);
+            this.Controls.Add(this.undetectButton);
             this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.serialCheckBox);
+            this.Controls.Add(this.exhaustiveCheckBox);
             this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.bluetoothCheckBox);
             this.Controls.Add(this.cancelDetectButton);
             this.Controls.Add(this.detectButton);
+            this.Controls.Add(this.startButton);
             this.Controls.Add(this.resumeButton);
             this.Controls.Add(this.pauseButton);
             this.Controls.Add(this.stopButton);
-            this.Controls.Add(this.startButton);
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "MainForm";
             this.Text = "GPS.NET 3.0 Diagnostics";
+            this.deviceContextMenu.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
@@ -576,6 +633,11 @@
         private System.Windows.Forms.ColumnHeader columnHeader5;
         private System.Windows.Forms.ColumnHeader columnHeader6;
         private System.Windows.Forms.ColumnHeader columnHeader7;
+        private System.Windows.Forms.ContextMenuStrip deviceContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem redetectMenuItem;
+        private System.Windows.Forms.CheckBox exhaustiveCheckBox;
+        private System.Windows.Forms.ToolStripMenuItem resetMenuItem;
+        private System.Windows.Forms.Button undetectButton;
     }
 }
 

@@ -93,6 +93,15 @@ Public Class MainForm
     End Sub
 
     Private Sub DeviceDetectionAttempted(ByVal sender As Object, ByVal e As DeviceEventArgs)
+        undetectButton.Enabled = True
+
+        For Each existingItem As ListViewItem In devicesListView.Items
+            If Object.ReferenceEquals(existingItem.Tag, e.Device) Then
+                existingItem.SubItems(1).Text = "Detecting..."
+                Return
+            End If
+        Next
+
         Dim item As New ListViewItem
         item.Text = e.Device.Name
         item.ImageIndex = 2
@@ -271,6 +280,12 @@ Public Class MainForm
         Devices.CancelDetection()
     End Sub
 
+    Private Sub undetectButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles undetectButton.Click
+        Devices.Undetect()
+        devicesListView.Items.Clear()
+        undetectButton.Enabled = False
+    End Sub
+
     Private Sub startButton_Click(ByVal sender As Object, ByVal e As EventArgs) Handles startButton.Click
         Try
             nmeaInterpreter1.Start()
@@ -293,6 +308,25 @@ Public Class MainForm
 
 #End Region
 
+#Region "  Context Menu Events  "
+
+    Private Sub deviceContextMenu_Opening(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles deviceContextMenu.Opening
+        e.Cancel = devicesListView.SelectedItems.Count = 0
+    End Sub
+
+    Private Sub redetectMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles redetectMenuItem.Click
+        Dim device As Device = devicesListView.SelectedItems(0).Tag
+        device.Undetect()
+        device.BeginDetection()
+    End Sub
+
+    Private Sub resetMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles resetMenuItem.Click
+        Dim device As Device = devicesListView.SelectedItems(0).Tag
+        device.Reset()
+    End Sub
+
+#End Region
+
 #Region "  Other Form Control Events  "
 
     Private Sub devicesListView_ItemSelectionChanged(ByVal sender As Object, ByVal e As ListViewItemSelectionChangedEventArgs) Handles devicesListView.ItemSelectionChanged
@@ -301,6 +335,11 @@ Public Class MainForm
 
     Private Sub serialCheckBox_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs) Handles serialCheckBox.CheckedChanged
         Devices.AllowSerialConnections = serialCheckBox.Checked
+        exhaustiveCheckBox.Enabled = serialCheckBox.Checked
+    End Sub
+
+    Private Sub exhaustiveCheckBox_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles exhaustiveCheckBox.CheckedChanged
+        Devices.AllowExhaustiveSerialPortScanning = exhaustiveCheckBox.Checked
     End Sub
 
     Private Sub bluetoothCheckBox_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs) Handles bluetoothCheckBox.CheckedChanged
@@ -308,5 +347,4 @@ Public Class MainForm
     End Sub
 
 #End Region
-
 End Class

@@ -1009,139 +1009,18 @@ namespace GeoFramework.Gps.IO
                     }
                 }
 
-#endif
                 /* If we get here, the GPS Intermediate Driver is not responding! */
 
-                int count;
-
-                #region Detect Bluetooth devices
-
-                // Is Bluetooth supported and turned on?
-                if (IsBluetoothSupported && IsBluetoothEnabled)
-                {
-                    Debug.WriteLine("Detecting Bluetooth devices", DebugCategory);
-
-                    // Start bluetooth detection for each device
-                    count = _BluetoothDevices.Count;
-                    for (int index = 0; index < count; index++)
-                        _BluetoothDevices[index].BeginDetection();
-                }
-
-                #endregion
-
-                #region Detect serial GPS devices
-
-                if (AllowSerialConnections)
-                {
-                    Debug.WriteLine("Detecting serial devices", DebugCategory);
-
-                    count = SerialDevices.Count;
-                    for (int index = 0; index < count; index++)
-                        _SerialDevices[index].BeginDetection();
-
-                    /* If we're performing "exhaustive" detection, ports are scanned
-                     * even if there's no evidence they actually exist.  This can happen in rare
-                     * cases, such as when a PCMCIA GPS device is plugged in and fails to create
-                     * a registry entry.
-                     */
-
-                    if (_AllowExhaustiveSerialPortScanning)
-                    {
-                        Debug.WriteLine("Scanning all serial ports", DebugCategory);
-
-                        // Try all ports from COM0: up to the maximum port number
-                        for (int index = 0; index < _MaximumSerialPortNumber; index++)
-                        {
-                            // Is this port already being checked?
-                            bool alreadyBeingScanned = false;
-                            for (int existingIndex = 0; existingIndex < _SerialDevices.Count; existingIndex++)
-                            {
-                                if (_SerialDevices[existingIndex].PortNumber.Equals(index))
-                                {
-                                    // Yes.  Don't test it again
-                                    alreadyBeingScanned = true;
-                                    break;
-                                }
-
-                                // If it's already being scanned, stop
-                                if (alreadyBeingScanned)
-                                    break;
-                            }
-
-                            // If it's already being scanned, skip to the next port
-                            if (alreadyBeingScanned)
-                                continue;
-
-                            // This is a new device.  Scan it
-                            SerialDevice exhaustivePort = new SerialDevice("COM" + index.ToString() + ":");
-                            Debug.WriteLine("Checking COM" + index + " for GPS device", DebugCategory);
-                            exhaustivePort.BeginDetection();
-                        }
-                    }
-                }
-
-                #endregion
-
-                #region Discover new Bluetooth devices
-
-                // Is Bluetooth supported and turned on?
-                if (IsBluetoothSupported && IsBluetoothEnabled)
-                {
-                    /* NOTE: For mobile devices, only one connection is allowed at a time.
-                     * As a result, we use a static SyncRoot to ensure that connections
-                     * and discovery happens in serial.  For this reason, we will not attempt
-                     * to discover devices until *after* trying to detect existing ones.
-                     */
-
-#if PocketPC
-                    // Wait for existing devices to be tested
-                    count = _BluetoothDevices.Count;
-                    for (int index = 0; index < count; index++)
-                    {
-                        // Complete detection for this device
-                        _BluetoothDevices[index].WaitForDetection();
-                    }
 #endif
+                // Inspect all Bluetooth and serial devices to see if any of them are GPSes
+                BeginBluetoothDetection();
+                BeginSerialDetection(false);
 
-                    // Begin searching for brand new devices
-                    Debug.WriteLine("Discovering new Bluetooth devices", DebugCategory);
-                    BluetoothDevice.DiscoverDevices(true);
+                // Discover any new Bluetooth devices
+                DiscoverBluetoothDevices();
 
-                    // Block until that search completes
-                    BluetoothDevice.DeviceDiscoveryThread.Join();
-                }
-
-                #endregion
-
-                #region Wait for all devices to finish detection
-
-                /* A list holds the wait handles of devices being detected.  When it is empty, 
-                 * detection has finished on all threads.
-                 */
-                Debug.WriteLine("Waiting for device detection to finish", DebugCategory);
-                while (_CurrentlyDetectingWaitHandles.Count != 0)
-                {
-                    try
-                    {
-                        ManualResetEvent handle = _CurrentlyDetectingWaitHandles[0];
-#if !PocketPC
-                        if (!handle.SafeWaitHandle.IsClosed)
-#endif
-                        handle.WaitOne();
-                    }
-                    catch (ObjectDisposedException)
-                    {
-                        /* In some rare cases a device will get disposed of and nulled out.
-                         * So, regardless of what happens we can remove the item.
-                         */
-                    }
-                    finally
-                    {
-                        _CurrentlyDetectingWaitHandles.RemoveAt(0);
-                    }
-                }
-
-                #endregion
+                // Wait for all devices to finish detection
+                WaitForDetectionInternal();
 
 #if PocketPC
                 #region Reconfigure the GPS Intermediate Driver (if necessary)
@@ -1160,7 +1039,7 @@ namespace GeoFramework.Gps.IO
                     && !gpsid.IsGpsDevice)
                 {
                     // Look through each confirmed GPS device
-                    count = _GpsDevices.Count;
+                    int count = _GpsDevices.Count;
                     for (int index = 0; index < count; index++)
                     {
                         // Is it a serial device?
@@ -1189,6 +1068,14 @@ namespace GeoFramework.Gps.IO
 
                 #endregion
 #endif
+                if (!IsDeviceDetected && AllowSerialConnections)
+                {
+                    // If we get here, and there are still no GPSes detected, then try detecting serial devices again,
+                    // but this time omitting the colon suffix. On some systems, the colon is not included in the port name.
+                    Debug.WriteLine("No serial devices were detected in the first pass. Starting second pass...");
+                    BeginSerialDetection(true);
+                    WaitForDetectionInternal();
+                }
 
                 // Signal completion
                 Debug.WriteLine("Device detection has completed", DebugCategory);
@@ -1241,16 +1128,198 @@ namespace GeoFramework.Gps.IO
             }
         }
 
+        /// <summary>
+        /// This method, spawned by the ThreadPool, monitors detection and aborts it if it's taking too long.
+        /// </summary>
         private static void DetectionThreadProcWatcher(object over9000)
         {
-            /* This method, spawned by the ThreadPool, monitors detection and aborts it if
-             * it's taking too long.
-             */
             if (_DetectionCompleteWaitHandle.WaitOne((int)_DeviceDetectionTimeout.TotalMilliseconds, false))
                 return;
 
-            // Yes.  Stop it.
+            // If we get here, then the timeout has expired. So cancel detection.
             CancelDetection();
+        }
+
+        /// <summary>
+        /// Begins detecting all bluetooth devices to determine if they are GPS devices.
+        /// All detection is done asynchronously, so this method returns immediately. 
+        /// Use the <see cref="WaitForDetection()"/> method if you need to block until detection is completed.
+        /// </summary>
+        private static void BeginBluetoothDetection()
+        {
+            // Is Bluetooth supported and turned on?
+            if (IsBluetoothSupported && IsBluetoothEnabled)
+            {
+                Debug.WriteLine("Detecting Bluetooth devices", DebugCategory);
+
+                // Start bluetooth detection for each device
+                int count = _BluetoothDevices.Count;
+                for (int index = 0; index < count; index++)
+                    _BluetoothDevices[index].BeginDetection();
+            }
+        }
+
+        /// <summary>
+        /// Begins detecting all serial devices to determine if they are GPS devices.
+        /// All detection is done asynchronously, so this method returns immediately.
+        /// Use the <see cref="WaitForDetection()"/> method if you need to block until detection is completed.
+        /// </summary>
+        /// <param name="omitColonSuffix">
+        /// If set to <see langword="true"/>, the colon character (":") will be omitted from the port names.
+        /// This is required on some systems in order for the device to be detected properly.
+        /// </param>
+        private static void BeginSerialDetection(bool omitColonSuffix)
+        {
+            if (AllowSerialConnections)
+            {
+                Debug.WriteLine("Detecting serial devices", DebugCategory);
+
+                // Begin detection for each of the known serial devices
+                int count = SerialDevices.Count;
+                for (int index = 0; index < count; index++)
+                {
+                    SerialDevice device = _SerialDevices[index];
+
+                    if (omitColonSuffix && device.Port.EndsWith(":", StringComparison.Ordinal))
+                    {
+                        // Remove the colon suffix from the port name
+                        string newName = device.Port.Substring(0, device.Port.Length - 1);
+                        RenameDevice(device, newName);
+                    }
+
+                    device.BeginDetection();
+                }
+
+                /* If we're performing "exhaustive" detection, ports are scanned
+                 * even if there's no evidence they actually exist.  This can happen in rare
+                 * cases, such as when a PCMCIA GPS device is plugged in and fails to create
+                 * a registry entry.
+                 */
+                if (_AllowExhaustiveSerialPortScanning)
+                {
+                    Debug.WriteLine("Scanning all serial ports", DebugCategory);
+
+                    // Try all ports from COM0: up to the maximum port number
+                    for (int index = 0; index <= _MaximumSerialPortNumber; index++)
+                    {
+                        // Is this port already being checked?
+                        bool alreadyBeingScanned = false;
+                        for (int existingIndex = 0; existingIndex < _SerialDevices.Count; existingIndex++)
+                        {
+                            if (_SerialDevices[existingIndex].PortNumber.Equals(index))
+                            {
+                                // Yes.  Don't test it again
+                                alreadyBeingScanned = true;
+                                break;
+                            }
+
+                            // If it's already being scanned, stop
+                            if (alreadyBeingScanned)
+                                break;
+                        }
+
+                        // If it's already being scanned, skip to the next port
+                        if (alreadyBeingScanned)
+                            continue;
+
+                        // Build the port name
+                        string portName = "COM" + index;
+                        if (!omitColonSuffix)
+                            portName += ":";
+
+                        // This is a new device.  Scan it
+                        SerialDevice exhaustivePort = new SerialDevice(portName);
+                        Debug.WriteLine("Checking " + portName + " for GPS device", DebugCategory);
+                        exhaustivePort.BeginDetection();
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Discovers any new bluetooth devices.
+        /// </summary>
+        private static void DiscoverBluetoothDevices()
+        {
+            // Is Bluetooth supported and turned on?
+            if (IsBluetoothSupported && IsBluetoothEnabled)
+            {
+#if PocketPC
+                /* NOTE: For mobile devices, only one connection is allowed at a time.
+                * As a result, we use a static SyncRoot to ensure that connections
+                * and discovery happens in serial.  For this reason, we will not attempt
+                * to discover devices until *after* trying to detect existing ones.
+                */
+
+                // Wait for existing devices to be tested
+                int count = _BluetoothDevices.Count;
+                for (int index = 0; index < count; index++)
+                {
+                    // Complete detection for this device
+                    _BluetoothDevices[index].WaitForDetection();
+                }
+#endif
+
+                // Begin searching for brand new devices
+                Debug.WriteLine("Discovering new Bluetooth devices", DebugCategory);
+                BluetoothDevice.DiscoverDevices(true);
+
+                // Block until that search completes
+                BluetoothDevice.DeviceDiscoveryThread.Join();
+            }
+        }
+
+        /// <summary>
+        /// Waits for device detection to complete.
+        /// </summary>
+        private static void WaitForDetectionInternal()
+        {
+            Debug.WriteLine("Waiting for device detection to finish", DebugCategory);
+
+            /* A list holds the wait handles of devices being detected.  When it is empty, 
+             * detection has finished on all threads.
+             */
+            while (_CurrentlyDetectingWaitHandles.Count != 0)
+            {
+                try
+                {
+                    ManualResetEvent handle = _CurrentlyDetectingWaitHandles[0];
+#if !PocketPC
+                    if (!handle.SafeWaitHandle.IsClosed)
+#endif
+                        handle.WaitOne();
+                }
+                catch (ObjectDisposedException)
+                {
+                    /* In some rare cases a device will get disposed of and nulled out.
+                     * So, regardless of what happens we can remove the item.
+                     */
+                }
+                finally
+                {
+                    _CurrentlyDetectingWaitHandles.RemoveAt(0);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Renames the specified serial device, only if there is not already another serial device with the specified name.
+        /// </summary>
+        /// <param name="device">The device to be renamed.</param>
+        /// <param name="newName">The new name for the device.</param>
+        private static void RenameDevice(SerialDevice device, string newName)
+        {
+            // Make sure this port isn't already opened by another device
+            for (int existingDevice = 0; existingDevice < _SerialDevices.Count; existingDevice++)
+            {
+                if (_SerialDevices[existingDevice].Port.Equals(newName, StringComparison.OrdinalIgnoreCase))
+                {
+                    return;
+                }
+            }
+
+            device.Port = newName;
+            device.SetName(newName);
         }
 
         internal static void OnDeviceDetectionAttempted(Device device)

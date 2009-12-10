@@ -158,8 +158,7 @@ namespace GeoFramework.Gps.IO
         {
             get
             {
-                // Start with a zero in case there is no numeric portion
-                StringBuilder numericPortion = new StringBuilder("0", 4);
+                StringBuilder numericPortion = new StringBuilder(4);
 
                 // Extract numeric digits from the name
 #if !PocketPC
@@ -172,8 +171,15 @@ namespace GeoFramework.Gps.IO
                         numericPortion.Append(character);
                 }
 
-                // Yes.  Extract the number
-                return int.Parse(numericPortion.ToString());
+                // Did we find any numeric digits?
+                if (numericPortion.Length > 0)
+                {
+                    // Yes.  Extract the number
+                    return int.Parse(numericPortion.ToString());
+                }
+                
+                // No.  Return -1 (not zero, since that's a valid port number)
+                return -1;
             }
         }
 
@@ -801,77 +807,154 @@ namespace GeoFramework.Gps.IO
             {
                 List<SerialDevice> devices = new List<SerialDevice>();
 
-                // Add virtual ports for Bluetooth devices
-                IList<BluetoothDevice> cache = Devices.BluetoothDevices;
-                for (int index = 0; index < cache.Count; index++)
-                {
-                    // Get the device
-                    BluetoothDevice device = cache[index];
+                // Pass 1: Look for devices recorded in the registry
+                LoadCachedDevices(devices);
 
-                    // Does this Bluetooth device have a serial port?
-                    SerialDevice virtualDevice = device.VirtualSerialPort;
-                    if (virtualDevice != null)
-                        if (!devices.Contains(virtualDevice))
-                            devices.Add(virtualDevice);
+                // Pass 2: Add virtual serial ports for Bluetooth devices
+                LoadVirtualDevices(devices);
+
+                // Pass 3: Look for devices already detected by Windows
+                LoadWindowsDevices(devices);
+
+                /* Sort the list based on the most reliable device first.
+                 * Device detection will execute in this order.
+                 */
+                devices.Sort(Device.BestDeviceComparer);
+
+                // Return the results
+                return devices;
+            }
+        }
+
+        #endregion
+
+        #region Internal Methods
+
+        internal void SetName(string name)
+        {
+            _Name = name;
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        /// <summary>
+        /// Loads the serial devices that have been cached by GPS.Net. This list contains previously-detected GPS devices, 
+        /// along with devices which were tested but found to NOT be GPS devices. By keeping these statistics, 
+        /// the detection system can become faster over time by first testing devices which have a better success rate.
+        /// </summary>
+        /// <param name="devices">The list to which the cached devices are added.</param>
+        private static void LoadCachedDevices(IList<SerialDevice> devices)
+        {
+            RegistryKey serialDevicesKey = Registry.LocalMachine.OpenSubKey(RootKeyName, false);
+
+            // Anything to do?
+            if (serialDevicesKey != null)
+            {
+                // Yes.  Enumerate the sub-keys
+                string[] deviceKeys = serialDevicesKey.GetSubKeyNames();
+                for (int index = 0; index < deviceKeys.Length; index++)
+                {
+                    // This value is a serial port name
+                    string portName = deviceKeys[index];
+
+                    // Finally, create a device from this information
+                    SerialDevice device = new SerialDevice(portName);
+
+                    // And add it
+                    devices.Add(device);
                 }
 
+                // Finally, close the key
+                serialDevicesKey.Close();
+            }
+        }
+
+        /// <summary>
+        /// Loads any virtual serial devices that exist for other types of physical devices.
+        /// This list includes non-GPS devices.
+        /// </summary>
+        /// <param name="devices">The list to which the cached devices are added.</param>
+        private static void LoadVirtualDevices(IList<SerialDevice> devices)
+        {
+            IList<BluetoothDevice> cache = Devices.BluetoothDevices;
+            for (int index = 0; index < cache.Count; index++)
+            {
+                // Get the device
+                BluetoothDevice device = cache[index];
+
+                // Does this Bluetooth device have a serial port?
+                SerialDevice virtualDevice = device.VirtualSerialPort;
+                if (virtualDevice != null)
+                    if (!devices.Contains(virtualDevice))
+                        devices.Add(virtualDevice);
+            }
+        }
+
+        /// <summary>
+        /// Loads the serial devices that have already been detected by Windows. This list includes non-GPS devices.
+        /// </summary>
+        /// <param name="devices">The list to which the devices are added.</param>
+        private static void LoadWindowsDevices(IList<SerialDevice> devices)
+        {
 #if !PocketPC
+            // Open HKLM\HARDWARE\DEVICEMAP\SERIALCOMM
+            RegistryKey portsKey = Registry.LocalMachine.OpenSubKey(@"HARDWARE\DEVICEMAP\SERIALCOMM", false);
+            if (portsKey != null)
+            {
+                // Get a list of keys underneath this one
+                string[] portKeys = portsKey.GetValueNames();
 
-                // Open HKLM\HARDWARE\DEVICEMAP\SERIALCOMM
-                RegistryKey portsKey = Registry.LocalMachine.OpenSubKey(@"HARDWARE\DEVICEMAP\SERIALCOMM", false);
-                if (portsKey != null)
+                #region Pass #1: Analysis of actual ports
+
+                int count = portKeys.Length;
+                for (int index = 0; index < count; index++)
                 {
-                    // Get a list of keys underneath this one
-                    string[] portKeys = portsKey.GetValueNames();
+                    // Get the name of the registry key for this device
+                    string portKey = portKeys[index];
 
-                    #region Pass #1: Analysis of actual ports
-
-                    int count = portKeys.Length;
-                    for (int index = 0; index < count; index++)
+                    // Is this device a Bluetooth virtual serial port?
+                    if (portKey.Contains(@"\BthModem"))
                     {
-                        // Get the name of the registry key for this device
-                        string portKey = portKeys[index];
-
-                        // Is this device a Bluetooth virtual serial port?
-                        if (portKey.Contains(@"\BthModem"))
-                        {
-                            /* Yes.  We already have a way to associate BluetoothDevice objects
+                        /* Yes.  We already have a way to associate BluetoothDevice objects
                              * with SerialDevice objects, so just skip this.
                              */
-                            continue;
-                        }
+                        continue;
+                    }
 
-                        /* A bug in the Microsoft Bluetooth stack causes the registry value to have an extra 
+                    /* A bug in the Microsoft Bluetooth stack causes the registry value to have an extra 
                          * byte, which mucks shiz up.  So, in order to scrub those out, we must use ASCII encoding
                          * to convert the string to bytes and back.  This causes any garbage chars to become "?"
                          * which is never valid for a COM: port name.
                          */
 
-                        string portName = (string)portsKey.GetValue(portKey);
+                    string portName = (string)portsKey.GetValue(portKey);
 
-                        // Convert the ASCII bytes to a string
-                        portName =
-                            ASCIIEncoding.ASCII.GetString(
+                    // Convert the ASCII bytes to a string
+                    portName =
+                        ASCIIEncoding.ASCII.GetString(
                             // Convert the registry value to ASCII bytes
                             ASCIIEncoding.ASCII.GetBytes(portName))
                             // Lastly, remove "?" characters
                             .Replace("?", string.Empty);
 
-                        // Lastly, append a colon
-                        portName = portName + ":";
+                    // Lastly, append a colon
+                    portName = portName + ":";
 
-                        // Make a device with the port name
-                        SerialDevice device = new SerialDevice(portName);
+                    // Make a device with the port name
+                    SerialDevice device = new SerialDevice(portName);
 
-                        // Add it to the results
+                    // Add it to the results
+                    if (!devices.Contains(device))
                         devices.Add(device);
-                    }
-
-                    // Finally, clean up
-                    portsKey.Close();
-
-                    #endregion
                 }
+
+                // Finally, clean up
+                portsKey.Close();
+
+                #endregion
+            }
 #else
                 #region WIDCOMM Bluetooth via Serial
 
@@ -1214,24 +1297,6 @@ namespace GeoFramework.Gps.IO
 
                 #endregion
 #endif
-
-                /* Sort the list based on the most reliable device first.
-                 * Device detection will execute in this order.
-                 */
-                devices.Sort(Device.BestDeviceComparer);
-
-                // Return the results
-                return devices;
-            }
-        }
-
-        #endregion
-
-        #region Internal Methods
-
-        internal void SetName(string name)
-        {
-            _Name = name;
         }
 
         #endregion

@@ -916,24 +916,29 @@ namespace GeoFramework.Gps.IO
         /// </summary>
         public virtual void CancelDetection()
         {
-            if (
-                // Is a thread running?  If not, skip
-                _DetectionThread != null
+            try
+            {
+                if (
+                    // Is a thread running?  If not, skip
+                    _DetectionThread != null
 #if !PocketPC
-                // Is the thread alive?  If not, skip
-                && _DetectionThread.IsAlive
+                    // Is the thread alive?  If not, skip
+                    && _DetectionThread.IsAlive
 #else
-                // Is the thread alive?  If not, skip
+    // Is the thread alive?  If not, skip
                 && _IsDetectionThreadAlive 
 #endif
-                )
-            {
-                _DetectionThread.Abort();
-            }
+                    )
+                {
+                    _DetectionThread.Abort();
+                }
 
-            _DetectionThread = null;
-            _DetectionStartedWaitHandle.Reset();
-            _DetectionCompleteWaitHandle.Reset();
+                _DetectionThread = null;
+                _DetectionStartedWaitHandle.Reset();
+                _DetectionCompleteWaitHandle.Reset();
+            }
+            catch (ObjectDisposedException)
+            { }
         }
 
         private void DetectionThreadProc()

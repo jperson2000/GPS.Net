@@ -703,74 +703,11 @@ namespace GeoFramework.Gps.IO
             {
                 List<BluetoothDevice> devices = new List<BluetoothDevice>();
 
-                #region Look for devices recorded in the registry
+                // Pass 1: Look for devices recorded in the registry
+                LoadCachedDevices(devices);
 
-                /* GPS.NET 3.0 will use the registry to remember previously detected GPS devices, along with devices which were tested
-                 * but found to NOT be GPS devices.  By keeping these statistics, the detection system can become faster over time by
-                 * first testing devices which have a better success rate.
-                 */
-
-                // Let's look for previously detected Bluetooth devices
-                RegistryKey bluetoothDevicesKey = Registry.LocalMachine.OpenSubKey(RootKeyName, false);
-
-                // Anything to do?
-                if (bluetoothDevicesKey != null)
-                {
-                    // Yes.  Enumerate the sub-keys
-                    string[] deviceKeys = bluetoothDevicesKey.GetSubKeyNames();
-                    for (int index = 0; index < deviceKeys.Length; index++)
-                    {
-                        string addressValue = deviceKeys[index];
-
-                        // This value is a Bluetooth socket address
-                        BluetoothAddress address = BluetoothAddress.Parse(addressValue);
-
-                        // Finally, create a device from this information
-                        BluetoothDevice device = new BluetoothDevice(address);
-
-                        // And add it
-                        devices.Add(device);
-                    }
-
-                    // Finally, close the key
-                    bluetoothDevicesKey.Close();
-                }
-
-                #endregion
-
-                #region Pass 2: Look for devices discovered already by Windows
-
-#if !PocketPC
-                RegistryKey existingDevicesKey = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters\Devices", false);
-                if (existingDevicesKey != null)
-                {
-                    // Each subkey is a device
-                    foreach (string subKeyName in existingDevicesKey.GetSubKeyNames())
-                    {
-                        // The subkey name is an address
-                        int count = subKeyName.Length / 2;
-
-                        // The address is pairs of hex numbers
-                        byte[] addressBytes = new byte[count];
-                        for (int index = 0; index < count; index++)
-                        {
-                            addressBytes[count - index - 1] = Convert.ToByte(subKeyName.Substring(index * 2, 2), 16);
-                        }
-                        
-                        // Make a new device object
-                        BluetoothDevice device = new BluetoothDevice(new BluetoothAddress(addressBytes));
-
-                        // If it's not already in the list, add it
-                        if (!devices.Contains(device))
-                            devices.Add(device);
-                    }
-
-                    // Close the key
-                    existingDevicesKey.Close();
-                }
-#endif
-
-                #endregion
+                // Pass 2: Look for devices discovered already by Windows
+                LoadWindowsDevices(devices);
 
                 // Sort the cache based on the most reliable device first
                 devices.Sort(Device.BestDeviceComparer);
@@ -867,9 +804,9 @@ namespace GeoFramework.Gps.IO
 #if !PocketPC
                 || !DeviceDiscoveryThread.IsAlive
 #else
- || !_IsDeviceDiscoveryThreadAlive
+                || !_IsDeviceDiscoveryThreadAlive
 #endif
-)
+            )
                 return true;
 
 #if !PocketPC
@@ -1637,7 +1574,7 @@ namespace GeoFramework.Gps.IO
 
 #if !PocketPC
 
-               internal void Refresh()
+        internal void Refresh()
         {
             /* Attempt to populate information about this device, such as the name, and
              * whether the device is paired, connected, remembered, etc.
@@ -1689,6 +1626,7 @@ namespace GeoFramework.Gps.IO
             // Save everything to the registry
             OnCacheWrite();
         }
+
 #else
         // Deserializes an int into class and service information
         internal void SetClassOfDevice(uint classOfDevice)
@@ -1698,6 +1636,81 @@ namespace GeoFramework.Gps.IO
             _ServiceClass = (ServiceClass)(classOfDevice & 0xFFE000);
         }
 #endif
+
+        #endregion
+
+        #region Private Methods
+
+        /// <summary>
+        /// Loads the Bluetooth devices that have been cached by GPS.Net. This list contains previously-detected GPS devices, 
+        /// along with devices which were tested but found to NOT be GPS devices. By keeping these statistics, 
+        /// the detection system can become faster over time by first testing devices which have a better success rate.
+        /// </summary>
+        /// <param name="devices">The list to which the cached devices are added.</param>
+        private static void LoadCachedDevices(IList<BluetoothDevice> devices)
+        {
+            RegistryKey bluetoothDevicesKey = Registry.LocalMachine.OpenSubKey(RootKeyName, false);
+
+            // Anything to do?
+            if (bluetoothDevicesKey != null)
+            {
+                // Yes.  Enumerate the sub-keys
+                string[] deviceKeys = bluetoothDevicesKey.GetSubKeyNames();
+                for (int index = 0; index < deviceKeys.Length; index++)
+                {
+                    string addressValue = deviceKeys[index];
+
+                    // This value is a Bluetooth socket address
+                    BluetoothAddress address = BluetoothAddress.Parse(addressValue);
+
+                    // Finally, create a device from this information
+                    BluetoothDevice device = new BluetoothDevice(address);
+
+                    // And add it
+                    devices.Add(device);
+                }
+
+                // Finally, close the key
+                bluetoothDevicesKey.Close();
+            }
+        }
+
+        /// <summary>
+        /// Loads the Bluetooth devices that have already been discovered by Windows. This list includes non-GPS devices.
+        /// </summary>
+        /// <param name="devices">The list to which the devices are added.</param>
+        private static void LoadWindowsDevices(IList<BluetoothDevice> devices)
+        {
+#if !PocketPC
+            RegistryKey existingDevicesKey = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Services\BTHPORT\Parameters\Devices", false);
+            if (existingDevicesKey != null)
+            {
+                // Each subkey is a device
+                foreach (string subKeyName in existingDevicesKey.GetSubKeyNames())
+                {
+                    // The subkey name is an address
+                    int count = subKeyName.Length / 2;
+
+                    // The address is pairs of hex numbers
+                    byte[] addressBytes = new byte[count];
+                    for (int index = 0; index < count; index++)
+                    {
+                        addressBytes[count - index - 1] = Convert.ToByte(subKeyName.Substring(index * 2, 2), 16);
+                    }
+                        
+                    // Make a new device object
+                    BluetoothDevice device = new BluetoothDevice(new BluetoothAddress(addressBytes));
+
+                    // If it's not already in the list, add it
+                    if (!devices.Contains(device))
+                        devices.Add(device);
+                }
+
+                // Close the key
+                existingDevicesKey.Close();
+            }
+#endif
+        }
 
         #endregion
 

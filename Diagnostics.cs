@@ -262,7 +262,7 @@ namespace GeoFramework.Gps
                     Log("PocketPC 2003 version " + Environment.OSVersion.Version.ToString());
                     break;
                 case 5: // Windows Mobile 
-                    switch (Environment.OSVersion.Version.Major)
+                    switch (Environment.OSVersion.Version.Minor)
                     {
                         case 0:
                         case 1:

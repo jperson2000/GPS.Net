@@ -27,7 +27,7 @@ Public Class MainForm
 #Region "  GPS Device Detection Events  "
 
     Sub Devices_DeviceDetectionCanceled(ByVal sender As Object, ByVal e As EventArgs)
-        BeginInvoke(New Action(Of Object, EventArgs)(AddressOf DeviceDetected), sender, e)
+        BeginInvoke(New Action(Of Object, EventArgs)(AddressOf DeviceDetectionCanceled), sender, e)
     End Sub
 
     Private Sub DeviceDetectionCanceled(ByVal sender As Object, ByVal e As EventArgs)
@@ -277,7 +277,7 @@ Public Class MainForm
     End Sub
 
     Private Sub cancelDetectButton_Click(ByVal sender As Object, ByVal e As EventArgs) Handles cancelDetectButton.Click
-        Devices.CancelDetection()
+        Devices.CancelDetection(True)
     End Sub
 
     Private Sub undetectButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles undetectButton.Click
@@ -346,5 +346,10 @@ Public Class MainForm
         Devices.AllowBluetoothConnections = bluetoothCheckBox.Checked
     End Sub
 
+    Private Sub firstDeviceCheckBox_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles firstDeviceCheckBox.CheckedChanged
+        Devices.IsOnlyFirstDeviceDetected = firstDeviceCheckBox.Checked
+    End Sub
+
 #End Region
+
 End Class

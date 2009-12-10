@@ -280,7 +280,7 @@ namespace WindowsFormsApplication1
 
         private void cancelDetectButton_Click(object sender, EventArgs e)
         {
-            Devices.CancelDetection();
+            Devices.CancelDetection(true);
         }
 
         private void undetectButton_Click(object sender, EventArgs e)
@@ -362,6 +362,11 @@ namespace WindowsFormsApplication1
         private void bluetoothCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             Devices.AllowBluetoothConnections = bluetoothCheckBox.Checked;
+        }
+
+        private void firstDeviceCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Devices.IsOnlyFirstDeviceDetected = firstDeviceCheckBox.Checked;
         }
 
         #endregion

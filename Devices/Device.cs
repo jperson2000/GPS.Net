@@ -866,15 +866,22 @@ namespace GeoFramework.Gps.IO
                 // Signal that we're disconnecting
                 OnDisconnecting();
 
-                // Close the connection
-                _BaseStream.Close();
+                try
+                {
+                    // Close the connection
+                    _BaseStream.Close();
 
 #if Framework30
-                _BaseStream.Dispose();
+                    _BaseStream.Dispose();
 #endif
-
-                // Null it out for the GC
-                _BaseStream = null;
+                }
+                catch (ObjectDisposedException) {}
+                catch (NullReferenceException) {}
+                finally
+                {
+                    // Null it out for the GC
+                    _BaseStream = null;
+                }
 
                 // Signal that we're disconnected
                 OnDisconnected();
@@ -916,25 +923,23 @@ namespace GeoFramework.Gps.IO
         /// </summary>
         public virtual void CancelDetection()
         {
+            if (IsDetectionInProgress)
+            {
+                Debug.WriteLine("Aborting detection thread for " + Name, Devices.DebugCategory);
+                _DetectionThread.Abort();
+            }
+
+            _DetectionThread = null;
+
             try
             {
-                if (
-                    // Is a thread running?  If not, skip
-                    _DetectionThread != null
-#if !PocketPC
-                    // Is the thread alive?  If not, skip
-                    && _DetectionThread.IsAlive
-#else
-    // Is the thread alive?  If not, skip
-                && _IsDetectionThreadAlive 
-#endif
-                    )
-                {
-                    _DetectionThread.Abort();
-                }
-
-                _DetectionThread = null;
                 _DetectionStartedWaitHandle.Reset();
+            }
+            catch (ObjectDisposedException)
+            { }
+
+            try
+            {
                 _DetectionCompleteWaitHandle.Reset();
             }
             catch (ObjectDisposedException)
@@ -951,7 +956,7 @@ namespace GeoFramework.Gps.IO
             // Signal that detection has started
             _IsDetectionCompleted = false;
 
-            // It is critical that finalizers for this task complete.  This ensures connections get closed.             
+            // It is critical that finalizers for this task complete.  This ensures connections get closed.
 #if !PocketPC
             RuntimeHelpers.PrepareConstrainedRegions();
 #endif

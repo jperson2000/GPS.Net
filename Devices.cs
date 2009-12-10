@@ -612,11 +612,10 @@ namespace GeoFramework.Gps.IO
         {
             get
             {
-                return _DetectionThread != null
 #if !PocketPC
- && _DetectionThread.IsAlive;
+                return _DetectionThread != null && _DetectionThread.IsAlive;
 #else
-                    && _IsDetectionThreadAlive;
+                return _DetectionThread != null && _IsDetectionThreadAlive;
 #endif
             }
         }
@@ -785,26 +784,37 @@ namespace GeoFramework.Gps.IO
         #region Static Methods
 
         /// <summary>
-        /// Aborts the process of finding GPS devices.
+        /// Aborts the process of finding GPS devices and blocks until the cancellation is complete.
         /// </summary>
         public static void CancelDetection()
         {
+            CancelDetection(false);
+        }
+
+        /// <summary>
+        /// Aborts the process of finding GPS devices and optionally blocks until the cancellation is complete.
+        /// </summary>
+        /// <param name="async">
+        /// If set to <see langword="true"/>, then the method will return immediately rather than waiting
+        /// for the cancellation to complete.
+        /// </param>
+        public static void CancelDetection(bool async)
+        {
             // If the detection thread is alive, abort it
-            if (_DetectionThread != null
-#if !PocketPC
- && _DetectionThread.IsAlive
-#else
-                && _IsDetectionThreadAlive
-#endif
-)
+            if (IsDetectionInProgress)
             {
                 // Abort the thread
-                _DetectionThread.Abort();
+                Debug.WriteLine("Canceling device detection", DebugCategory);
+                _DetectionThread.Abort(async);
 
-                // Wait for the abort to wrap up
-                _DetectionCompleteWaitHandle.WaitOne();
+                if (!async)
+                {
+                    // Wait for the abort to wrap up
+                    _DetectionCompleteWaitHandle.WaitOne();
+                }
 
                 // Detection is complete
+                Debug.WriteLine("Device detection has been canceled successfully", DebugCategory);
                 OnDeviceDetectionCompleted();
             }
         }
@@ -1072,7 +1082,7 @@ namespace GeoFramework.Gps.IO
                 {
                     // If we get here, and there are still no GPSes detected, then try detecting serial devices again,
                     // but this time omitting the colon suffix. On some systems, the colon is not included in the port name.
-                    Debug.WriteLine("No serial devices were detected in the first pass. Starting second pass...");
+                    Debug.WriteLine("No serial devices were detected in the first pass. Starting second pass...", DebugCategory);
                     BeginSerialDetection(true);
                     WaitForDetectionInternal();
                 }
@@ -1081,11 +1091,12 @@ namespace GeoFramework.Gps.IO
                 Debug.WriteLine("Device detection has completed", DebugCategory);
                 OnDeviceDetectionCompleted();
             }
-            catch (ThreadAbortException)
+            catch (ThreadAbortException ex)
             {
-                Debug.WriteLine("Device detection has been canceled.", DebugCategory);
-
                 #region Abort detection for all devices
+
+                Debug.WriteLine("Aborting all device detection threads", DebugCategory);
+
 #if PocketPC
                 // Stop detection for the GPSID
                 if(GpsIntermediateDriver.Current != null)
@@ -1102,15 +1113,27 @@ namespace GeoFramework.Gps.IO
 
                 #endregion
 
-                // Wait for all the threads to die.  Just... sit and watch.  And wait. 
-                while (_CurrentlyDetectingWaitHandles.Count != 0)
+                // Determine whether we should block until all detection threads have canceled
+                bool async = false;
+                if (ex.ExceptionState != null && ex.ExceptionState is bool)
                 {
-                    try { _CurrentlyDetectingWaitHandles[0].WaitOne(); }
-                    catch { }
-                    finally { _CurrentlyDetectingWaitHandles.RemoveAt(0); }
+                    async = (bool)ex.ExceptionState;
+                }
+
+                if (!async)
+                {
+                    // Wait for all the threads to die.  Just... sit and watch.  And wait.
+                    Debug.WriteLine("Waiting for device detection threads to abort", DebugCategory);
+                    while (_CurrentlyDetectingWaitHandles.Count != 0)
+                    {
+                        try { _CurrentlyDetectingWaitHandles[0].WaitOne(); }
+                        catch { }
+                        finally { _CurrentlyDetectingWaitHandles.RemoveAt(0); }
+                    }
                 }
 
                 // Signal the cancellation
+                Debug.WriteLine("All device detection threads have been aborted", DebugCategory);
                 if (DeviceDetectionCanceled != null)
                     DeviceDetectionCanceled(null, EventArgs.Empty);
             }
@@ -1385,7 +1408,7 @@ namespace GeoFramework.Gps.IO
 
             // Are we only detecting the first device?  If so, abort now
             if (_IsOnlyFirstDeviceDetected)
-                CancelDetection();
+                CancelDetection(true);
         }
 
         internal static bool IsStreamNeeded

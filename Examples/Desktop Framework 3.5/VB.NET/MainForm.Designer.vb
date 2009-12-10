@@ -30,6 +30,9 @@ Partial Class MainForm
         Me.devicesListView = New System.Windows.Forms.ListView
         Me.columnHeader1 = New System.Windows.Forms.ColumnHeader
         Me.columnHeader2 = New System.Windows.Forms.ColumnHeader
+        Me.deviceContextMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.redetectMenuItem = New System.Windows.Forms.ToolStripMenuItem
+        Me.resetMenuItem = New System.Windows.Forms.ToolStripMenuItem
         Me.imageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.propertyGrid1 = New System.Windows.Forms.PropertyGrid
         Me.label5 = New System.Windows.Forms.Label
@@ -67,28 +70,26 @@ Partial Class MainForm
         Me.cancelDetectButton = New System.Windows.Forms.Button
         Me.detectButton = New System.Windows.Forms.Button
         Me.undetectButton = New System.Windows.Forms.Button
-        Me.deviceContextMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.redetectMenuItem = New System.Windows.Forms.ToolStripMenuItem
-        Me.resetMenuItem = New System.Windows.Forms.ToolStripMenuItem
+        Me.firstDeviceCheckBox = New System.Windows.Forms.CheckBox
         Me.splitContainer1.Panel1.SuspendLayout()
         Me.splitContainer1.Panel2.SuspendLayout()
         Me.splitContainer1.SuspendLayout()
+        Me.deviceContextMenu.SuspendLayout()
         Me.devicesTab.SuspendLayout()
         Me.dataTab.SuspendLayout()
         Me.rawDataTab.SuspendLayout()
         Me.satellitesTab.SuspendLayout()
         Me.tabControl1.SuspendLayout()
         Me.statusStrip1.SuspendLayout()
-        Me.deviceContextMenu.SuspendLayout()
         Me.SuspendLayout()
         '
         'startButton
         '
         Me.startButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.startButton.Location = New System.Drawing.Point(578, 121)
+        Me.startButton.Location = New System.Drawing.Point(573, 142)
         Me.startButton.Name = "startButton"
         Me.startButton.Size = New System.Drawing.Size(98, 23)
-        Me.startButton.TabIndex = 15
+        Me.startButton.TabIndex = 0
         Me.startButton.Text = "Start"
         Me.startButton.UseVisualStyleBackColor = True
         '
@@ -114,8 +115,8 @@ Partial Class MainForm
         'splitContainer1.Panel2
         '
         Me.splitContainer1.Panel2.Controls.Add(Me.propertyGrid1)
-        Me.splitContainer1.Size = New System.Drawing.Size(546, 448)
-        Me.splitContainer1.SplitterDistance = 309
+        Me.splitContainer1.Size = New System.Drawing.Size(533, 448)
+        Me.splitContainer1.SplitterDistance = 301
         Me.splitContainer1.TabIndex = 10
         '
         'devicesListView
@@ -126,9 +127,9 @@ Partial Class MainForm
         Me.devicesListView.LargeImageList = Me.imageList1
         Me.devicesListView.Location = New System.Drawing.Point(0, 0)
         Me.devicesListView.Name = "devicesListView"
-        Me.devicesListView.Size = New System.Drawing.Size(309, 448)
+        Me.devicesListView.Size = New System.Drawing.Size(301, 448)
         Me.devicesListView.SmallImageList = Me.imageList1
-        Me.devicesListView.TabIndex = 8
+        Me.devicesListView.TabIndex = 0
         Me.devicesListView.UseCompatibleStateImageBehavior = False
         Me.devicesListView.View = System.Windows.Forms.View.Details
         '
@@ -141,6 +142,24 @@ Partial Class MainForm
         '
         Me.columnHeader2.Text = "Status"
         Me.columnHeader2.Width = 641
+        '
+        'deviceContextMenu
+        '
+        Me.deviceContextMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.redetectMenuItem, Me.resetMenuItem})
+        Me.deviceContextMenu.Name = "deviceContextMenu"
+        Me.deviceContextMenu.Size = New System.Drawing.Size(130, 48)
+        '
+        'redetectMenuItem
+        '
+        Me.redetectMenuItem.Name = "redetectMenuItem"
+        Me.redetectMenuItem.Size = New System.Drawing.Size(129, 22)
+        Me.redetectMenuItem.Text = "Redetect"
+        '
+        'resetMenuItem
+        '
+        Me.resetMenuItem.Name = "resetMenuItem"
+        Me.resetMenuItem.Size = New System.Drawing.Size(129, 22)
+        Me.resetMenuItem.Text = "Reset"
         '
         'imageList1
         '
@@ -155,8 +174,8 @@ Partial Class MainForm
         Me.propertyGrid1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.propertyGrid1.Location = New System.Drawing.Point(0, 0)
         Me.propertyGrid1.Name = "propertyGrid1"
-        Me.propertyGrid1.Size = New System.Drawing.Size(233, 448)
-        Me.propertyGrid1.TabIndex = 9
+        Me.propertyGrid1.Size = New System.Drawing.Size(228, 448)
+        Me.propertyGrid1.TabIndex = 0
         '
         'label5
         '
@@ -173,7 +192,7 @@ Partial Class MainForm
         Me.devicesTab.Location = New System.Drawing.Point(4, 22)
         Me.devicesTab.Name = "devicesTab"
         Me.devicesTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.devicesTab.Size = New System.Drawing.Size(552, 454)
+        Me.devicesTab.Size = New System.Drawing.Size(539, 454)
         Me.devicesTab.TabIndex = 0
         Me.devicesTab.Text = "Devices"
         Me.devicesTab.UseVisualStyleBackColor = True
@@ -355,14 +374,14 @@ Partial Class MainForm
         '
         'bluetoothCheckBox
         '
-        Me.bluetoothCheckBox.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.bluetoothCheckBox.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.bluetoothCheckBox.AutoSize = True
         Me.bluetoothCheckBox.Checked = True
         Me.bluetoothCheckBox.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.bluetoothCheckBox.Location = New System.Drawing.Point(585, 316)
+        Me.bluetoothCheckBox.Location = New System.Drawing.Point(565, 442)
         Me.bluetoothCheckBox.Name = "bluetoothCheckBox"
         Me.bluetoothCheckBox.Size = New System.Drawing.Size(99, 17)
-        Me.bluetoothCheckBox.TabIndex = 24
+        Me.bluetoothCheckBox.TabIndex = 9
         Me.bluetoothCheckBox.Text = "Allow Bluetooth"
         Me.bluetoothCheckBox.UseVisualStyleBackColor = True
         '
@@ -372,14 +391,14 @@ Partial Class MainForm
         '
         'serialCheckBox
         '
-        Me.serialCheckBox.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.serialCheckBox.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.serialCheckBox.AutoSize = True
         Me.serialCheckBox.Checked = True
         Me.serialCheckBox.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.serialCheckBox.Location = New System.Drawing.Point(585, 270)
+        Me.serialCheckBox.Location = New System.Drawing.Point(565, 396)
         Me.serialCheckBox.Name = "serialCheckBox"
         Me.serialCheckBox.Size = New System.Drawing.Size(80, 17)
-        Me.serialCheckBox.TabIndex = 23
+        Me.serialCheckBox.TabIndex = 7
         Me.serialCheckBox.Text = "Allow Serial"
         Me.serialCheckBox.UseVisualStyleBackColor = True
         '
@@ -395,8 +414,8 @@ Partial Class MainForm
         Me.tabControl1.Location = New System.Drawing.Point(12, 6)
         Me.tabControl1.Name = "tabControl1"
         Me.tabControl1.SelectedIndex = 0
-        Me.tabControl1.Size = New System.Drawing.Size(560, 480)
-        Me.tabControl1.TabIndex = 22
+        Me.tabControl1.Size = New System.Drawing.Size(547, 480)
+        Me.tabControl1.TabIndex = 11
         '
         'statusLabel
         '
@@ -408,10 +427,10 @@ Partial Class MainForm
         '
         Me.resumeButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.resumeButton.Enabled = False
-        Me.resumeButton.Location = New System.Drawing.Point(578, 222)
+        Me.resumeButton.Location = New System.Drawing.Point(573, 243)
         Me.resumeButton.Name = "resumeButton"
         Me.resumeButton.Size = New System.Drawing.Size(98, 23)
-        Me.resumeButton.TabIndex = 18
+        Me.resumeButton.TabIndex = 3
         Me.resumeButton.Text = "Resume"
         Me.resumeButton.UseVisualStyleBackColor = True
         '
@@ -419,10 +438,10 @@ Partial Class MainForm
         '
         Me.pauseButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.pauseButton.Enabled = False
-        Me.pauseButton.Location = New System.Drawing.Point(578, 192)
+        Me.pauseButton.Location = New System.Drawing.Point(573, 213)
         Me.pauseButton.Name = "pauseButton"
         Me.pauseButton.Size = New System.Drawing.Size(98, 23)
-        Me.pauseButton.TabIndex = 17
+        Me.pauseButton.TabIndex = 2
         Me.pauseButton.Text = "Pause"
         Me.pauseButton.UseVisualStyleBackColor = True
         '
@@ -430,10 +449,10 @@ Partial Class MainForm
         '
         Me.stopButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.stopButton.Enabled = False
-        Me.stopButton.Location = New System.Drawing.Point(578, 150)
+        Me.stopButton.Location = New System.Drawing.Point(573, 171)
         Me.stopButton.Name = "stopButton"
         Me.stopButton.Size = New System.Drawing.Size(98, 23)
-        Me.stopButton.TabIndex = 16
+        Me.stopButton.TabIndex = 1
         Me.stopButton.Text = "Stop"
         Me.stopButton.UseVisualStyleBackColor = True
         '
@@ -443,17 +462,17 @@ Partial Class MainForm
         Me.statusStrip1.Location = New System.Drawing.Point(0, 506)
         Me.statusStrip1.Name = "statusStrip1"
         Me.statusStrip1.Size = New System.Drawing.Size(688, 22)
-        Me.statusStrip1.TabIndex = 21
+        Me.statusStrip1.TabIndex = 12
         Me.statusStrip1.Text = "statusStrip1"
         '
         'exhaustiveCheckBox
         '
-        Me.exhaustiveCheckBox.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.exhaustiveCheckBox.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.exhaustiveCheckBox.AutoSize = True
-        Me.exhaustiveCheckBox.Location = New System.Drawing.Point(585, 293)
+        Me.exhaustiveCheckBox.Location = New System.Drawing.Point(565, 419)
         Me.exhaustiveCheckBox.Name = "exhaustiveCheckBox"
         Me.exhaustiveCheckBox.Size = New System.Drawing.Size(106, 17)
-        Me.exhaustiveCheckBox.TabIndex = 25
+        Me.exhaustiveCheckBox.TabIndex = 8
         Me.exhaustiveCheckBox.Text = "Exhaustive Scan"
         Me.exhaustiveCheckBox.UseVisualStyleBackColor = True
         '
@@ -461,20 +480,20 @@ Partial Class MainForm
         '
         Me.cancelDetectButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cancelDetectButton.Enabled = False
-        Me.cancelDetectButton.Location = New System.Drawing.Point(578, 36)
+        Me.cancelDetectButton.Location = New System.Drawing.Point(573, 57)
         Me.cancelDetectButton.Name = "cancelDetectButton"
         Me.cancelDetectButton.Size = New System.Drawing.Size(98, 23)
-        Me.cancelDetectButton.TabIndex = 20
+        Me.cancelDetectButton.TabIndex = 5
         Me.cancelDetectButton.Text = "Cancel"
         Me.cancelDetectButton.UseVisualStyleBackColor = True
         '
         'detectButton
         '
         Me.detectButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.detectButton.Location = New System.Drawing.Point(578, 7)
+        Me.detectButton.Location = New System.Drawing.Point(573, 28)
         Me.detectButton.Name = "detectButton"
         Me.detectButton.Size = New System.Drawing.Size(98, 23)
-        Me.detectButton.TabIndex = 19
+        Me.detectButton.TabIndex = 4
         Me.detectButton.Text = "Detect"
         Me.detectButton.UseVisualStyleBackColor = True
         '
@@ -482,36 +501,30 @@ Partial Class MainForm
         '
         Me.undetectButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.undetectButton.Enabled = False
-        Me.undetectButton.Location = New System.Drawing.Point(578, 65)
+        Me.undetectButton.Location = New System.Drawing.Point(573, 86)
         Me.undetectButton.Name = "undetectButton"
         Me.undetectButton.Size = New System.Drawing.Size(98, 23)
-        Me.undetectButton.TabIndex = 26
+        Me.undetectButton.TabIndex = 6
         Me.undetectButton.Text = "Undetect"
         Me.undetectButton.UseVisualStyleBackColor = True
         '
-        'deviceContextMenu
+        'firstDeviceCheckBox
         '
-        Me.deviceContextMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.redetectMenuItem, Me.resetMenuItem})
-        Me.deviceContextMenu.Name = "deviceContextMenu"
-        Me.deviceContextMenu.Size = New System.Drawing.Size(130, 48)
-        '
-        'redetectMenuItem
-        '
-        Me.redetectMenuItem.Name = "redetectMenuItem"
-        Me.redetectMenuItem.Size = New System.Drawing.Size(129, 22)
-        Me.redetectMenuItem.Text = "Redetect"
-        '
-        'resetMenuItem
-        '
-        Me.resetMenuItem.Name = "resetMenuItem"
-        Me.resetMenuItem.Size = New System.Drawing.Size(129, 22)
-        Me.resetMenuItem.Text = "Reset"
+        Me.firstDeviceCheckBox.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.firstDeviceCheckBox.AutoSize = True
+        Me.firstDeviceCheckBox.Location = New System.Drawing.Point(565, 465)
+        Me.firstDeviceCheckBox.Name = "firstDeviceCheckBox"
+        Me.firstDeviceCheckBox.Size = New System.Drawing.Size(126, 17)
+        Me.firstDeviceCheckBox.TabIndex = 10
+        Me.firstDeviceCheckBox.Text = "Stop after first device"
+        Me.firstDeviceCheckBox.UseVisualStyleBackColor = True
         '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(688, 528)
+        Me.Controls.Add(Me.firstDeviceCheckBox)
         Me.Controls.Add(Me.undetectButton)
         Me.Controls.Add(Me.startButton)
         Me.Controls.Add(Me.bluetoothCheckBox)
@@ -529,6 +542,7 @@ Partial Class MainForm
         Me.splitContainer1.Panel1.ResumeLayout(False)
         Me.splitContainer1.Panel2.ResumeLayout(False)
         Me.splitContainer1.ResumeLayout(False)
+        Me.deviceContextMenu.ResumeLayout(False)
         Me.devicesTab.ResumeLayout(False)
         Me.dataTab.ResumeLayout(False)
         Me.dataTab.PerformLayout()
@@ -537,7 +551,6 @@ Partial Class MainForm
         Me.tabControl1.ResumeLayout(False)
         Me.statusStrip1.ResumeLayout(False)
         Me.statusStrip1.PerformLayout()
-        Me.deviceContextMenu.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -592,5 +605,6 @@ Partial Class MainForm
     Private WithEvents deviceContextMenu As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents redetectMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents resetMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Private WithEvents firstDeviceCheckBox As System.Windows.Forms.CheckBox
 
 End Class

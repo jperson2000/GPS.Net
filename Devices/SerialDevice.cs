@@ -596,12 +596,18 @@ namespace GeoFramework.Gps.IO
 #if !PocketPC
         public override void CancelDetection()
         {
-            /* Hooray .NET!  Aborting a thread can cause an ObjectDisposedException in the SerialPort's internal code. 
-             * As a result, we can't just forcefully abort the thread.  Close the port.
-             */
-
-            if(IsDetectionInProgress && _Port != null && _Port.IsOpen)
-                _Port.Close();
+            if (IsDetectionInProgress && _Port != null && _Port.IsOpen)
+            {
+                try
+                {
+                    // There are several errors that can occur within the SerialPort.Close method, 
+                    // despite the above checks.  Thus, all the empty catch blocks below.
+                    _Port.Close();
+                }
+                catch (ArgumentNullException) {}
+                catch (NullReferenceException) {}
+                catch (ObjectDisposedException) {}
+            }
 
             // Continue to abort the thread
             base.CancelDetection();

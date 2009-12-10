@@ -79,6 +79,7 @@
             this.nmeaInterpreter1 = new GeoFramework.Gps.Nmea.NmeaInterpreter();
             this.exhaustiveCheckBox = new System.Windows.Forms.CheckBox();
             this.undetectButton = new System.Windows.Forms.Button();
+            this.firstDeviceCheckBox = new System.Windows.Forms.CheckBox();
             this.deviceContextMenu.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -94,7 +95,7 @@
             // startButton
             // 
             this.startButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.startButton.Location = new System.Drawing.Point(578, 121);
+            this.startButton.Location = new System.Drawing.Point(559, 142);
             this.startButton.Name = "startButton";
             this.startButton.Size = new System.Drawing.Size(98, 23);
             this.startButton.TabIndex = 0;
@@ -106,7 +107,7 @@
             // 
             this.stopButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.stopButton.Enabled = false;
-            this.stopButton.Location = new System.Drawing.Point(578, 150);
+            this.stopButton.Location = new System.Drawing.Point(559, 171);
             this.stopButton.Name = "stopButton";
             this.stopButton.Size = new System.Drawing.Size(98, 23);
             this.stopButton.TabIndex = 1;
@@ -118,7 +119,7 @@
             // 
             this.pauseButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pauseButton.Enabled = false;
-            this.pauseButton.Location = new System.Drawing.Point(578, 192);
+            this.pauseButton.Location = new System.Drawing.Point(559, 213);
             this.pauseButton.Name = "pauseButton";
             this.pauseButton.Size = new System.Drawing.Size(98, 23);
             this.pauseButton.TabIndex = 2;
@@ -130,7 +131,7 @@
             // 
             this.resumeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.resumeButton.Enabled = false;
-            this.resumeButton.Location = new System.Drawing.Point(578, 222);
+            this.resumeButton.Location = new System.Drawing.Point(559, 243);
             this.resumeButton.Name = "resumeButton";
             this.resumeButton.Size = new System.Drawing.Size(98, 23);
             this.resumeButton.TabIndex = 3;
@@ -144,7 +145,7 @@
             this.sentenceListBox.FormattingEnabled = true;
             this.sentenceListBox.Location = new System.Drawing.Point(0, 0);
             this.sentenceListBox.Name = "sentenceListBox";
-            this.sentenceListBox.Size = new System.Drawing.Size(552, 446);
+            this.sentenceListBox.Size = new System.Drawing.Size(518, 433);
             this.sentenceListBox.TabIndex = 4;
             // 
             // altitudeTextBox
@@ -153,7 +154,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.altitudeTextBox.Location = new System.Drawing.Point(131, 102);
             this.altitudeTextBox.Name = "altitudeTextBox";
-            this.altitudeTextBox.Size = new System.Drawing.Size(407, 22);
+            this.altitudeTextBox.Size = new System.Drawing.Size(373, 22);
             this.altitudeTextBox.TabIndex = 11;
             // 
             // label3
@@ -171,7 +172,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.speedTextBox.Location = new System.Drawing.Point(131, 128);
             this.speedTextBox.Name = "speedTextBox";
-            this.speedTextBox.Size = new System.Drawing.Size(407, 22);
+            this.speedTextBox.Size = new System.Drawing.Size(373, 22);
             this.speedTextBox.TabIndex = 7;
             // 
             // label4
@@ -189,7 +190,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.positionTextBox.Location = new System.Drawing.Point(131, 73);
             this.positionTextBox.Name = "positionTextBox";
-            this.positionTextBox.Size = new System.Drawing.Size(407, 22);
+            this.positionTextBox.Size = new System.Drawing.Size(373, 22);
             this.positionTextBox.TabIndex = 5;
             // 
             // positionLabel
@@ -207,7 +208,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.utcDateTimeTextBox.Location = new System.Drawing.Point(131, 44);
             this.utcDateTimeTextBox.Name = "utcDateTimeTextBox";
-            this.utcDateTimeTextBox.Size = new System.Drawing.Size(407, 22);
+            this.utcDateTimeTextBox.Size = new System.Drawing.Size(373, 22);
             this.utcDateTimeTextBox.TabIndex = 3;
             // 
             // label2
@@ -225,7 +226,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.dateTimeTextBox.Location = new System.Drawing.Point(131, 16);
             this.dateTimeTextBox.Name = "dateTimeTextBox";
-            this.dateTimeTextBox.Size = new System.Drawing.Size(407, 22);
+            this.dateTimeTextBox.Size = new System.Drawing.Size(373, 22);
             this.dateTimeTextBox.TabIndex = 1;
             // 
             // label1
@@ -240,10 +241,10 @@
             // detectButton
             // 
             this.detectButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.detectButton.Location = new System.Drawing.Point(578, 13);
+            this.detectButton.Location = new System.Drawing.Point(559, 34);
             this.detectButton.Name = "detectButton";
             this.detectButton.Size = new System.Drawing.Size(98, 23);
-            this.detectButton.TabIndex = 6;
+            this.detectButton.TabIndex = 4;
             this.detectButton.Text = "Detect";
             this.detectButton.UseVisualStyleBackColor = true;
             this.detectButton.Click += new System.EventHandler(this.detectButton_Click);
@@ -252,10 +253,10 @@
             // 
             this.cancelDetectButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelDetectButton.Enabled = false;
-            this.cancelDetectButton.Location = new System.Drawing.Point(578, 42);
+            this.cancelDetectButton.Location = new System.Drawing.Point(559, 63);
             this.cancelDetectButton.Name = "cancelDetectButton";
             this.cancelDetectButton.Size = new System.Drawing.Size(98, 23);
-            this.cancelDetectButton.TabIndex = 7;
+            this.cancelDetectButton.TabIndex = 5;
             this.cancelDetectButton.Text = "Cancel";
             this.cancelDetectButton.UseVisualStyleBackColor = true;
             this.cancelDetectButton.Click += new System.EventHandler(this.cancelDetectButton_Click);
@@ -270,9 +271,9 @@
             this.devicesListView.LargeImageList = this.imageList1;
             this.devicesListView.Location = new System.Drawing.Point(0, 0);
             this.devicesListView.Name = "devicesListView";
-            this.devicesListView.Size = new System.Drawing.Size(309, 448);
+            this.devicesListView.Size = new System.Drawing.Size(289, 435);
             this.devicesListView.SmallImageList = this.imageList1;
-            this.devicesListView.TabIndex = 8;
+            this.devicesListView.TabIndex = 0;
             this.devicesListView.UseCompatibleStateImageBehavior = false;
             this.devicesListView.View = System.Windows.Forms.View.Details;
             this.devicesListView.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.devicesListView_ItemSelectionChanged);
@@ -322,9 +323,9 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 506);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 493);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(688, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(679, 22);
             this.statusStrip1.TabIndex = 9;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -346,7 +347,7 @@
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(560, 480);
+            this.tabControl1.Size = new System.Drawing.Size(526, 467);
             this.tabControl1.TabIndex = 11;
             // 
             // devicesTab
@@ -355,7 +356,7 @@
             this.devicesTab.Location = new System.Drawing.Point(4, 22);
             this.devicesTab.Name = "devicesTab";
             this.devicesTab.Padding = new System.Windows.Forms.Padding(3);
-            this.devicesTab.Size = new System.Drawing.Size(552, 454);
+            this.devicesTab.Size = new System.Drawing.Size(518, 441);
             this.devicesTab.TabIndex = 0;
             this.devicesTab.Text = "Devices";
             this.devicesTab.UseVisualStyleBackColor = true;
@@ -373,8 +374,8 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.propertyGrid1);
-            this.splitContainer1.Size = new System.Drawing.Size(546, 448);
-            this.splitContainer1.SplitterDistance = 309;
+            this.splitContainer1.Size = new System.Drawing.Size(512, 435);
+            this.splitContainer1.SplitterDistance = 289;
             this.splitContainer1.TabIndex = 10;
             // 
             // propertyGrid1
@@ -382,8 +383,8 @@
             this.propertyGrid1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.propertyGrid1.Location = new System.Drawing.Point(0, 0);
             this.propertyGrid1.Name = "propertyGrid1";
-            this.propertyGrid1.Size = new System.Drawing.Size(233, 448);
-            this.propertyGrid1.TabIndex = 9;
+            this.propertyGrid1.Size = new System.Drawing.Size(219, 435);
+            this.propertyGrid1.TabIndex = 0;
             // 
             // dataTab
             // 
@@ -402,7 +403,7 @@
             this.dataTab.Location = new System.Drawing.Point(4, 22);
             this.dataTab.Name = "dataTab";
             this.dataTab.Padding = new System.Windows.Forms.Padding(3);
-            this.dataTab.Size = new System.Drawing.Size(552, 454);
+            this.dataTab.Size = new System.Drawing.Size(518, 441);
             this.dataTab.TabIndex = 1;
             this.dataTab.Text = "Real-Time Data";
             this.dataTab.UseVisualStyleBackColor = true;
@@ -413,7 +414,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.bearingTextBox.Location = new System.Drawing.Point(131, 156);
             this.bearingTextBox.Name = "bearingTextBox";
-            this.bearingTextBox.Size = new System.Drawing.Size(407, 22);
+            this.bearingTextBox.Size = new System.Drawing.Size(373, 22);
             this.bearingTextBox.TabIndex = 13;
             // 
             // label5
@@ -430,7 +431,7 @@
             this.rawDataTab.Controls.Add(this.sentenceListBox);
             this.rawDataTab.Location = new System.Drawing.Point(4, 22);
             this.rawDataTab.Name = "rawDataTab";
-            this.rawDataTab.Size = new System.Drawing.Size(552, 454);
+            this.rawDataTab.Size = new System.Drawing.Size(518, 441);
             this.rawDataTab.TabIndex = 2;
             this.rawDataTab.Text = "Raw Data";
             this.rawDataTab.UseVisualStyleBackColor = true;
@@ -440,7 +441,7 @@
             this.satellitesTab.Controls.Add(this.satellitesListView);
             this.satellitesTab.Location = new System.Drawing.Point(4, 22);
             this.satellitesTab.Name = "satellitesTab";
-            this.satellitesTab.Size = new System.Drawing.Size(552, 454);
+            this.satellitesTab.Size = new System.Drawing.Size(518, 441);
             this.satellitesTab.TabIndex = 3;
             this.satellitesTab.Text = "Satelllites";
             this.satellitesTab.UseVisualStyleBackColor = true;
@@ -456,7 +457,7 @@
             this.satellitesListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.satellitesListView.Location = new System.Drawing.Point(0, 0);
             this.satellitesListView.Name = "satellitesListView";
-            this.satellitesListView.Size = new System.Drawing.Size(552, 454);
+            this.satellitesListView.Size = new System.Drawing.Size(518, 441);
             this.satellitesListView.TabIndex = 0;
             this.satellitesListView.UseCompatibleStateImageBehavior = false;
             this.satellitesListView.View = System.Windows.Forms.View.Details;
@@ -486,28 +487,28 @@
             // 
             // serialCheckBox
             // 
-            this.serialCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.serialCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.serialCheckBox.AutoSize = true;
             this.serialCheckBox.Checked = true;
             this.serialCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.serialCheckBox.Location = new System.Drawing.Point(578, 270);
+            this.serialCheckBox.Location = new System.Drawing.Point(544, 386);
             this.serialCheckBox.Name = "serialCheckBox";
             this.serialCheckBox.Size = new System.Drawing.Size(86, 17);
-            this.serialCheckBox.TabIndex = 12;
+            this.serialCheckBox.TabIndex = 7;
             this.serialCheckBox.Text = "Allow Serial";
             this.serialCheckBox.UseVisualStyleBackColor = true;
             this.serialCheckBox.CheckedChanged += new System.EventHandler(this.serialCheckBox_CheckedChanged);
             // 
             // bluetoothCheckBox
             // 
-            this.bluetoothCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.bluetoothCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bluetoothCheckBox.AutoSize = true;
             this.bluetoothCheckBox.Checked = true;
             this.bluetoothCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.bluetoothCheckBox.Location = new System.Drawing.Point(578, 316);
+            this.bluetoothCheckBox.Location = new System.Drawing.Point(544, 432);
             this.bluetoothCheckBox.Name = "bluetoothCheckBox";
             this.bluetoothCheckBox.Size = new System.Drawing.Size(110, 17);
-            this.bluetoothCheckBox.TabIndex = 13;
+            this.bluetoothCheckBox.TabIndex = 9;
             this.bluetoothCheckBox.Text = "Allow Bluetooth";
             this.bluetoothCheckBox.UseVisualStyleBackColor = true;
             this.bluetoothCheckBox.CheckedChanged += new System.EventHandler(this.bluetoothCheckBox_CheckedChanged);
@@ -531,12 +532,12 @@
             // 
             // exhaustiveCheckBox
             // 
-            this.exhaustiveCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.exhaustiveCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.exhaustiveCheckBox.AutoSize = true;
-            this.exhaustiveCheckBox.Location = new System.Drawing.Point(578, 293);
+            this.exhaustiveCheckBox.Location = new System.Drawing.Point(544, 409);
             this.exhaustiveCheckBox.Name = "exhaustiveCheckBox";
             this.exhaustiveCheckBox.Size = new System.Drawing.Size(107, 17);
-            this.exhaustiveCheckBox.TabIndex = 15;
+            this.exhaustiveCheckBox.TabIndex = 8;
             this.exhaustiveCheckBox.Text = "Exhaustive Scan";
             this.exhaustiveCheckBox.UseVisualStyleBackColor = true;
             this.exhaustiveCheckBox.CheckedChanged += new System.EventHandler(this.exhaustiveCheckBox_CheckedChanged);
@@ -545,19 +546,32 @@
             // 
             this.undetectButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.undetectButton.Enabled = false;
-            this.undetectButton.Location = new System.Drawing.Point(578, 71);
+            this.undetectButton.Location = new System.Drawing.Point(559, 92);
             this.undetectButton.Name = "undetectButton";
             this.undetectButton.Size = new System.Drawing.Size(98, 23);
-            this.undetectButton.TabIndex = 16;
+            this.undetectButton.TabIndex = 6;
             this.undetectButton.Text = "Undetect";
             this.undetectButton.UseVisualStyleBackColor = true;
             this.undetectButton.Click += new System.EventHandler(this.undetectButton_Click);
+            // 
+            // firstDeviceCheckBox
+            // 
+            this.firstDeviceCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.firstDeviceCheckBox.AutoSize = true;
+            this.firstDeviceCheckBox.Location = new System.Drawing.Point(544, 455);
+            this.firstDeviceCheckBox.Name = "firstDeviceCheckBox";
+            this.firstDeviceCheckBox.Size = new System.Drawing.Size(135, 17);
+            this.firstDeviceCheckBox.TabIndex = 10;
+            this.firstDeviceCheckBox.Text = "Stop after first device";
+            this.firstDeviceCheckBox.UseVisualStyleBackColor = true;
+            this.firstDeviceCheckBox.CheckedChanged += new System.EventHandler(this.firstDeviceCheckBox_CheckedChanged);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(688, 528);
+            this.ClientSize = new System.Drawing.Size(679, 515);
+            this.Controls.Add(this.firstDeviceCheckBox);
             this.Controls.Add(this.undetectButton);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.serialCheckBox);
@@ -638,6 +652,7 @@
         private System.Windows.Forms.CheckBox exhaustiveCheckBox;
         private System.Windows.Forms.ToolStripMenuItem resetMenuItem;
         private System.Windows.Forms.Button undetectButton;
+        private System.Windows.Forms.CheckBox firstDeviceCheckBox;
     }
 }
 

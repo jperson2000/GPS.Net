@@ -1884,35 +1884,22 @@ namespace GeoFramework.Gps
                          * In that situation, we just try again to make a connection.
                          */
 
+                        // Try to find another device (or the same device)
+                        _Device = Devices.Any;
 
-                        // Try to get another stream
-                        try
-                        {
-                            // Try to find another device (or the same device)
-                            _Device = Devices.Any;
-
-                            // If it's null then wait a while and try again
-                            if (_Device == null)
-                                continue;
-
-                            // Signal that we're starting
-                            OnStarting();
-
-                            // Signal that the stream has changed
-                            OnDeviceChanged();
-
-                            // And we're started
-                            OnStarted();
+                        // If it's null then wait a while and try again
+                        if (_Device == null)
                             continue;
-                        }
-                        catch
-                        {
-                            // We still don't have a stream to work with!  dayum
-                            OnStopped();
 
-                            // Try again.
-                            continue;
-                        }
+                        // Signal that we're starting
+                        OnStarting();
+
+                        // Signal that the stream has changed
+                        OnDeviceChanged();
+
+                        // And we're started
+                        OnStarted();
+                        continue;
                     }
 
                     // Raise the virtual method for parsing

@@ -191,7 +191,7 @@ namespace GeoFramework.Gps.IO
                         // Wait for a device to be found.
                         if (!WaitForDevice())
                         {
-                            // No device was found!  Return null.                    
+                            // No device was found!  Return null.
                             return null;
                         }
                     }
@@ -874,13 +874,7 @@ namespace GeoFramework.Gps.IO
             catch (UnauthorizedAccessException) 
             { }
 
-            // Clear the lists of Bluetooth/Serial devices. This will allow new devices to be detected the next
-            // time the SerialDevice.Cache or BluetoothDevice.Cache is read.
-            _BluetoothDevices = null;
-            _SerialDevices = null;
-
-            // Clear the list of known GPS devices. This will be repopulated as new GPS devices are detected.
-            _GpsDevices.Clear();
+            ClearDeviceCache();
         }
 
         /// <summary>
@@ -1000,7 +994,10 @@ namespace GeoFramework.Gps.IO
                 // Monitor this thread up to the timeout, then quit
                 ThreadPool.QueueUserWorkItem(new WaitCallback(DetectionThreadProcWatcher));
 
-#if PocketPC                              
+                // Clear the device cache to force a re-scan for any new devices
+                ClearDeviceCache();
+
+#if PocketPC
                 // Are we using the GPS Intermediate Driver?
                 GpsIntermediateDriver gpsid = GpsIntermediateDriver.Current;
 
@@ -1176,7 +1173,7 @@ namespace GeoFramework.Gps.IO
                 Debug.WriteLine("Detecting Bluetooth devices", DebugCategory);
 
                 // Start bluetooth detection for each device
-                int count = _BluetoothDevices.Count;
+                int count = BluetoothDevices.Count;
                 for (int index = 0; index < count; index++)
                     _BluetoothDevices[index].BeginDetection();
             }
@@ -1343,6 +1340,21 @@ namespace GeoFramework.Gps.IO
 
             device.Port = newName;
             device.SetName(newName);
+        }
+
+        /// <summary>
+        /// Clears the <see cref="BluetoothDevices"/>, <see cref="SerialDevices"/>, and <see cref="GpsDevices"/> lists.
+        /// This will cause the lists to be rebuilt the next time the <see cref="BeginBluetoothDetection"/> or
+        /// <see cref="BeginSerialDetection"/> methods are called.
+        /// </summary>
+        private static void ClearDeviceCache()
+        {
+            // Clear the lists of Bluetooth/Serial devices.
+            _BluetoothDevices = null;
+            _SerialDevices = null;
+
+            // Clear the list of known GPS devices. This will be repopulated as new GPS devices are detected.
+            _GpsDevices.Clear();
         }
 
         internal static void OnDeviceDetectionAttempted(Device device)

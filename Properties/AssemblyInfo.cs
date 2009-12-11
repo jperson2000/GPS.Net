@@ -20,7 +20,7 @@ using System.Runtime.ConstrainedExecution;
 [assembly: AssemblyProduct("Global Positioning System Framework for Visual Studio.NET")]
 
 /* The version will crank up depending on how much the code has changed. */
-[assembly: AssemblyVersion("3.0.0.0")]
+[assembly: AssemblyVersion("3.0.1.*")]
 
 /* The title of the assembly varies depending on whether the assembly is for design-time use,
  * and whether the assembly targets a desktop or mobile device.

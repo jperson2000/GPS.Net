@@ -43,7 +43,7 @@
             this.speedTextBox = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.positionTextBox = new System.Windows.Forms.TextBox();
-            this.positionLabel = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             this.utcDateTimeTextBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.dateTimeTextBox = new System.Windows.Forms.TextBox();
@@ -59,6 +59,10 @@
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.positionLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.speedLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.bearingLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.altitudeLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.devicesTab = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -193,14 +197,14 @@
             this.positionTextBox.Size = new System.Drawing.Size(373, 22);
             this.positionTextBox.TabIndex = 5;
             // 
-            // positionLabel
+            // label6
             // 
-            this.positionLabel.AutoSize = true;
-            this.positionLabel.Location = new System.Drawing.Point(20, 76);
-            this.positionLabel.Name = "positionLabel";
-            this.positionLabel.Size = new System.Drawing.Size(52, 13);
-            this.positionLabel.TabIndex = 4;
-            this.positionLabel.Text = "Position:";
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(20, 76);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(52, 13);
+            this.label6.TabIndex = 4;
+            this.label6.Text = "Position:";
             // 
             // utcDateTimeTextBox
             // 
@@ -322,9 +326,14 @@
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.statusLabel});
+            this.statusLabel,
+            this.positionLabel,
+            this.speedLabel,
+            this.bearingLabel,
+            this.altitudeLabel});
             this.statusStrip1.Location = new System.Drawing.Point(0, 493);
             this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.ShowItemToolTips = true;
             this.statusStrip1.Size = new System.Drawing.Size(679, 22);
             this.statusStrip1.TabIndex = 9;
             this.statusStrip1.Text = "statusStrip1";
@@ -332,8 +341,50 @@
             // statusLabel
             // 
             this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Size = new System.Drawing.Size(29, 17);
+            this.statusLabel.Size = new System.Drawing.Size(617, 17);
+            this.statusLabel.Spring = true;
             this.statusLabel.Text = "Idle.";
+            this.statusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // positionLabel
+            // 
+            this.positionLabel.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
+                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
+                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.positionLabel.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
+            this.positionLabel.Name = "positionLabel";
+            this.positionLabel.Size = new System.Drawing.Size(4, 17);
+            this.positionLabel.ToolTipText = "Current Position";
+            // 
+            // speedLabel
+            // 
+            this.speedLabel.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
+                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
+                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.speedLabel.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
+            this.speedLabel.Name = "speedLabel";
+            this.speedLabel.Size = new System.Drawing.Size(4, 17);
+            this.speedLabel.ToolTipText = "Current Speed";
+            // 
+            // bearingLabel
+            // 
+            this.bearingLabel.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
+                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
+                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.bearingLabel.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
+            this.bearingLabel.Name = "bearingLabel";
+            this.bearingLabel.Size = new System.Drawing.Size(4, 17);
+            this.bearingLabel.ToolTipText = "Current Bearing";
+            // 
+            // altitudeLabel
+            // 
+            this.altitudeLabel.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
+                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
+                        | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.altitudeLabel.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
+            this.altitudeLabel.Name = "altitudeLabel";
+            this.altitudeLabel.Size = new System.Drawing.Size(4, 17);
+            this.altitudeLabel.ToolTipText = "Current Altitude";
             // 
             // tabControl1
             // 
@@ -399,7 +450,7 @@
             this.dataTab.Controls.Add(this.label2);
             this.dataTab.Controls.Add(this.positionTextBox);
             this.dataTab.Controls.Add(this.utcDateTimeTextBox);
-            this.dataTab.Controls.Add(this.positionLabel);
+            this.dataTab.Controls.Add(this.label6);
             this.dataTab.Location = new System.Drawing.Point(4, 22);
             this.dataTab.Name = "dataTab";
             this.dataTab.Padding = new System.Windows.Forms.Padding(3);
@@ -618,7 +669,7 @@
         private System.Windows.Forms.TextBox speedTextBox;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox positionTextBox;
-        private System.Windows.Forms.Label positionLabel;
+        private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox utcDateTimeTextBox;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox dateTimeTextBox;
@@ -653,6 +704,10 @@
         private System.Windows.Forms.ToolStripMenuItem resetMenuItem;
         private System.Windows.Forms.Button undetectButton;
         private System.Windows.Forms.CheckBox firstDeviceCheckBox;
+        private System.Windows.Forms.ToolStripStatusLabel speedLabel;
+        private System.Windows.Forms.ToolStripStatusLabel positionLabel;
+        private System.Windows.Forms.ToolStripStatusLabel bearingLabel;
+        private System.Windows.Forms.ToolStripStatusLabel altitudeLabel;
     }
 }
 

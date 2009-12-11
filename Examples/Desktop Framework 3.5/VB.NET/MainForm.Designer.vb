@@ -47,7 +47,7 @@ Partial Class MainForm
         Me.label2 = New System.Windows.Forms.Label
         Me.positionTextBox = New System.Windows.Forms.TextBox
         Me.utcDateTimeTextBox = New System.Windows.Forms.TextBox
-        Me.positionLabel = New System.Windows.Forms.Label
+        Me.label6 = New System.Windows.Forms.Label
         Me.rawDataTab = New System.Windows.Forms.TabPage
         Me.sentenceListBox = New System.Windows.Forms.ListBox
         Me.satellitesTab = New System.Windows.Forms.TabPage
@@ -71,6 +71,10 @@ Partial Class MainForm
         Me.detectButton = New System.Windows.Forms.Button
         Me.undetectButton = New System.Windows.Forms.Button
         Me.firstDeviceCheckBox = New System.Windows.Forms.CheckBox
+        Me.positionLabel = New System.Windows.Forms.ToolStripStatusLabel
+        Me.speedLabel = New System.Windows.Forms.ToolStripStatusLabel
+        Me.bearingLabel = New System.Windows.Forms.ToolStripStatusLabel
+        Me.altitudeLabel = New System.Windows.Forms.ToolStripStatusLabel
         Me.splitContainer1.Panel1.SuspendLayout()
         Me.splitContainer1.Panel2.SuspendLayout()
         Me.splitContainer1.SuspendLayout()
@@ -210,11 +214,11 @@ Partial Class MainForm
         Me.dataTab.Controls.Add(Me.label2)
         Me.dataTab.Controls.Add(Me.positionTextBox)
         Me.dataTab.Controls.Add(Me.utcDateTimeTextBox)
-        Me.dataTab.Controls.Add(Me.positionLabel)
+        Me.dataTab.Controls.Add(Me.label6)
         Me.dataTab.Location = New System.Drawing.Point(4, 22)
         Me.dataTab.Name = "dataTab"
         Me.dataTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.dataTab.Size = New System.Drawing.Size(552, 454)
+        Me.dataTab.Size = New System.Drawing.Size(539, 454)
         Me.dataTab.TabIndex = 1
         Me.dataTab.Text = "Real-Time Data"
         Me.dataTab.UseVisualStyleBackColor = True
@@ -300,21 +304,21 @@ Partial Class MainForm
         Me.utcDateTimeTextBox.Size = New System.Drawing.Size(407, 20)
         Me.utcDateTimeTextBox.TabIndex = 3
         '
-        'positionLabel
+        'label6
         '
-        Me.positionLabel.AutoSize = True
-        Me.positionLabel.Location = New System.Drawing.Point(20, 76)
-        Me.positionLabel.Name = "positionLabel"
-        Me.positionLabel.Size = New System.Drawing.Size(47, 13)
-        Me.positionLabel.TabIndex = 4
-        Me.positionLabel.Text = "Position:"
+        Me.label6.AutoSize = True
+        Me.label6.Location = New System.Drawing.Point(20, 76)
+        Me.label6.Name = "label6"
+        Me.label6.Size = New System.Drawing.Size(47, 13)
+        Me.label6.TabIndex = 4
+        Me.label6.Text = "Position:"
         '
         'rawDataTab
         '
         Me.rawDataTab.Controls.Add(Me.sentenceListBox)
         Me.rawDataTab.Location = New System.Drawing.Point(4, 22)
         Me.rawDataTab.Name = "rawDataTab"
-        Me.rawDataTab.Size = New System.Drawing.Size(552, 454)
+        Me.rawDataTab.Size = New System.Drawing.Size(539, 454)
         Me.rawDataTab.TabIndex = 2
         Me.rawDataTab.Text = "Raw Data"
         Me.rawDataTab.UseVisualStyleBackColor = True
@@ -325,7 +329,7 @@ Partial Class MainForm
         Me.sentenceListBox.FormattingEnabled = True
         Me.sentenceListBox.Location = New System.Drawing.Point(0, 0)
         Me.sentenceListBox.Name = "sentenceListBox"
-        Me.sentenceListBox.Size = New System.Drawing.Size(552, 446)
+        Me.sentenceListBox.Size = New System.Drawing.Size(539, 446)
         Me.sentenceListBox.TabIndex = 4
         '
         'satellitesTab
@@ -333,7 +337,7 @@ Partial Class MainForm
         Me.satellitesTab.Controls.Add(Me.satellitesListView)
         Me.satellitesTab.Location = New System.Drawing.Point(4, 22)
         Me.satellitesTab.Name = "satellitesTab"
-        Me.satellitesTab.Size = New System.Drawing.Size(552, 454)
+        Me.satellitesTab.Size = New System.Drawing.Size(539, 454)
         Me.satellitesTab.TabIndex = 3
         Me.satellitesTab.Text = "Satelllites"
         Me.satellitesTab.UseVisualStyleBackColor = True
@@ -344,7 +348,7 @@ Partial Class MainForm
         Me.satellitesListView.Dock = System.Windows.Forms.DockStyle.Fill
         Me.satellitesListView.Location = New System.Drawing.Point(0, 0)
         Me.satellitesListView.Name = "satellitesListView"
-        Me.satellitesListView.Size = New System.Drawing.Size(552, 454)
+        Me.satellitesListView.Size = New System.Drawing.Size(539, 454)
         Me.satellitesListView.TabIndex = 0
         Me.satellitesListView.UseCompatibleStateImageBehavior = False
         Me.satellitesListView.View = System.Windows.Forms.View.Details
@@ -420,8 +424,10 @@ Partial Class MainForm
         'statusLabel
         '
         Me.statusLabel.Name = "statusLabel"
-        Me.statusLabel.Size = New System.Drawing.Size(29, 17)
+        Me.statusLabel.Size = New System.Drawing.Size(626, 17)
+        Me.statusLabel.Spring = True
         Me.statusLabel.Text = "Idle."
+        Me.statusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'resumeButton
         '
@@ -458,9 +464,10 @@ Partial Class MainForm
         '
         'statusStrip1
         '
-        Me.statusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.statusLabel})
+        Me.statusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.statusLabel, Me.positionLabel, Me.speedLabel, Me.bearingLabel, Me.altitudeLabel})
         Me.statusStrip1.Location = New System.Drawing.Point(0, 506)
         Me.statusStrip1.Name = "statusStrip1"
+        Me.statusStrip1.ShowItemToolTips = True
         Me.statusStrip1.Size = New System.Drawing.Size(688, 22)
         Me.statusStrip1.TabIndex = 12
         Me.statusStrip1.Text = "statusStrip1"
@@ -518,6 +525,46 @@ Partial Class MainForm
         Me.firstDeviceCheckBox.TabIndex = 10
         Me.firstDeviceCheckBox.Text = "Stop after first device"
         Me.firstDeviceCheckBox.UseVisualStyleBackColor = True
+        '
+        'positionLabel
+        '
+        Me.positionLabel.BorderSides = CType((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) _
+                    Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) _
+                    Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom), System.Windows.Forms.ToolStripStatusLabelBorderSides)
+        Me.positionLabel.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter
+        Me.positionLabel.Name = "positionLabel"
+        Me.positionLabel.Size = New System.Drawing.Size(4, 17)
+        Me.positionLabel.ToolTipText = "Current Position"
+        '
+        'speedLabel
+        '
+        Me.speedLabel.BorderSides = CType((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) _
+                    Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) _
+                    Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom), System.Windows.Forms.ToolStripStatusLabelBorderSides)
+        Me.speedLabel.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter
+        Me.speedLabel.Name = "speedLabel"
+        Me.speedLabel.Size = New System.Drawing.Size(4, 17)
+        Me.speedLabel.ToolTipText = "Current Speed"
+        '
+        'bearingLabel
+        '
+        Me.bearingLabel.BorderSides = CType((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) _
+                    Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) _
+                    Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom), System.Windows.Forms.ToolStripStatusLabelBorderSides)
+        Me.bearingLabel.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter
+        Me.bearingLabel.Name = "bearingLabel"
+        Me.bearingLabel.Size = New System.Drawing.Size(4, 17)
+        Me.bearingLabel.ToolTipText = "Current Bearing"
+        '
+        'altitudeLabel
+        '
+        Me.altitudeLabel.BorderSides = CType((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) _
+                    Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) _
+                    Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom), System.Windows.Forms.ToolStripStatusLabelBorderSides)
+        Me.altitudeLabel.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter
+        Me.altitudeLabel.Name = "altitudeLabel"
+        Me.altitudeLabel.Size = New System.Drawing.Size(4, 17)
+        Me.altitudeLabel.ToolTipText = "Current Altitude"
         '
         'MainForm
         '
@@ -579,7 +626,7 @@ Partial Class MainForm
     Private WithEvents label2 As System.Windows.Forms.Label
     Private WithEvents positionTextBox As System.Windows.Forms.TextBox
     Private WithEvents utcDateTimeTextBox As System.Windows.Forms.TextBox
-    Private WithEvents positionLabel As System.Windows.Forms.Label
+    Private WithEvents label6 As System.Windows.Forms.Label
     Private WithEvents rawDataTab As System.Windows.Forms.TabPage
     Private WithEvents sentenceListBox As System.Windows.Forms.ListBox
     Private WithEvents satellitesTab As System.Windows.Forms.TabPage
@@ -606,5 +653,9 @@ Partial Class MainForm
     Friend WithEvents redetectMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents resetMenuItem As System.Windows.Forms.ToolStripMenuItem
     Private WithEvents firstDeviceCheckBox As System.Windows.Forms.CheckBox
+    Private WithEvents positionLabel As System.Windows.Forms.ToolStripStatusLabel
+    Private WithEvents speedLabel As System.Windows.Forms.ToolStripStatusLabel
+    Private WithEvents bearingLabel As System.Windows.Forms.ToolStripStatusLabel
+    Private WithEvents altitudeLabel As System.Windows.Forms.ToolStripStatusLabel
 
 End Class

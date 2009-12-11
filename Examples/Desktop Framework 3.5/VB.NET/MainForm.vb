@@ -124,6 +124,7 @@ Public Class MainForm
 
     Private Sub SpeedChanged(ByVal sender As Object, ByVal e As SpeedEventArgs)
         speedTextBox.Text = e.Speed.ToString()
+        speedLabel.Text = speedTextBox.Text
     End Sub
 
     Private Sub nmeaInterpreter1_BearingChanged(ByVal sender As Object, ByVal e As AzimuthEventArgs) Handles nmeaInterpreter1.BearingChanged
@@ -132,6 +133,7 @@ Public Class MainForm
 
     Private Sub BearingChanged(ByVal sender As Object, ByVal e As AzimuthEventArgs)
         bearingTextBox.Text = e.Azimuth.ToString()
+        bearingLabel.Text = bearingTextBox.Text
     End Sub
 
     Private Sub nmeaInterpreter1_AltitudeChanged(ByVal sender As Object, ByVal e As DistanceEventArgs) Handles nmeaInterpreter1.AltitudeChanged
@@ -140,6 +142,7 @@ Public Class MainForm
 
     Private Sub AltitudeChanged(ByVal sender As Object, ByVal e As DistanceEventArgs)
         altitudeTextBox.Text = e.Distance.ToString()
+        altitudeLabel.Text = altitudeTextBox.Text
     End Sub
 
     Private Sub nmeaInterpreter1_Paused(ByVal sender As Object, ByVal e As EventArgs) Handles nmeaInterpreter1.Paused
@@ -149,6 +152,7 @@ Public Class MainForm
     Private Sub Paused(ByVal sender As Object, ByVal e As EventArgs)
         pauseButton.Enabled = False
         resumeButton.Enabled = True
+        statusLabel.Text = "Paused."
     End Sub
 
     Private Sub nmeaInterpreter1_Resumed(ByVal sender As Object, ByVal e As EventArgs) Handles nmeaInterpreter1.Resumed
@@ -179,6 +183,11 @@ Public Class MainForm
         stopButton.Enabled = True
         pauseButton.Enabled = True
         resumeButton.Enabled = False
+
+        positionLabel.Text = Position.Empty.ToString()
+        speedLabel.Text = Speed.Empty.ToString()
+        bearingLabel.Text = Azimuth.Empty.ToString()
+        altitudeLabel.Text = Distance.Empty.ToString()
     End Sub
 
     Private Sub nmeaInterpreter1_Stopping(ByVal sender As Object, ByVal e As EventArgs)
@@ -244,6 +253,7 @@ Public Class MainForm
 
     Private Sub PositionChanged(ByVal sender As Object, ByVal e As PositionEventArgs)
         positionTextBox.Text = e.Position.ToString()
+        positionLabel.Text = positionTextBox.Text
     End Sub
 
     Private Sub nmeaInterpreter1_DateTimeChanged(ByVal sender As Object, ByVal e As DateTimeEventArgs) Handles nmeaInterpreter1.DateTimeChanged
@@ -266,6 +276,8 @@ Public Class MainForm
 
         sentenceListBox.Items.Add(e.Sentence.ToString())
         sentenceListBox.SelectedIndex = sentenceListBox.Items.Count - 1
+
+        statusLabel.Text = "Receiving GPS data."
     End Sub
 
 #End Region

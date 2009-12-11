@@ -127,6 +127,7 @@ namespace WindowsFormsApplication1
             BeginInvoke(new MethodInvoker(delegate()
             {
                 speedTextBox.Text = e.Speed.ToString();
+                speedLabel.Text = speedTextBox.Text;
             }));
 
         }
@@ -136,6 +137,7 @@ namespace WindowsFormsApplication1
             BeginInvoke(new MethodInvoker(delegate()
             {
                 bearingTextBox.Text = e.Azimuth.ToString();
+                bearingLabel.Text = bearingTextBox.Text;
             }));
         }
 
@@ -144,6 +146,7 @@ namespace WindowsFormsApplication1
             BeginInvoke(new MethodInvoker(delegate()
             {
                 altitudeTextBox.Text = e.Distance.ToString();
+                altitudeLabel.Text = altitudeTextBox.Text;
             }));
 
         }
@@ -155,6 +158,7 @@ namespace WindowsFormsApplication1
             {
                 pauseButton.Enabled = false;
                 resumeButton.Enabled = true;
+                statusLabel.Text = "Paused.";
             }));
         }
 
@@ -185,6 +189,11 @@ namespace WindowsFormsApplication1
                 stopButton.Enabled = true;
                 pauseButton.Enabled = true;
                 resumeButton.Enabled = false;
+
+                positionLabel.Text = Position.Empty.ToString();
+                speedLabel.Text = Speed.Empty.ToString();
+                bearingLabel.Text = Azimuth.Empty.ToString();
+                altitudeLabel.Text = Distance.Empty.ToString();
             }));
         }
 
@@ -245,6 +254,7 @@ namespace WindowsFormsApplication1
             BeginInvoke(new MethodInvoker(delegate()
             {
                 positionTextBox.Text = e.Position.ToString();
+                positionLabel.Text = positionTextBox.Text;
             }));
         }
 
@@ -266,6 +276,8 @@ namespace WindowsFormsApplication1
 
                 sentenceListBox.Items.Add(e.Sentence.ToString());
                 sentenceListBox.SelectedIndex = sentenceListBox.Items.Count - 1;
+
+                statusLabel.Text = "Receiving GPS data.";
             }));
         }
 

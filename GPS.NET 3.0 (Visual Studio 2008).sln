@@ -21,13 +21,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{A0
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{7C568874-6A07-4EAC-8F78-0015D1B6EBCB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GPS Diagnostics CF (CSharp)", "Examples\Compact Framework 3.5\C#\GPS Diagnostics CF (CSharp).csproj", "{6B06A12B-D7EA-4C2D-958A-09D3B23A0101}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GPS Diagnostics CF35 (CSharp)", "Examples\Compact Framework 3.5\C#\GPS Diagnostics CF35 (CSharp).csproj", "{6B06A12B-D7EA-4C2D-958A-09D3B23A0101}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "GPS Diagnostics CF (VB.NET)", "Examples\Compact Framework 3.5\VB.NET\GPS Diagnostics CF (VB.NET).vbproj", "{98CF37D0-C42C-42CE-A7BA-66EE33C9F00B}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "GPS Diagnostics CF35 (VB.NET)", "Examples\Compact Framework 3.5\VB.NET\GPS Diagnostics CF35 (VB.NET).vbproj", "{98CF37D0-C42C-42CE-A7BA-66EE33C9F00B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GPS Diagnostics (CSharp)", "Examples\Desktop Framework 3.5\C#\GPS Diagnostics (CSharp).csproj", "{1E591A3F-D723-41DA-BD08-D38C27ABFD6C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GPS Diagnostics DF35 (CSharp)", "Examples\Desktop Framework\C#\GPS Diagnostics DF35 (CSharp).csproj", "{1E591A3F-D723-41DA-BD08-D38C27ABFD6C}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "GPS Diagnostics (VB.NET)", "Examples\Desktop Framework 3.5\VB.NET\GPS Diagnostics (VB.NET).vbproj", "{452F1CB0-6401-4D64-B2CC-CD53C411D927}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "GPS Diagnostics DF35 (VB.NET)", "Examples\Desktop Framework\VB.NET\GPS Diagnostics DF35 (VB.NET).vbproj", "{452F1CB0-6401-4D64-B2CC-CD53C411D927}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

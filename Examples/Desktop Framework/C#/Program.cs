@@ -5,7 +5,7 @@ using System.IO;
 using System.Windows.Forms;
 using GeoFramework;
 
-namespace WindowsFormsApplication1
+namespace Diagnostics
 {
     static class Program
     {

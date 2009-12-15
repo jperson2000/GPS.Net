@@ -2,6 +2,7 @@
 Imports GeoFramework.Gps
 Imports GeoFramework.Gps.IO
 Imports GeoFramework.Gps.Nmea
+Imports System.Threading
 
 Public Class MainForm
 
@@ -22,12 +23,17 @@ Public Class MainForm
         AddHandler Devices.DeviceDetectionCompleted, AddressOf Devices_DeviceDetectionCompleted
         AddHandler Devices.DeviceDetectionCanceled, AddressOf Devices_DeviceDetectionCanceled
         AddHandler Devices.DeviceDetected, AddressOf Devices_DeviceDetected
+
+        ' Hook up event handlers for application-level and AppDomain-level exceptions so 
+        ' they can be reported to the user
+        AddHandler Application.ThreadException, AddressOf Application_ThreadException
+        AddHandler AppDomain.CurrentDomain.UnhandledException, AddressOf CurrentDomain_UnhandledException
     End Sub
 
 #Region "  GPS Device Detection Events  "
 
     Sub Devices_DeviceDetectionCanceled(ByVal sender As Object, ByVal e As EventArgs)
-        BeginInvoke(New Action(Of Object, EventArgs)(AddressOf DeviceDetectionCanceled), sender, e)
+        BeginInvoke(New EventHandler(AddressOf DeviceDetectionCanceled), sender, e)
     End Sub
 
     Private Sub DeviceDetectionCanceled(ByVal sender As Object, ByVal e As EventArgs)
@@ -37,13 +43,13 @@ Public Class MainForm
     End Sub
 
     Sub Devices_DeviceDetected(ByVal sender As Object, ByVal e As DeviceEventArgs)
-        BeginInvoke(New Action(Of Object, DeviceEventArgs)(AddressOf DeviceDetected), sender, e)
+        BeginInvoke(New EventHandler(Of DeviceEventArgs)(AddressOf DeviceDetected), sender, e)
     End Sub
 
     Private Sub DeviceDetected(ByVal sender As Object, ByVal e As DeviceEventArgs)
         Dim item As ListViewItem
         For Each item In devicesListView.Items
-            If Object.ReferenceEquals(item.Tag, e.Device) Then                  
+            If Object.ReferenceEquals(item.Tag, e.Device) Then
                 item.SubItems(1).Text = "GPS DETECTED"
                 item.ImageIndex = 0
             End If
@@ -52,7 +58,7 @@ Public Class MainForm
     End Sub
 
     Sub Devices_DeviceDetectionCompleted(ByVal sender As Object, ByVal e As EventArgs)
-        BeginInvoke(New Action(Of Object, EventArgs)(AddressOf DeviceDetectionCompleted), sender, e)
+        BeginInvoke(New EventHandler(AddressOf DeviceDetectionCompleted), sender, e)
     End Sub
 
     Private Sub DeviceDetectionCompleted(ByVal sender As Object, ByVal e As EventArgs)
@@ -62,7 +68,7 @@ Public Class MainForm
     End Sub
 
     Sub Devices_DeviceDetectionStarted(ByVal sender As Object, ByVal e As EventArgs)
-        BeginInvoke(New Action(Of Object, EventArgs)(AddressOf DeviceDetectionStarted), sender, e)
+        BeginInvoke(New EventHandler(AddressOf DeviceDetectionStarted), sender, e)
     End Sub
 
     Private Sub DeviceDetectionStarted(ByVal sender As Object, ByVal e As EventArgs)
@@ -73,13 +79,13 @@ Public Class MainForm
     End Sub
 
     Sub Devices_DeviceDetectionAttemptFailed(ByVal sender As Object, ByVal e As DeviceDetectionExceptionEventArgs)
-        BeginInvoke(New Action(Of Object, DeviceDetectionExceptionEventArgs)(AddressOf DeviceDetectionAttemptFailed), sender, e)
+        BeginInvoke(New EventHandler(Of DeviceDetectionExceptionEventArgs)(AddressOf DeviceDetectionAttemptFailed), sender, e)
     End Sub
 
     Private Sub DeviceDetectionAttemptFailed(ByVal sender As Object, ByVal e As DeviceDetectionExceptionEventArgs)
         Dim item As ListViewItem
         For Each item In devicesListView.Items
-            If Object.ReferenceEquals(item.Tag, e.Device) Then                    
+            If Object.ReferenceEquals(item.Tag, e.Device) Then
                 item.SubItems(1).Text = e.Exception.Message
                 item.ToolTipText = e.Exception.Message
                 item.ImageIndex = 1
@@ -89,7 +95,7 @@ Public Class MainForm
     End Sub
 
     Sub Devices_DeviceDetectionAttempted(ByVal sender As Object, ByVal e As DeviceEventArgs)
-        BeginInvoke(New Action(Of Object, DeviceEventArgs)(AddressOf DeviceDetectionAttempted), sender, e)
+        BeginInvoke(New EventHandler(Of DeviceEventArgs)(AddressOf DeviceDetectionAttempted), sender, e)
     End Sub
 
     Private Sub DeviceDetectionAttempted(ByVal sender As Object, ByVal e As DeviceEventArgs)
@@ -119,7 +125,7 @@ Public Class MainForm
     ' we must use Invoke or BeginInvoke to "marshal" the code to the Form's thread.
 
     Private Sub nmeaInterpreter1_SpeedChanged(ByVal sender As Object, ByVal e As SpeedEventArgs) Handles nmeaInterpreter1.SpeedChanged
-        BeginInvoke(New Action(Of Object, SpeedEventArgs)(AddressOf SpeedChanged), sender, e)
+        BeginInvoke(New EventHandler(Of SpeedEventArgs)(AddressOf SpeedChanged), sender, e)
     End Sub
 
     Private Sub SpeedChanged(ByVal sender As Object, ByVal e As SpeedEventArgs)
@@ -128,7 +134,7 @@ Public Class MainForm
     End Sub
 
     Private Sub nmeaInterpreter1_BearingChanged(ByVal sender As Object, ByVal e As AzimuthEventArgs) Handles nmeaInterpreter1.BearingChanged
-        BeginInvoke(New Action(Of Object, AzimuthEventArgs)(AddressOf BearingChanged), sender, e)
+        BeginInvoke(New EventHandler(Of AzimuthEventArgs)(AddressOf BearingChanged), sender, e)
     End Sub
 
     Private Sub BearingChanged(ByVal sender As Object, ByVal e As AzimuthEventArgs)
@@ -137,7 +143,7 @@ Public Class MainForm
     End Sub
 
     Private Sub nmeaInterpreter1_AltitudeChanged(ByVal sender As Object, ByVal e As DistanceEventArgs) Handles nmeaInterpreter1.AltitudeChanged
-        BeginInvoke(New Action(Of Object, DistanceEventArgs)(AddressOf AltitudeChanged), sender, e)
+        BeginInvoke(New EventHandler(Of DistanceEventArgs)(AddressOf AltitudeChanged), sender, e)
     End Sub
 
     Private Sub AltitudeChanged(ByVal sender As Object, ByVal e As DistanceEventArgs)
@@ -146,7 +152,7 @@ Public Class MainForm
     End Sub
 
     Private Sub nmeaInterpreter1_Paused(ByVal sender As Object, ByVal e As EventArgs) Handles nmeaInterpreter1.Paused
-        BeginInvoke(New Action(Of Object, EventArgs)(AddressOf Paused), sender, e)
+        BeginInvoke(New EventHandler(AddressOf Paused), sender, e)
     End Sub
 
     Private Sub Paused(ByVal sender As Object, ByVal e As EventArgs)
@@ -156,7 +162,7 @@ Public Class MainForm
     End Sub
 
     Private Sub nmeaInterpreter1_Resumed(ByVal sender As Object, ByVal e As EventArgs) Handles nmeaInterpreter1.Resumed
-        BeginInvoke(New Action(Of Object, EventArgs)(AddressOf Resumed), sender, e)
+        BeginInvoke(New EventHandler(AddressOf Resumed), sender, e)
     End Sub
 
     Private Sub Resumed(ByVal sender As Object, ByVal e As EventArgs)
@@ -165,7 +171,7 @@ Public Class MainForm
     End Sub
 
     Private Sub nmeaInterpreter1_Starting(ByVal sender As Object, ByVal e As DeviceEventArgs) Handles nmeaInterpreter1.Starting
-        BeginInvoke(New Action(Of Object, DeviceEventArgs)(AddressOf Starting), sender, e)
+        BeginInvoke(New EventHandler(Of DeviceEventArgs)(AddressOf Starting), sender, e)
     End Sub
 
     Private Sub Starting(ByVal sender As Object, ByVal e As DeviceEventArgs)
@@ -173,7 +179,7 @@ Public Class MainForm
     End Sub
 
     Private Sub nmeaInterpreter1_Started(ByVal sender As Object, ByVal e As EventArgs) Handles nmeaInterpreter1.Started
-        BeginInvoke(New Action(Of Object, EventArgs)(AddressOf Started), sender, e)
+        BeginInvoke(New EventHandler(AddressOf Started), sender, e)
     End Sub
 
     Private Sub Started(ByVal sender As Object, ByVal e As EventArgs)
@@ -191,7 +197,7 @@ Public Class MainForm
     End Sub
 
     Private Sub nmeaInterpreter1_Stopping(ByVal sender As Object, ByVal e As EventArgs)
-        BeginInvoke(New Action(Of Object, EventArgs)(AddressOf Stopping), sender, e)
+        BeginInvoke(New EventHandler(AddressOf Stopping), sender, e)
     End Sub
 
     Private Sub Stopping(ByVal sender As Object, ByVal e As EventArgs)
@@ -199,7 +205,7 @@ Public Class MainForm
     End Sub
 
     Private Sub nmeaInterpreter1_Stopped(ByVal sender As Object, ByVal e As EventArgs)
-        BeginInvoke(New Action(Of Object, EventArgs)(AddressOf Stopped), sender, e)
+        BeginInvoke(New EventHandler(AddressOf Stopped), sender, e)
     End Sub
 
     Private Sub Stopped(ByVal sender As Object, ByVal e As EventArgs)
@@ -211,7 +217,7 @@ Public Class MainForm
     End Sub
 
     Private Sub nmeaInterpreter1_SatellitesChanged(ByVal sender As Object, ByVal e As SatelliteListEventArgs)
-        BeginInvoke(New Action(Of Object, SatelliteListEventArgs)(AddressOf SatellitesChanged), sender, e)
+        BeginInvoke(New EventHandler(Of SatelliteListEventArgs)(AddressOf SatellitesChanged), sender, e)
     End Sub
 
     Private Sub SatellitesChanged(ByVal sender As Object, ByVal e As SatelliteListEventArgs)
@@ -221,7 +227,7 @@ Public Class MainForm
         For Each satellite In e.Satellites
 
             ' Look through the existing list for matches
-            Dim viewItem As ListViewItem            
+            Dim viewItem As ListViewItem
             For Each viewItem In satellitesListView.Items
                 ' Each item's Tag property houses a Satellite object
                 Dim existing As Satellite = CType(viewItem.Tag, Satellite)
@@ -248,7 +254,7 @@ Public Class MainForm
     End Sub
 
     Private Sub nmeaInterpreter1_PositionChanged(ByVal sender As Object, ByVal e As PositionEventArgs) Handles nmeaInterpreter1.PositionChanged
-        BeginInvoke(New Action(Of Object, PositionEventArgs)(AddressOf PositionChanged), sender, e)
+        BeginInvoke(New EventHandler(Of PositionEventArgs)(AddressOf PositionChanged), sender, e)
     End Sub
 
     Private Sub PositionChanged(ByVal sender As Object, ByVal e As PositionEventArgs)
@@ -257,7 +263,7 @@ Public Class MainForm
     End Sub
 
     Private Sub nmeaInterpreter1_DateTimeChanged(ByVal sender As Object, ByVal e As DateTimeEventArgs) Handles nmeaInterpreter1.DateTimeChanged
-        BeginInvoke(New Action(Of Object, DateTimeEventArgs)(AddressOf DateTimeChanged), sender, e)
+        BeginInvoke(New EventHandler(Of DateTimeEventArgs)(AddressOf DateTimeChanged), sender, e)
     End Sub
 
     Private Sub DateTimeChanged(ByVal sender As Object, ByVal e As DateTimeEventArgs)
@@ -266,7 +272,7 @@ Public Class MainForm
     End Sub
 
     Private Sub nmeaInterpreter1_SentenceReceived(ByVal sender As Object, ByVal e As NmeaSentenceEventArgs) Handles nmeaInterpreter1.SentenceReceived
-        BeginInvoke(New Action(Of Object, NmeaSentenceEventArgs)(AddressOf SentenceReceived), sender, e)
+        BeginInvoke(New EventHandler(Of NmeaSentenceEventArgs)(AddressOf SentenceReceived), sender, e)
     End Sub
 
     Private Sub SentenceReceived(ByVal sender As Object, ByVal e As NmeaSentenceEventArgs)
@@ -327,13 +333,13 @@ Public Class MainForm
     End Sub
 
     Private Sub redetectMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles redetectMenuItem.Click
-        Dim device As Device = devicesListView.SelectedItems(0).Tag
+        Dim device As Device = DirectCast(devicesListView.SelectedItems(0).Tag, Device)
         device.Undetect()
         device.BeginDetection()
     End Sub
 
     Private Sub resetMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles resetMenuItem.Click
-        Dim device As Device = devicesListView.SelectedItems(0).Tag
+        Dim device As Device = DirectCast(devicesListView.SelectedItems(0).Tag, Device)
         device.Reset()
     End Sub
 
@@ -360,6 +366,42 @@ Public Class MainForm
 
     Private Sub firstDeviceCheckBox_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles firstDeviceCheckBox.CheckedChanged
         Devices.IsOnlyFirstDeviceDetected = firstDeviceCheckBox.Checked
+    End Sub
+
+#End Region
+
+#Region "  Unhandled Exception Events  "
+
+    Private Sub CurrentDomain_UnhandledException(ByVal sender As Object, ByVal e As UnhandledExceptionEventArgs)
+        Dim ex As Exception = DirectCast(e.ExceptionObject, Exception)
+        NotifyOfUnhandledException(ex)
+    End Sub
+
+    Private Sub Application_ThreadException(ByVal sender As Object, ByVal e As ThreadExceptionEventArgs)
+        NotifyOfUnhandledException(e.Exception)
+    End Sub
+
+    ''' <summary>
+    ''' Logs an unhandled exception and displays a message box alerting the user to the error.
+    ''' </summary>
+    ''' <param name="exception">The unhandled exception.</param>
+    Private Sub NotifyOfUnhandledException(ByVal exception As Exception)
+        Try
+            ' Log the exception (and all of its inner exceptions)
+            Dim innerException As Exception = exception
+            While (Not (innerException) Is Nothing)
+                Trace.TraceError(innerException.ToString)
+                innerException = innerException.InnerException
+            End While
+
+            ' Stop the interpreter
+            nmeaInterpreter1.Stop()
+        Finally
+            ' Display the error to the user
+            MessageBox.Show( _
+                "An unexpected error has occurred." & vbLf & vbLf & exception.GetType.ToString & ": " & exception.Message, _
+                Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
 
 #End Region

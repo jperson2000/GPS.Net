@@ -290,8 +290,7 @@ namespace GeoFramework.Gps.IO
         protected override void OnDisconnecting()
         {
             // Close the port if it's open
-            if (_Port.IsOpen)
-                _Port.Close();
+            SafeClosePort();
 
             // And continue
             base.OnDisconnecting();
@@ -596,18 +595,8 @@ namespace GeoFramework.Gps.IO
 #if !PocketPC
         public override void CancelDetection()
         {
-            if (IsDetectionInProgress && _Port != null && _Port.IsOpen)
-            {
-                try
-                {
-                    // There are several errors that can occur within the SerialPort.Close method, 
-                    // despite the above checks.  Thus, all the empty catch blocks below.
-                    _Port.Close();
-                }
-                catch (ArgumentNullException) {}
-                catch (NullReferenceException) {}
-                catch (ObjectDisposedException) {}
-            }
+            if (IsDetectionInProgress)
+                SafeClosePort();
 
             // Continue to abort the thread
             base.CancelDetection();
@@ -1304,6 +1293,28 @@ namespace GeoFramework.Gps.IO
                 #endregion
 #endif
         }
+
+#if !PocketPC
+        /// <summary>
+        /// Closes the serial port, and ignores several exceptions that are outside of our control.
+        /// </summary>
+        private void SafeClosePort()
+        {
+            if (_Port != null && _Port.IsOpen)
+            {
+                try
+                {
+                    // There are several errors that can occur within the SerialPort.Close method, 
+                    // despite the above checks.  Thus, all the empty catch blocks below.
+                    _Port.Close();
+                }
+                catch (IOException) { }
+                catch (ArgumentNullException) { }
+                catch (NullReferenceException) { }
+                catch (ObjectDisposedException) { }
+            }
+        }
+#endif
 
         #endregion
 

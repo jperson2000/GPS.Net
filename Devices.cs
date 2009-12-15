@@ -1304,10 +1304,13 @@ namespace GeoFramework.Gps.IO
                 try
                 {
                     ManualResetEvent handle = _CurrentlyDetectingWaitHandles[0];
+                    if (handle != null)
+                    {
 #if !PocketPC
-                    if (!handle.SafeWaitHandle.IsClosed)
+                        if (!handle.SafeWaitHandle.IsClosed)
 #endif
-                        handle.WaitOne();
+                            handle.WaitOne();
+                    }
                 }
                 catch (ObjectDisposedException)
                 {

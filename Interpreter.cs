@@ -695,11 +695,11 @@ namespace GeoFramework.Gps
         }
 
         /// <summary>
-        /// Controls the maximum number of reconnection retries allowed.
+        /// Controls the maximum number of consecutive reconnection retries allowed.
         /// </summary>
 #if !PocketPC
         [Category("Behavior")]
-        [Description("Controls the maximum number of reconnection retries allowed.")]
+        [Description("Controls the maximum number of consecutive reconnection retries allowed.")]
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
@@ -1889,7 +1889,12 @@ namespace GeoFramework.Gps
 
                         // If it's null then wait a while and try again
                         if (_Device == null)
-                            continue;
+                        {
+                            if (QueryReconnectAllowed())
+                                continue;
+                            else
+                                return;
+                        }
 
                         // Signal that we're starting
                         OnStarting();
@@ -1899,6 +1904,10 @@ namespace GeoFramework.Gps
 
                         // And we're started
                         OnStarted();
+
+                        // Reset the reconnection counter, since we only care about consecutive reconnects
+                        _ReconnectionAttemptCount = 0;
+
                         continue;
                     }
 
@@ -1930,30 +1939,10 @@ namespace GeoFramework.Gps
                     OnStopped();
 
                     // Are we automatically reconnecting?
-                    if (_AllowAutomaticReconnection)
-                    {
-                        /* Wait just a moment before trying again.  This gives software such as the Bluetooth stack
-                         * the ability to properly reset and make connections again.
-                         */
-
-                        // Bump up the failure count
-                        _ReconnectionAttemptCount++;
-
-                        // If we're above the maximum, stop trying to reconnect
-                        if (_MaximumReconnectionAttempts > -1
-                            && _ReconnectionAttemptCount >= _MaximumReconnectionAttempts)
-                        {
-                            // Exit
-                            return;
-                        }
-
+                    if (QueryReconnectAllowed())
                         continue;
-                    }
                     else
-                    {
-                        // Automatic reconnection is not allowed, so exit
                         return;
-                    }
                 }
                 catch (Exception ex)
                 {
@@ -1972,6 +1961,39 @@ namespace GeoFramework.Gps
                 _IsParsingThreadAlive = false;
             }
 #endif
+        }
+
+        /// <summary>
+        /// Determines if automatic reconnection is currently allowed, based on the values of 
+        /// <see cref="AllowAutomaticReconnection"/>, <see cref="MaximumReconnectionAttempts"/>, and <see cref="_ReconnectionAttemptCount"/>.
+        /// If reconnection is allowed, then <see cref="_ReconnectionAttemptCount"/> is incremented after a short delay.
+        /// </summary>
+        /// <returns>
+        /// <see langword="true">True</see> if another reconnection attempt should be made; otherwise, <see langword="false"/>.
+        /// </returns>
+        private bool QueryReconnectAllowed()
+        {
+            // Are we automatically reconnecting?
+            if (_AllowAutomaticReconnection)
+            {
+                // Determine if we've exceeded the maximum reconnects
+                if (_MaximumReconnectionAttempts == -1
+                    || _ReconnectionAttemptCount < _MaximumReconnectionAttempts)
+                {
+                    /* Wait just a moment before reconnecting. This gives software such as the Bluetooth stack
+                     * the ability to properly reset and make connections again.
+                     */
+                    Thread.Sleep(1000);
+
+                    // Bump up the failure count
+                    _ReconnectionAttemptCount++;
+
+                    return true;
+                }
+            }
+
+            // Automatic reconnection is not allowed, or we have exceeded the maximum reconnects
+            return false;
         }
 
         #endregion

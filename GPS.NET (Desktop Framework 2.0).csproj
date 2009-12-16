@@ -70,6 +70,9 @@
     <Compile Include="Devices\BluetoothEndPoint.cs" />
     <Compile Include="Devices\BluetoothRadio.cs" />
     <Compile Include="Devices\NetworkDevice.cs" />
+    <Compile Include="Devices\SerialPort.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Devices\VirtualDevice.cs" />
     <Compile Include="DilutionOfPrecision.cs" />
     <Compile Include="Emulators\Emulator.cs" />

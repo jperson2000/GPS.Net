@@ -4,8 +4,6 @@ using System.Text;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.IO.Ports;
-using System.Runtime.CompilerServices;
 #if !PocketPC
 using System.ComponentModel;
 using System.Runtime.ConstrainedExecution;
@@ -39,20 +37,7 @@ namespace GeoFramework.Gps.IO
 #endif
     public class SerialDevice : Device, IEquatable<SerialDevice>
     {
-#if !PocketPC
-        /* We can use .NET's SerialPort for all serial communications without
-         * any problems. 
-         */
         private SerialPort _Port;
-#else
-        /* Older devices run into problems when trying to use .NET's SerialPort class.
-         * For example, it will barf trying to open the GPS Intermediate Driver because
-         * the driver may *temporarily* report error #21 until the underlying GPS port
-         * is opened.  So, we need a custom SerialStream class for this case.
-         */
-        private string _Port;
-        private int _BaudRate;
-#endif
         private int _LastSuccessfulBaudRate;
         private string _Name;
 
@@ -72,9 +57,7 @@ namespace GeoFramework.Gps.IO
         /// </summary>
         public SerialDevice()
         {
-#if !PocketPC
             _Port = new SerialPort();
-#endif
         }
 
         /// <summary>
@@ -91,20 +74,8 @@ namespace GeoFramework.Gps.IO
         /// <param name="portName"></param>
         /// <param name="baudRate"></param>
         public SerialDevice(string portName, int baudRate)
-        { 
-#if !PocketPC
+        {
             _Port = new SerialPort(portName, baudRate);
-            _Port.ReadTimeout = (int)DefaultReadTimeout.TotalMilliseconds;
-            _Port.WriteTimeout = (int)DefaultWriteTimeout.TotalMilliseconds;
-            _Port.NewLine = "\r\n";
-            _Port.WriteBufferSize = NmeaReader.IdealNmeaBufferSize;
-            _Port.ReadBufferSize = NmeaReader.IdealNmeaBufferSize; 
-            _Port.ReceivedBytesThreshold = 65535;  // We don't need this event, so max out the threshold
-            _Port.Encoding = ASCIIEncoding.ASCII;
-#else
-            _Port = portName;
-            _BaudRate = baudRate;
-#endif
 
             // Default to the port name for the friendly name
             _Name = portName;
@@ -130,19 +101,11 @@ namespace GeoFramework.Gps.IO
         {
             get
             {
-#if !PocketPC
                 return _Port.PortName;
-#else
-                return _Port;
-#endif
             }
             set
             {
-#if !PocketPC
                 _Port.PortName = value;
-#else
-                _Port = value;
-#endif
             }
         }
 
@@ -161,11 +124,7 @@ namespace GeoFramework.Gps.IO
                 StringBuilder numericPortion = new StringBuilder(4);
 
                 // Extract numeric digits from the name
-#if !PocketPC
                 foreach (char character in _Port.PortName)
-#else
-                foreach (char character in _Port)
-#endif
                 {
                     if (char.IsNumber(character))
                         numericPortion.Append(character);
@@ -198,19 +157,11 @@ namespace GeoFramework.Gps.IO
         {
             get
             {
-#if !PocketPC
                 return _Port.BaudRate;
-#else
-                return _BaudRate;
-#endif
             }
             set
             {
-#if !PocketPC
                 _Port.BaudRate = value;
-#else
-                _BaudRate = value;
-#endif
             }
         }
 
@@ -254,19 +205,10 @@ namespace GeoFramework.Gps.IO
             clone.ReceivedBytesThreshold = _Port.ReceivedBytesThreshold;
             clone.Encoding = _Port.Encoding;
 
-            /* Try to dispose of the old base stream.  I got Win32 errors in some cases
-             * because the Finalizer of a SerialPort's SerialStream was called, and (the fucking bastards)
-             * they don't catch exceptions in their finalizer  >.<.   .NET fail 
-             */
+            // Close and dispose the current reference
             if (_Port.IsOpen)
-            {
-                try { _Port.BaseStream.Close(); }
-                catch { }
-#if Framework30
-                try { _Port.BaseStream.Dispose(); } catch { }
-#endif
-                try { _Port.Dispose(); } catch { }
-            }
+                _Port.Close();
+            _Port.Dispose();
 
             // Use this new reference.
             _Port = clone;
@@ -275,27 +217,27 @@ namespace GeoFramework.Gps.IO
 
         protected override Stream OpenStream(FileAccess access, FileShare sharing)
         {
-#if !PocketPC
             // Open the port if it's not already open
             if (!_Port.IsOpen)
+#if !PocketPC
                 _Port.Open();
-
-            return _Port.BaseStream;
 #else
-            return new SerialStream(_Port, _BaudRate, access, sharing);
+                _Port.Open(access, sharing);
 #endif
+            return _Port.BaseStream;
         }
 
-#if !PocketPC
         protected override void OnDisconnecting()
         {
             // Close the port if it's open
-            SafeClosePort();
+            if (_Port != null && _Port.IsOpen)
+            {
+                _Port.Close();
+            }
 
             // And continue
             base.OnDisconnecting();
         }
-#endif
 
         protected override bool DetectProtocol()
         {
@@ -416,37 +358,22 @@ namespace GeoFramework.Gps.IO
                 _BaudRatesToTest.Insert(0, _LastSuccessfulBaudRate);
             }
 
-#if PocketPC
-            // Get the stream we're working with
-            SerialStream serialStream = (SerialStream)BaseStream;
-#endif
             /* For the purposes of detection, we should be getting data immediately.
              * As a result, we can use agressive timeouts here.  Only a tiny handful of devices
              * need longer than two seconds to start transmitting data.
              */
-#if PocketPC
-            serialStream.ReadTimeout = 1000;
-#else
             _Port.ReadTimeout = 1000;
-#endif
 
             // Loop through all baud rates to test
             int baudCount = _BaudRatesToTest.Count;
             for (int index = 0; index < baudCount; index++)
             {
-#if !PocketPC
                 // Set the port baud rate
                 _Port.BaudRate = _BaudRatesToTest[index];
 
                 // Clear any old data
                 _Port.DiscardInBuffer();
-#else
-                // Set the port baud rate
-                serialStream.BaudRate = _BaudRatesToTest[index];
 
-                // Clear any old data
-                serialStream.DiscardInBuffer();
-#endif
                 // Read a new buffer
                 byte[] buffer = new byte[NmeaReader.IdealNmeaBufferSize];
                 int bytesRead = 0;
@@ -539,19 +466,14 @@ namespace GeoFramework.Gps.IO
                     Thread.CurrentThread.Priority = ThreadPriority.AboveNormal;
 #endif
 
-                /* We have ASCII.  Try up to 10 times to get a full sentences.
-                 * NOTE: On the HTC P3300, an OutOfMemoryException occurs when using SerialPort.ReadLine().
-                 *       However, a StreamReader.ReadLine() works just fine.  This suggests that SerialPort.ReadLine()
-                 *       is buggy!  Use a StreamReader to get the job done.
-                 */
-                StreamReader reader = new StreamReader(BaseStream, ASCIIEncoding.ASCII, false, NmeaReader.IdealNmeaBufferSize);
+                // We have ASCII.  Try up to 10 times to get a full sentences.
                 for (int count = 0; count < 10; count++)
                 {
                     // Read a line
                     string testLine = null;
                     try
                     {
-                        testLine = reader.ReadLine();
+                        testLine = _Port.ReadLine();
                     }
                     catch (TimeoutException ex)
                     {
@@ -569,16 +491,8 @@ namespace GeoFramework.Gps.IO
                     {
                         // Yes!  This is an NMEA device.
 
-#if !PocketPC
                         // Set the "last successful" baud rate
                         _LastSuccessfulBaudRate = _Port.BaudRate;
-#else
-                        // Set the "last successful" baud rate
-                        _LastSuccessfulBaudRate = serialStream.BaudRate;
-
-                        // Update the baud rate of the device
-                        _BaudRate = _LastSuccessfulBaudRate;
-#endif
 
                         return true;
                     }
@@ -592,42 +506,36 @@ namespace GeoFramework.Gps.IO
             return false;
         }
 
-#if !PocketPC
         public override void CancelDetection()
         {
             if (IsDetectionInProgress)
-                SafeClosePort();
+            {
+                if (_Port != null && _Port.IsOpen)
+                {
+                    _Port.Close();
+                }
+            }
 
             // Continue to abort the thread
             base.CancelDetection();
         }
-#endif
 
-#if !PocketPC
         protected override void Dispose(bool disposing)
         {
-            if (_Port != null)
-            {
-                if (_Port.IsOpen)
-                {
-                    try { _Port.BaseStream.Close(); } catch { }
-#if Framework30
-                    try { _Port.BaseStream.Dispose(); } catch { }
-#endif
-                    try { _Port.Close(); } catch { }
-                }
-                try { _Port.Dispose(); } catch { }
-            }
-
             if (disposing)
-            {                
-                _Port = null;
+            {
+                if (_Port != null)
+                {
+                    if (_Port.IsOpen)
+                        _Port.Close();
+
+                    _Port.Dispose();
+                    _Port = null;
+                }
             }
 
             base.Dispose(disposing);
         }
-#endif
-
 
         protected override void OnCacheWrite()
         {
@@ -648,11 +556,7 @@ namespace GeoFramework.Gps.IO
                         deviceKey.SetValue(DefaultRegistryValueName, _Name);
 
                     // Update the baud rate and etc.
-#if !PocketPC
                     deviceKey.SetValue("Baud Rate", _Port.BaudRate);
-#else
-                    deviceKey.SetValue("Baud Rate", _BaudRate);
-#endif
 
                     // Update the success/fail statistics
                     deviceKey.SetValue("Number of Times Detected", SuccessfulDetectionCount);
@@ -718,11 +622,7 @@ namespace GeoFramework.Gps.IO
                         _Name = Convert.ToString(deviceKey.GetValue(name));
                         break;
                     case "Baud Rate":
-#if !PocketPC
                         _Port.BaudRate = Convert.ToInt32(deviceKey.GetValue(name), CultureInfo.InvariantCulture);
-#else
-                        _BaudRate = Convert.ToInt32(deviceKey.GetValue(name));
-#endif
                         break;
                     case "Number of Times Detected":
                         SetSuccessfulDetectionCount(Convert.ToInt32(deviceKey.GetValue(name), CultureInfo.InvariantCulture));
@@ -1293,28 +1193,6 @@ namespace GeoFramework.Gps.IO
                 #endregion
 #endif
         }
-
-#if !PocketPC
-        /// <summary>
-        /// Closes the serial port, and ignores several exceptions that are outside of our control.
-        /// </summary>
-        private void SafeClosePort()
-        {
-            if (_Port != null && _Port.IsOpen)
-            {
-                try
-                {
-                    // There are several errors that can occur within the SerialPort.Close method, 
-                    // despite the above checks.  Thus, all the empty catch blocks below.
-                    _Port.Close();
-                }
-                catch (IOException) { }
-                catch (ArgumentNullException) { }
-                catch (NullReferenceException) { }
-                catch (ObjectDisposedException) { }
-            }
-        }
-#endif
 
         #endregion
 

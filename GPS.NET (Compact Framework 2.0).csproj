@@ -97,6 +97,7 @@
     <Compile Include="Devices\NativeMethods.cs" />
     <Compile Include="Devices\NetworkDevice.cs" />
     <Compile Include="Devices\SerialDevice.cs" />
+    <Compile Include="Devices\SerialPort.cs" />
     <Compile Include="Devices\SerialStream.cs" />
     <Compile Include="Devices\VirtualDevice.cs" />
     <Compile Include="Diagnostics.cs" />

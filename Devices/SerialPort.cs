@@ -135,11 +135,12 @@ namespace GeoFramework.Gps.IO
         public new void Open()
         {
             base.Open();
+
             /* The .Net SerialStream class has a bug that causes its finalizer to crash when working 
              * with virtual COM ports (e.g. FTDI, Prolific, etc.) See the following page for details:
              * http://social.msdn.microsoft.com/Forums/en-US/netfxbcl/thread/8a1825d2-c84b-4620-91e7-3934a4d47330
-             * To work around this bug, we only allow the finalizer to run if the BaseStream is still
-             * valid at disposal time. See the Dispose method for the other half of this workaround.
+             * To work around this bug, we suppress the finalizer for the BaseStream and close it ourselves instead.
+             * See the Dispose method for the other half of this workaround.
              */
             GC.SuppressFinalize(BaseStream);
         }
@@ -200,22 +201,22 @@ namespace GeoFramework.Gps.IO
         {
             if (disposing)
             {
-                if (BaseStream != null)
+                try
                 {
-                    try
+                    /* The .Net SerialStream class has a bug that causes its finalizer to crash when working 
+                     * with virtual COM ports (e.g. FTDI, Prolific, etc.) See the following page for details:
+                     * http://social.msdn.microsoft.com/Forums/en-US/netfxbcl/thread/8a1825d2-c84b-4620-91e7-3934a4d47330
+                     * To work around this bug, we suppress the finalizer for the BaseStream and close it ourselves instead.
+                     * See the Open method for the other half of this workaround.
+                     */
+                    if (IsOpen)
                     {
-                        /* The .Net SerialStream class has a bug that causes its finalizer to crash when working 
-                         * with virtual COM ports (e.g. FTDI, Prolific, etc.) See the following page for details:
-                         * http://social.msdn.microsoft.com/Forums/en-US/netfxbcl/thread/8a1825d2-c84b-4620-91e7-3934a4d47330
-                         * To work around this bug, we only allow the finalizer to run if the BaseStream is still
-                         * valid at disposal time. See the Open method for the other half of this workaround.
-                         */
-                        GC.ReRegisterForFinalize(BaseStream);
+                        BaseStream.Close();
                     }
-                    catch
-                    {
-                        // The call to GC.ReRegisterForFinalize failed, which means that the BaseStream was invalid
-                    }
+                }
+                catch
+                {
+                    // The BaseStream is already closed, disposed, or in an invalid state. Ignore and continue disposing.
                 }
             }
 

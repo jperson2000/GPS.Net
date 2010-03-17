@@ -40,90 +40,90 @@ namespace Diagnostics
         void Devices_DeviceDetectionCanceled(object sender, EventArgs e)
         {
             BeginInvoke(new MethodInvoker(delegate()
-                                          {
-                                              statusLabel.Text = "Device detection canceled!";
-                                              detectButton.Enabled = true;
-                                              cancelDetectButton.Enabled = false;
-                                          }));
+            {
+                statusLabel.Text = "Device detection canceled!";
+                detectButton.Enabled = true;
+                cancelDetectButton.Enabled = false;
+            }));
         }
 
         void Devices_DeviceDetected(object sender, DeviceEventArgs e)
         {
             BeginInvoke(new MethodInvoker(delegate()
-                                          {
-                                              foreach (ListViewItem item in devicesListView.Items)
-                                              {
-                                                  if (object.ReferenceEquals(item.Tag, e.Device))
-                                                  {
-                                                      item.SubItems[1].Text = "GPS DETECTED";
-                                                      item.ImageIndex = 0;
-                                                  }
-                                              }
-                                              devicesListView.Refresh();
-                                          }));
+            {
+                foreach (ListViewItem item in devicesListView.Items)
+                {
+                    if (object.ReferenceEquals(item.Tag, e.Device))
+                    {
+                        item.SubItems[1].Text = "GPS DETECTED";
+                        item.ImageIndex = 0;
+                    }
+                }
+                devicesListView.Refresh();
+            }));
         }
 
         void Devices_DeviceDetectionCompleted(object sender, EventArgs e)
         {
             BeginInvoke(new MethodInvoker(delegate()
-                                          {
-                                              statusLabel.Text = "Device detection complete.";
-                                              detectButton.Enabled = true;
-                                              cancelDetectButton.Enabled = false;
-                                          }));
+            {
+                statusLabel.Text = "Device detection complete.";
+                detectButton.Enabled = true;
+                cancelDetectButton.Enabled = false;
+            }));
         }
 
         void Devices_DeviceDetectionStarted(object sender, EventArgs e)
         {
             BeginInvoke(new MethodInvoker(delegate()
-                                          {
-                                              statusLabel.Text = "Detecting GPS devices...";
-                                              devicesListView.Items.Clear();
-                                              detectButton.Enabled = false;
-                                              cancelDetectButton.Enabled = true;
-                                          }));
+            {
+                statusLabel.Text = "Detecting GPS devices...";
+                devicesListView.Items.Clear();
+                detectButton.Enabled = false;
+                cancelDetectButton.Enabled = true;
+            }));
         }
 
         void Devices_DeviceDetectionAttemptFailed(object sender, DeviceDetectionExceptionEventArgs e)
         {
             BeginInvoke(new MethodInvoker(delegate()
-                                          {
-                                              foreach (ListViewItem item in devicesListView.Items)
-                                              {
-                                                  if (object.ReferenceEquals(item.Tag, e.Device))
-                                                  {
-                                                      item.SubItems[1].Text = e.Exception.Message;
-                                                      item.ToolTipText = e.Exception.Message;
-                                                      item.ImageIndex = 1;
-                                                  }
-                                              }
-                                              devicesListView.Refresh();
-                                          }));
+            {
+                foreach (ListViewItem item in devicesListView.Items)
+                {
+                    if (object.ReferenceEquals(item.Tag, e.Device))
+                    {
+                        item.SubItems[1].Text = e.Exception.Message;
+                        item.ToolTipText = e.Exception.Message;
+                        item.ImageIndex = 1;
+                    }
+                }
+                devicesListView.Refresh();
+            }));
         }
 
         void Devices_DeviceDetectionAttempted(object sender, DeviceEventArgs e)
         {
             BeginInvoke(new MethodInvoker(delegate()
-                                          {
-                                              undetectButton.Enabled = true;
+            {
+                undetectButton.Enabled = true;
 
-                                              foreach (ListViewItem existingItem in devicesListView.Items)
-                                              {
-                                                  if (object.ReferenceEquals(existingItem.Tag, e.Device))
-                                                  {
-                                                      existingItem.SubItems[1].Text = "Detecting...";
-                                                      return;
-                                                  }
-                                              }
+                foreach (ListViewItem existingItem in devicesListView.Items)
+                {
+                    if (object.ReferenceEquals(existingItem.Tag, e.Device))
+                    {
+                        existingItem.SubItems[1].Text = "Detecting...";
+                        return;
+                    }
+                }
 
-                                              ListViewItem item = new ListViewItem();
-                                              item.Text = e.Device.Name;
-                                              item.ImageIndex = 2;
-                                              item.Tag = e.Device;
-                                              item.SubItems.Add(new ListViewItem.ListViewSubItem(item, "Detecting..."));
-                                              devicesListView.Items.Add(item);
-                                              devicesListView.Refresh();
-                                          }));
+                ListViewItem item = new ListViewItem();
+                item.Text = e.Device.Name;
+                item.ImageIndex = 2;
+                item.Tag = e.Device;
+                item.SubItems.Add(new ListViewItem.ListViewSubItem(item, "Detecting..."));
+                devicesListView.Items.Add(item);
+                devicesListView.Refresh();
+            }));
         }
 
         #endregion
@@ -133,29 +133,29 @@ namespace Diagnostics
         private void nmeaInterpreter1_SpeedChanged(object sender, SpeedEventArgs e)
         {
             BeginInvoke(new MethodInvoker(delegate()
-                                          {
-                                              speedTextBox.Text = e.Speed.ToString();
-                                              speedLabel.Text = speedTextBox.Text;
-                                          }));
+            {
+                speedTextBox.Text = e.Speed.ToString();
+                speedLabel.Text = speedTextBox.Text;
+            }));
 
         }
 
         private void nmeaInterpreter1_BearingChanged(object sender, AzimuthEventArgs e)
         {
             BeginInvoke(new MethodInvoker(delegate()
-                                          {
-                                              bearingTextBox.Text = e.Azimuth.ToString();
-                                              bearingLabel.Text = bearingTextBox.Text;
-                                          }));
+            {
+                bearingTextBox.Text = e.Azimuth.ToString();
+                bearingLabel.Text = bearingTextBox.Text;
+            }));
         }
 
         private void nmeaInterpreter1_AltitudeChanged(object sender, DistanceEventArgs e)
         {
             BeginInvoke(new MethodInvoker(delegate()
-                                          {
-                                              altitudeTextBox.Text = e.Distance.ToString();
-                                              altitudeLabel.Text = altitudeTextBox.Text;
-                                          }));
+            {
+                altitudeTextBox.Text = e.Distance.ToString();
+                altitudeLabel.Text = altitudeTextBox.Text;
+            }));
 
         }
 
@@ -163,130 +163,136 @@ namespace Diagnostics
         private void nmeaInterpreter1_Paused(object sender, EventArgs e)
         {
             BeginInvoke(new MethodInvoker(delegate()
-                                          {
-                                              pauseButton.Enabled = false;
-                                              resumeButton.Enabled = true;
-                                              statusLabel.Text = "Paused.";
-                                          }));
+            {
+                pauseButton.Enabled = false;
+                resumeButton.Enabled = true;
+                statusLabel.Text = "Paused.";
+            }));
         }
 
         private void nmeaInterpreter1_Resumed(object sender, EventArgs e)
         {
             BeginInvoke(new MethodInvoker(delegate()
-                                          {
-                                              pauseButton.Enabled = true;
-                                              resumeButton.Enabled = false;
-                                          }));
+            {
+                pauseButton.Enabled = true;
+                resumeButton.Enabled = false;
+            }));
         }
 
         private void nmeaInterpreter1_Starting(object sender, DeviceEventArgs e)
         {
             BeginInvoke(new MethodInvoker(delegate()
-                                          {
-                                              statusLabel.Text = "Connecting to " + e.Device.Name + "...";
-                                          }));
+            {
+                statusLabel.Text = "Connecting to " + e.Device.Name + "...";
+            }));
         }
 
         private void nmeaInterpreter1_Started(object sender, EventArgs e)
         {
             BeginInvoke(new MethodInvoker(delegate()
-                                          {
-                                              statusLabel.Text = "Connected!  Waiting for data...";
-                                              sentenceListBox.Items.Clear();
-                                              startButton.Enabled = false;
-                                              stopButton.Enabled = true;
-                                              pauseButton.Enabled = true;
-                                              resumeButton.Enabled = false;
+            {
+                statusLabel.Text = "Connected!  Waiting for data...";
+                sentenceListBox.Items.Clear();
+                startButton.Enabled = false;
+                stopButton.Enabled = true;
+                pauseButton.Enabled = true;
+                resumeButton.Enabled = false;
 
-                                              positionLabel.Text = Position.Empty.ToString();
-                                              speedLabel.Text = Speed.Empty.ToString();
-                                              bearingLabel.Text = Azimuth.Empty.ToString();
-                                              altitudeLabel.Text = Distance.Empty.ToString();
-                                          }));
+                positionLabel.Text = Position.Empty.ToString();
+                speedLabel.Text = Speed.Empty.ToString();
+                bearingLabel.Text = Azimuth.Empty.ToString();
+                altitudeLabel.Text = Distance.Empty.ToString();
+            }));
         }
 
         private void nmeaInterpreter1_Stopping(object sender, EventArgs e)
         {
             BeginInvoke(new MethodInvoker(delegate()
-                                          {
-                                              statusLabel.Text = "Stopping GPS device...";
-                                          }));
+            {
+                statusLabel.Text = "Stopping GPS device...";
+            }));
         }
 
         private void nmeaInterpreter1_Stopped(object sender, EventArgs e)
         {
             BeginInvoke(new MethodInvoker(delegate()
-                                          {
-                                              statusLabel.Text = "Stopped.";
-                                              startButton.Enabled = true;
-                                              stopButton.Enabled = false;
-                                              pauseButton.Enabled = false;
-                                              resumeButton.Enabled = false;
-                                          }));
+            {
+                statusLabel.Text = "Stopped.";
+                startButton.Enabled = true;
+                stopButton.Enabled = false;
+                pauseButton.Enabled = false;
+                resumeButton.Enabled = false;
+            }));
         }
 
 
         private void nmeaInterpreter1_SatellitesChanged(object sender, SatelliteListEventArgs e)
         {
             BeginInvoke(new MethodInvoker(delegate()
-                                          {
-                                              foreach (Satellite satellite in e.Satellites)
-                                              {
-                                                  // Look for an existing satellite
-                                                  foreach (ListViewItem viewItem in satellitesListView.Items)
-                                                  {
-                                                      Satellite existing = (Satellite)viewItem.Tag;
-                                                      if (existing.PseudorandomNumber.Equals(satellite.PseudorandomNumber))
-                                                      {
-                                                          // Update shiz
-                                                          viewItem.SubItems[2].Text = satellite.Azimuth.ToString();
-                                                          viewItem.SubItems[3].Text = satellite.Elevation.ToString();
-                                                          viewItem.SubItems[4].Text = satellite.SignalToNoiseRatio.ToString();
-                                                          return;
-                                                      }
-                                                  }
+            {
+                foreach (Satellite satellite in e.Satellites)
+                {
+                    bool isSatelliteNew = true;
 
-                                                  ListViewItem newItem = new ListViewItem(satellite.PseudorandomNumber.ToString());
-                                                  newItem.SubItems.Add(satellite.Name);
-                                                  newItem.SubItems.Add(satellite.Azimuth.ToString());
-                                                  newItem.SubItems.Add(satellite.Elevation.ToString());
-                                                  newItem.SubItems.Add(satellite.SignalToNoiseRatio.ToString());
-                                                  newItem.Tag = satellite;
-                                                  satellitesListView.Items.Add(newItem);
-                                              }
-                                          }));
+                    // Look for an existing satellite
+                    foreach (ListViewItem viewItem in satellitesListView.Items)
+                    {
+                        Satellite existing = (Satellite)viewItem.Tag;
+                        if (existing.PseudorandomNumber.Equals(satellite.PseudorandomNumber))
+                        {
+                            // Update shiz
+                            viewItem.SubItems[2].Text = satellite.Azimuth.ToString();
+                            viewItem.SubItems[3].Text = satellite.Elevation.ToString();
+                            viewItem.SubItems[4].Text = satellite.SignalToNoiseRatio.ToString();
+                            isSatelliteNew = false;
+                        }
+                    }
+
+                    // If no existing satellite was found, then add a new one
+                    if (isSatelliteNew)
+                    {
+                        ListViewItem newItem = new ListViewItem(satellite.PseudorandomNumber.ToString());
+                        newItem.SubItems.Add(satellite.Name);
+                        newItem.SubItems.Add(satellite.Azimuth.ToString());
+                        newItem.SubItems.Add(satellite.Elevation.ToString());
+                        newItem.SubItems.Add(satellite.SignalToNoiseRatio.ToString());
+                        newItem.Tag = satellite;
+                        satellitesListView.Items.Add(newItem);
+                    }
+                }
+            }));
         }
 
         private void nmeaInterpreter1_PositionChanged(object sender, PositionEventArgs e)
         {
             BeginInvoke(new MethodInvoker(delegate()
-                                          {
-                                              positionTextBox.Text = e.Position.ToString();
-                                              positionLabel.Text = positionTextBox.Text;
-                                          }));
+            {
+                positionTextBox.Text = e.Position.ToString();
+                positionLabel.Text = positionTextBox.Text;
+            }));
         }
 
         private void nmeaInterpreter1_DateTimeChanged(object sender, DateTimeEventArgs e)
         {
             BeginInvoke(new MethodInvoker(delegate()
-                                          {
-                                              dateTimeTextBox.Text = e.DateTime.ToShortDateString() + " " + e.DateTime.ToLongTimeString();
-                                              utcDateTimeTextBox.Text = e.DateTime.ToUniversalTime().ToString("R");
-                                          }));
+            {
+                dateTimeTextBox.Text = e.DateTime.ToShortDateString() + " " + e.DateTime.ToLongTimeString();
+                utcDateTimeTextBox.Text = e.DateTime.ToUniversalTime().ToString("R");
+            }));
         }
 
         private void nmeaInterpreter1_SentenceReceived(object sender, GeoFramework.Gps.Nmea.NmeaSentenceEventArgs e)
         {
             BeginInvoke(new MethodInvoker(delegate()
-                                          {
-                                              if (sentenceListBox.Items.Count >= 100)
-                                                  sentenceListBox.Items.RemoveAt(0);
+            {
+                if (sentenceListBox.Items.Count >= 100)
+                sentenceListBox.Items.RemoveAt(0);
 
-                                              sentenceListBox.Items.Add(e.Sentence.ToString());
-                                              sentenceListBox.SelectedIndex = sentenceListBox.Items.Count - 1;
+                sentenceListBox.Items.Add(e.Sentence.ToString());
+                sentenceListBox.SelectedIndex = sentenceListBox.Items.Count - 1;
 
-                                              statusLabel.Text = "Receiving GPS data.";
-                                          }));
+                statusLabel.Text = "Receiving GPS data.";
+            }));
         }
 
         #endregion

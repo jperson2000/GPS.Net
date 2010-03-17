@@ -225,6 +225,7 @@ Public Class MainForm
 
         ' Update each satellite
         For Each satellite In e.Satellites
+            Dim isSatelliteNew As Boolean = True
 
             ' Look through the existing list for matches
             Dim viewItem As ListViewItem
@@ -238,18 +239,21 @@ Public Class MainForm
                     viewItem.SubItems(2).Text = satellite.Azimuth.ToString()
                     viewItem.SubItems(3).Text = satellite.Elevation.ToString()
                     viewItem.SubItems(4).Text = satellite.SignalToNoiseRatio.ToString()
-                    Return
+                    isSatelliteNew = False
                 End If
             Next
 
-            ' Add a new column for this satellite
-            Dim newItem As New ListViewItem(satellite.PseudorandomNumber.ToString())
-            newItem.SubItems.Add(satellite.Name)
-            newItem.SubItems.Add(satellite.Azimuth.ToString())
-            newItem.SubItems.Add(satellite.Elevation.ToString())
-            newItem.SubItems.Add(satellite.SignalToNoiseRatio.ToString())
-            newItem.Tag = satellite
-            satellitesListView.Items.Add(newItem)
+            ' If no existing satellite was found, then add a new one
+            If isSatelliteNew Then
+                ' Add a new column for this satellite
+                Dim newItem As New ListViewItem(satellite.PseudorandomNumber.ToString())
+                newItem.SubItems.Add(satellite.Name)
+                newItem.SubItems.Add(satellite.Azimuth.ToString())
+                newItem.SubItems.Add(satellite.Elevation.ToString())
+                newItem.SubItems.Add(satellite.SignalToNoiseRatio.ToString())
+                newItem.Tag = satellite
+                satellitesListView.Items.Add(newItem)
+            End If
         Next
     End Sub
 

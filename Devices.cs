@@ -106,11 +106,11 @@ namespace GeoFramework.Gps.IO
         /// <summary>
         /// Occurs when any interpreter detects when a GPS device can no longer calculate the current location.
         /// </summary>
-        public static event EventHandler FixLost;
+        public static event EventHandler<DeviceEventArgs> FixLost;
         /// <summary>
         /// Occurs when any interpreter detects when a GPS device becomes able to calculate the current location.
         /// </summary>
-        public static event EventHandler FixAcquired;
+        public static event EventHandler<DeviceEventArgs> FixAcquired;
         /// <summary>
         /// Occurs when any interpreter detects a change in the satellite-derived date and time.
         /// </summary>
@@ -946,6 +946,30 @@ namespace GeoFramework.Gps.IO
 #else
             return _DetectionCompleteWaitHandle.WaitOne(timeout, false);
 #endif
+        }
+
+        /// <summary>
+        /// Raises the <see cref="FixLost"/> event.
+        /// </summary>
+        internal static void RaiseFixLost(DeviceEventArgs e)
+        {
+            EventHandler<DeviceEventArgs> handler = FixLost;
+            if (handler != null)
+            {
+                handler(null, e);
+            }
+        }
+
+        /// <summary>
+        /// Raises the <see cref="FixAcquired"/> event.
+        /// </summary>
+        internal static void RaiseFixAcquired(DeviceEventArgs e)
+        {
+            EventHandler<DeviceEventArgs> handler = FixAcquired;
+            if (handler != null)
+            {
+                handler(null, e);
+            }
         }
 
         #endregion

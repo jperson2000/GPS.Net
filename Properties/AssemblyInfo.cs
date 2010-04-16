@@ -53,8 +53,10 @@ using System.Runtime.ConstrainedExecution;
 	    [assembly: AssemblyConfiguration("Public Release for .NET Compact Framework 1.0")]
 #endif
 #else
-#if Framework30
-[assembly: AssemblyConfiguration("Public Release for .NET Framework 3.5")]
+#if Framework40
+        [assembly: AssemblyConfiguration("Public Release for .NET Framework 4.0")]
+#elif Framework30
+        [assembly: AssemblyConfiguration("Public Release for .NET Framework 3.5")]
 #elif Framework20
         [assembly: AssemblyConfiguration("Public Release for .NET Framework 2.0")]
 #elif Framework10
@@ -78,14 +80,21 @@ using System.Runtime.ConstrainedExecution;
  */
 
 #if !PocketPC || DesignTime
-// Grant only the minimum security permissions.  We use unmanaged code in some classes.  Serial/Bluetooth, etc.
-[assembly: SecurityPermission(SecurityAction.RequestMinimum, UnmanagedCode = true, Execution = false)]
-// We don't use reflection
-[assembly: ReflectionPermission(SecurityAction.RequestRefuse)]
-// We won't use the registry, so deny access
-[assembly: RegistryPermission(SecurityAction.RequestMinimum)]
-// We don't use the environment, so deny
-[assembly: EnvironmentPermission(SecurityAction.RequestRefuse)]
-// We DO use file I/O, so request it now
-[assembly: FileIOPermission(SecurityAction.RequestMinimum)]
+
+// CAS permission declarations are obsolted in .Net 4.0
+#if !Framework40
+
+    // Grant only the minimum security permissions.  We use unmanaged code in some classes.  Serial/Bluetooth, etc.
+    [assembly: SecurityPermission(SecurityAction.RequestMinimum, UnmanagedCode = true, Execution = false)]
+    // We don't use reflection
+    [assembly: ReflectionPermission(SecurityAction.RequestRefuse)]
+    // We won't use the registry, so deny access
+    [assembly: RegistryPermission(SecurityAction.RequestMinimum)]
+    // We don't use the environment, so deny
+    [assembly: EnvironmentPermission(SecurityAction.RequestRefuse)]
+    // We DO use file I/O, so request it now
+    [assembly: FileIOPermission(SecurityAction.RequestMinimum)]
+
+#endif
+
 #endif

@@ -42,6 +42,7 @@ namespace GeoFramework.Gps.IO
         /// Creates a new instance using the specified unsigned 64-bit integer.
         /// </summary>
         /// <param name="address"></param>
+        [CLSCompliant(false)]
         public BluetoothAddress(ulong address)
         {
             _Bytes = BitConverter.GetBytes(address);
@@ -159,6 +160,7 @@ namespace GeoFramework.Gps.IO
             return new BluetoothAddress(address);
         }
 
+        [CLSCompliant(false)]
         public static explicit operator BluetoothAddress(ulong address)
         {
             return new BluetoothAddress(address);

@@ -1419,18 +1419,24 @@ namespace GeoFramework.Gps
             // Set the new status
             _FixStatus = value;
 
+            DeviceEventArgs e = new DeviceEventArgs(_Device);
+
             // Is a fix acquired or lost?
             if (_FixStatus == FixStatus.Fix)
             {
                 // Acquired.
                 if (FixAcquired != null)
-                    FixAcquired(this, EventArgs.Empty);
+                    FixAcquired(this, e);
+
+                Devices.RaiseFixAcquired(e);
             }
             else
             {
                 // Lost.
                 if (FixLost != null)
-                    FixLost(this, EventArgs.Empty);
+                    FixLost(this, e);
+
+                Devices.RaiseFixLost(e);
             }
         }
 

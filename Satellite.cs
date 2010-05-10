@@ -893,6 +893,13 @@ namespace GeoFramework.Gps
         public string ToString(string format, IFormatProvider formatProvider)
         {
             CultureInfo culture = (CultureInfo)formatProvider;
+
+            if (culture == null)
+                culture = CultureInfo.CurrentCulture;
+
+            if (format == null || format.Length == 0)
+                format = "G";
+
             return Name + " (" + _PseudorandomNumber.ToString(format, formatProvider) + "): "
                         + _Azimuth.ToString(format, formatProvider) + culture.TextInfo.ListSeparator + " "
                         + _Elevation.ToString(format, formatProvider) + culture.TextInfo.ListSeparator + " "

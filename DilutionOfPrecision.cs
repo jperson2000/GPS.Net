@@ -270,6 +270,14 @@ namespace GeoFramework.Gps
 
         public string ToString(string format, IFormatProvider formatProvider)
         {
+            CultureInfo culture = (CultureInfo)formatProvider;
+
+            if (culture == null)
+                culture = CultureInfo.CurrentCulture;
+
+            if (format == null || format.Length == 0)
+                format = "G";
+
             // If the format is "G", use the default format
             if(format.Equals("G", StringComparison.OrdinalIgnoreCase))
                 format = "0.0 (R)";

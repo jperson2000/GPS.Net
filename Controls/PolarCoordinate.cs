@@ -256,6 +256,12 @@ namespace GeoFramework
         {
             CultureInfo culture = (CultureInfo)formatProvider;
 
+            if (culture == null)
+                culture = CultureInfo.CurrentCulture;
+
+            if (format == null || format.Length == 0)
+                format = "G";
+
             return R.ToString(format, culture)
                 + culture.TextInfo.ListSeparator + " "
                 + Theta.ToString(format, culture);

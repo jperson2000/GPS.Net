@@ -331,6 +331,12 @@ namespace GeoFramework.Gps.IO
             {
                 CultureInfo culture = (CultureInfo)formatProvider;
 
+                if (culture == null)
+                    culture = CultureInfo.CurrentCulture;
+
+                if (format == null || format.Length == 0)
+                    format = "G";
+
                 // Start with the address
                 string result = _Address.ToString(format, formatProvider);
 

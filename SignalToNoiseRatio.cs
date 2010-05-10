@@ -229,8 +229,12 @@ namespace GeoFramework.Gps
         /// </summary>
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            // Use the default format if none was given
-            if (string.IsNullOrEmpty(format))
+            CultureInfo culture = (CultureInfo)formatProvider;
+
+            if (culture == null)
+                culture = CultureInfo.CurrentCulture;
+
+            if (format == null || format.Length == 0)
                 format = "G";
 
             // IF the format is "G", use the default

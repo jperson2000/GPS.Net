@@ -83,6 +83,7 @@ namespace GeoFramework.Gps.Emulators
         /// <summary>
         /// Moves to the next point in the route, and calls the base <see cref="NmeaEmulator"/> 
         /// implementation to generate the appropriate NMEA sentences.
+        /// </summary>
         protected override void OnEmulation()
         {
             // Determine the distance to the next point on the route

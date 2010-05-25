@@ -10,11 +10,11 @@ namespace GeoFramework.Gps.Emulators
 {
     public class NmeaEmulator : Emulator
     {
-        private DateTime _GpggaLastSent = DateTime.Now;
-        private DateTime _GpgsaLastSent = DateTime.Now;
-        private DateTime _GpgllLastSent = DateTime.Now;
-        private DateTime _GpgsvLastSent = DateTime.Now;
-        private DateTime _GprmcLastSent = DateTime.Now;
+        private DateTime _GpggaLastSent = DateTime.UtcNow;
+        private DateTime _GpgsaLastSent = DateTime.UtcNow;
+        private DateTime _GpgllLastSent = DateTime.UtcNow;
+        private DateTime _GpgsvLastSent = DateTime.UtcNow;
+        private DateTime _GprmcLastSent = DateTime.UtcNow;
 		private TimeSpan _GpggaInterval = TimeSpan.FromSeconds(1);
         private TimeSpan _GpgsaInterval = TimeSpan.FromSeconds(1);
         private TimeSpan _GpgllInterval = TimeSpan.FromSeconds(1);

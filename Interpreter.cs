@@ -1497,13 +1497,24 @@ namespace GeoFramework.Gps
                 }
                 else
                 {
-                    _Position = _Filter.Filter(
-                       value,
-                       this.FixPrecisionEstimate,
-                       this._HorizontalDOP,
-                       this._VerticalDOP,
-                       this._Bearing,
-                       this._Speed);
+                    // Do we have enough information to apply a filter?
+                    double fail = this.FixPrecisionEstimate.Value * this._HorizontalDOP.Value * this._VerticalDOP.Value;
+                    if (fail == 0 || double.IsNaN(fail) || double.IsInfinity(fail))
+                    {
+                        // Nope. So just use the raw value
+                        _Position = value;
+                    }
+                    else
+                    {
+                        // Yep. So apply the filter
+                        _Position = _Filter.Filter(
+                            value,
+                            this.FixPrecisionEstimate,
+                            this._HorizontalDOP,
+                            this._VerticalDOP,
+                            this._Bearing,
+                            this._Speed);
+                    }
                 }
             }
             else

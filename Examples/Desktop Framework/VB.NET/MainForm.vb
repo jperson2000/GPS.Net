@@ -372,42 +372,45 @@ Public Class MainForm
         Devices.IsOnlyFirstDeviceDetected = firstDeviceCheckBox.Checked
     End Sub
 
+    Private Sub clockSynchronizationCheckBox_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles clockSynchronizationCheckBox.CheckedChanged
+        Devices.IsClockSynchronizationEnabled = clockSynchronizationCheckBox.Checked
+    End Sub
+
 #End Region
 
 #Region "  Unhandled Exception Events  "
 
-    Private Sub CurrentDomain_UnhandledException(ByVal sender As Object, ByVal e As UnhandledExceptionEventArgs)
-        Dim ex As Exception = DirectCast(e.ExceptionObject, Exception)
-        NotifyOfUnhandledException(ex)
-    End Sub
+	Private Sub CurrentDomain_UnhandledException(ByVal sender As Object, ByVal e As UnhandledExceptionEventArgs)
+		Dim ex As Exception = DirectCast(e.ExceptionObject, Exception)
+		NotifyOfUnhandledException(ex)
+	End Sub
 
-    Private Sub Application_ThreadException(ByVal sender As Object, ByVal e As ThreadExceptionEventArgs)
-        NotifyOfUnhandledException(e.Exception)
-    End Sub
+	Private Sub Application_ThreadException(ByVal sender As Object, ByVal e As ThreadExceptionEventArgs)
+		NotifyOfUnhandledException(e.Exception)
+	End Sub
 
-    ''' <summary>
-    ''' Logs an unhandled exception and displays a message box alerting the user to the error.
-    ''' </summary>
-    ''' <param name="exception">The unhandled exception.</param>
-    Private Sub NotifyOfUnhandledException(ByVal exception As Exception)
-        Try
-            ' Log the exception (and all of its inner exceptions)
-            Dim innerException As Exception = exception
-            While (Not (innerException) Is Nothing)
-                Trace.TraceError(innerException.ToString)
-                innerException = innerException.InnerException
-            End While
+	''' <summary>
+	''' Logs an unhandled exception and displays a message box alerting the user to the error.
+	''' </summary>
+	''' <param name="exception">The unhandled exception.</param>
+	Private Sub NotifyOfUnhandledException(ByVal exception As Exception)
+		Try
+			' Log the exception (and all of its inner exceptions)
+			Dim innerException As Exception = exception
+			While (Not (innerException) Is Nothing)
+				Trace.TraceError(innerException.ToString)
+				innerException = innerException.InnerException
+			End While
 
-            ' Stop the interpreter
-            nmeaInterpreter1.Stop()
-        Finally
-            ' Display the error to the user
-            MessageBox.Show( _
-                "An unexpected error has occurred." & vbLf & vbLf & exception.GetType.ToString & ": " & exception.Message, _
-                Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
+			' Stop the interpreter
+			nmeaInterpreter1.Stop()
+		Finally
+			' Display the error to the user
+			MessageBox.Show( _
+				"An unexpected error has occurred." & vbLf & vbLf & exception.GetType.ToString & ": " & exception.Message, _
+				Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error)
+		End Try
+	End Sub
 
 #End Region
-
 End Class

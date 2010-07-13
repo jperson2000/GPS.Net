@@ -1283,19 +1283,25 @@ namespace GeoFramework.Gps
             _dateTime = _utcDateTime.ToLocalTime();
 
             // Are we updating the system clock?
+            bool systemClockUpdated = false;
             if (IsFixed && Devices.IsClockSynchronizationEnabled)
             {
-                // Yes.  Do it now.  Also respect local time zone and DST settings by using SetLocalTime.
-                GeoFramework.Gps.IO.NativeMethods.SYSTEMTIME time =
-                    GeoFramework.Gps.IO.NativeMethods.SYSTEMTIME.FromDateTime(_dateTime);
-                GeoFramework.Gps.IO.NativeMethods.SetLocalTime(ref time);
+                // Yes. Only update the system clock if it's at least 1 second off;
+                // otherwise, we'll end up updating the clock several times each second
+                if (DateTime.UtcNow.Subtract(_utcDateTime).TotalSeconds > 1)
+                {
+                    // Note: Setting the system clock to UTC will still respect local time zone and DST settings
+                    NativeMethods.SYSTEMTIME time = NativeMethods.SYSTEMTIME.FromDateTime(_utcDateTime);
+                    NativeMethods.SetSystemTime(ref time);
+                    systemClockUpdated = true;
+                }
             }
 
             // Raise the events
             if (UtcDateTimeChanged != null)
-                UtcDateTimeChanged(this, new DateTimeEventArgs(UtcDateTime));
+                UtcDateTimeChanged(this, new DateTimeEventArgs(UtcDateTime, systemClockUpdated));
             if (DateTimeChanged != null)
-                DateTimeChanged(this, new DateTimeEventArgs(DateTime));
+                DateTimeChanged(this, new DateTimeEventArgs(DateTime, systemClockUpdated));
         }
 
         /// <summary>

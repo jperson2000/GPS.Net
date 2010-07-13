@@ -51,8 +51,8 @@
             this.detectButton = new System.Windows.Forms.Button();
             this.cancelDetectButton = new System.Windows.Forms.Button();
             this.devicesListView = new System.Windows.Forms.ListView();
-            this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
-            this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.deviceContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.redetectMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -73,21 +73,23 @@
             this.rawDataTab = new System.Windows.Forms.TabPage();
             this.satellitesTab = new System.Windows.Forms.TabPage();
             this.satellitesListView = new System.Windows.Forms.ListView();
-            this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
-            this.columnHeader4 = new System.Windows.Forms.ColumnHeader();
-            this.columnHeader5 = new System.Windows.Forms.ColumnHeader();
-            this.columnHeader6 = new System.Windows.Forms.ColumnHeader();
-            this.columnHeader7 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.serialCheckBox = new System.Windows.Forms.CheckBox();
             this.bluetoothCheckBox = new System.Windows.Forms.CheckBox();
             this.nmeaInterpreter1 = new GeoFramework.Gps.Nmea.NmeaInterpreter();
             this.exhaustiveCheckBox = new System.Windows.Forms.CheckBox();
             this.undetectButton = new System.Windows.Forms.Button();
             this.firstDeviceCheckBox = new System.Windows.Forms.CheckBox();
+            this.clockSynchronizationCheckBox = new System.Windows.Forms.CheckBox();
             this.deviceContextMenu.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.devicesTab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -149,7 +151,7 @@
             this.sentenceListBox.FormattingEnabled = true;
             this.sentenceListBox.Location = new System.Drawing.Point(0, 0);
             this.sentenceListBox.Name = "sentenceListBox";
-            this.sentenceListBox.Size = new System.Drawing.Size(518, 433);
+            this.sentenceListBox.Size = new System.Drawing.Size(548, 448);
             this.sentenceListBox.TabIndex = 4;
             // 
             // altitudeTextBox
@@ -454,7 +456,7 @@
             this.dataTab.Location = new System.Drawing.Point(4, 22);
             this.dataTab.Name = "dataTab";
             this.dataTab.Padding = new System.Windows.Forms.Padding(3);
-            this.dataTab.Size = new System.Drawing.Size(518, 441);
+            this.dataTab.Size = new System.Drawing.Size(548, 448);
             this.dataTab.TabIndex = 1;
             this.dataTab.Text = "Real-Time Data";
             this.dataTab.UseVisualStyleBackColor = true;
@@ -482,7 +484,7 @@
             this.rawDataTab.Controls.Add(this.sentenceListBox);
             this.rawDataTab.Location = new System.Drawing.Point(4, 22);
             this.rawDataTab.Name = "rawDataTab";
-            this.rawDataTab.Size = new System.Drawing.Size(518, 441);
+            this.rawDataTab.Size = new System.Drawing.Size(548, 448);
             this.rawDataTab.TabIndex = 2;
             this.rawDataTab.Text = "Raw Data";
             this.rawDataTab.UseVisualStyleBackColor = true;
@@ -492,7 +494,7 @@
             this.satellitesTab.Controls.Add(this.satellitesListView);
             this.satellitesTab.Location = new System.Drawing.Point(4, 22);
             this.satellitesTab.Name = "satellitesTab";
-            this.satellitesTab.Size = new System.Drawing.Size(518, 441);
+            this.satellitesTab.Size = new System.Drawing.Size(548, 448);
             this.satellitesTab.TabIndex = 3;
             this.satellitesTab.Text = "Satelllites";
             this.satellitesTab.UseVisualStyleBackColor = true;
@@ -541,7 +543,7 @@
             this.serialCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.serialCheckBox.Checked = true;
             this.serialCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.serialCheckBox.Location = new System.Drawing.Point(574, 393);
+            this.serialCheckBox.Location = new System.Drawing.Point(574, 336);
             this.serialCheckBox.Name = "serialCheckBox";
             this.serialCheckBox.Size = new System.Drawing.Size(151, 17);
             this.serialCheckBox.TabIndex = 7;
@@ -554,7 +556,7 @@
             this.bluetoothCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.bluetoothCheckBox.Checked = true;
             this.bluetoothCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.bluetoothCheckBox.Location = new System.Drawing.Point(574, 439);
+            this.bluetoothCheckBox.Location = new System.Drawing.Point(574, 382);
             this.bluetoothCheckBox.Name = "bluetoothCheckBox";
             this.bluetoothCheckBox.Size = new System.Drawing.Size(151, 17);
             this.bluetoothCheckBox.TabIndex = 9;
@@ -565,24 +567,24 @@
             // nmeaInterpreter1
             // 
             this.nmeaInterpreter1.IsFilterEnabled = false;
-            this.nmeaInterpreter1.Started += new System.EventHandler(this.nmeaInterpreter1_Started);
-            this.nmeaInterpreter1.SpeedChanged += new System.EventHandler<GeoFramework.SpeedEventArgs>(this.nmeaInterpreter1_SpeedChanged);
             this.nmeaInterpreter1.SentenceReceived += new System.EventHandler<GeoFramework.Gps.Nmea.NmeaSentenceEventArgs>(this.nmeaInterpreter1_SentenceReceived);
+            this.nmeaInterpreter1.AltitudeChanged += new System.EventHandler<GeoFramework.DistanceEventArgs>(this.nmeaInterpreter1_AltitudeChanged);
             this.nmeaInterpreter1.BearingChanged += new System.EventHandler<GeoFramework.AzimuthEventArgs>(this.nmeaInterpreter1_BearingChanged);
             this.nmeaInterpreter1.DateTimeChanged += new System.EventHandler<GeoFramework.DateTimeEventArgs>(this.nmeaInterpreter1_DateTimeChanged);
-            this.nmeaInterpreter1.SatellitesChanged += new System.EventHandler<GeoFramework.Gps.SatelliteListEventArgs>(this.nmeaInterpreter1_SatellitesChanged);
-            this.nmeaInterpreter1.Stopped += new System.EventHandler(this.nmeaInterpreter1_Stopped);
-            this.nmeaInterpreter1.AltitudeChanged += new System.EventHandler<GeoFramework.DistanceEventArgs>(this.nmeaInterpreter1_AltitudeChanged);
-            this.nmeaInterpreter1.Resumed += new System.EventHandler(this.nmeaInterpreter1_Resumed);
-            this.nmeaInterpreter1.Stopping += new System.EventHandler(this.nmeaInterpreter1_Stopping);
-            this.nmeaInterpreter1.Starting += new System.EventHandler<GeoFramework.Gps.IO.DeviceEventArgs>(this.nmeaInterpreter1_Starting);
-            this.nmeaInterpreter1.Paused += new System.EventHandler(this.nmeaInterpreter1_Paused);
             this.nmeaInterpreter1.PositionChanged += new System.EventHandler<GeoFramework.PositionEventArgs>(this.nmeaInterpreter1_PositionChanged);
+            this.nmeaInterpreter1.SpeedChanged += new System.EventHandler<GeoFramework.SpeedEventArgs>(this.nmeaInterpreter1_SpeedChanged);
+            this.nmeaInterpreter1.SatellitesChanged += new System.EventHandler<GeoFramework.Gps.SatelliteListEventArgs>(this.nmeaInterpreter1_SatellitesChanged);
+            this.nmeaInterpreter1.Starting += new System.EventHandler<GeoFramework.Gps.IO.DeviceEventArgs>(this.nmeaInterpreter1_Starting);
+            this.nmeaInterpreter1.Started += new System.EventHandler(this.nmeaInterpreter1_Started);
+            this.nmeaInterpreter1.Stopping += new System.EventHandler(this.nmeaInterpreter1_Stopping);
+            this.nmeaInterpreter1.Stopped += new System.EventHandler(this.nmeaInterpreter1_Stopped);
+            this.nmeaInterpreter1.Paused += new System.EventHandler(this.nmeaInterpreter1_Paused);
+            this.nmeaInterpreter1.Resumed += new System.EventHandler(this.nmeaInterpreter1_Resumed);
             // 
             // exhaustiveCheckBox
             // 
             this.exhaustiveCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.exhaustiveCheckBox.Location = new System.Drawing.Point(574, 416);
+            this.exhaustiveCheckBox.Location = new System.Drawing.Point(574, 359);
             this.exhaustiveCheckBox.Name = "exhaustiveCheckBox";
             this.exhaustiveCheckBox.Size = new System.Drawing.Size(151, 17);
             this.exhaustiveCheckBox.TabIndex = 8;
@@ -605,7 +607,7 @@
             // firstDeviceCheckBox
             // 
             this.firstDeviceCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.firstDeviceCheckBox.Location = new System.Drawing.Point(574, 462);
+            this.firstDeviceCheckBox.Location = new System.Drawing.Point(574, 405);
             this.firstDeviceCheckBox.Name = "firstDeviceCheckBox";
             this.firstDeviceCheckBox.Size = new System.Drawing.Size(151, 17);
             this.firstDeviceCheckBox.TabIndex = 10;
@@ -613,19 +615,31 @@
             this.firstDeviceCheckBox.UseVisualStyleBackColor = true;
             this.firstDeviceCheckBox.CheckedChanged += new System.EventHandler(this.firstDeviceCheckBox_CheckedChanged);
             // 
+            // clockSynchronizationCheckBox
+            // 
+            this.clockSynchronizationCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.clockSynchronizationCheckBox.Location = new System.Drawing.Point(574, 462);
+            this.clockSynchronizationCheckBox.Name = "clockSynchronizationCheckBox";
+            this.clockSynchronizationCheckBox.Size = new System.Drawing.Size(151, 17);
+            this.clockSynchronizationCheckBox.TabIndex = 11;
+            this.clockSynchronizationCheckBox.Text = "Sync system clock";
+            this.clockSynchronizationCheckBox.UseVisualStyleBackColor = true;
+            this.clockSynchronizationCheckBox.CheckedChanged += new System.EventHandler(this.clockSynchronizationCheckBox_CheckedChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(709, 522);
-            this.Controls.Add(this.firstDeviceCheckBox);
+            this.Controls.Add(this.clockSynchronizationCheckBox);
             this.Controls.Add(this.undetectButton);
+            this.Controls.Add(this.firstDeviceCheckBox);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.serialCheckBox);
-            this.Controls.Add(this.exhaustiveCheckBox);
             this.Controls.Add(this.statusStrip1);
-            this.Controls.Add(this.bluetoothCheckBox);
+            this.Controls.Add(this.exhaustiveCheckBox);
             this.Controls.Add(this.cancelDetectButton);
+            this.Controls.Add(this.bluetoothCheckBox);
             this.Controls.Add(this.detectButton);
             this.Controls.Add(this.startButton);
             this.Controls.Add(this.resumeButton);
@@ -641,6 +655,7 @@
             this.devicesTab.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.dataTab.ResumeLayout(false);
             this.dataTab.PerformLayout();
@@ -704,5 +719,6 @@
         private System.Windows.Forms.ToolStripStatusLabel positionLabel;
         private System.Windows.Forms.ToolStripStatusLabel bearingLabel;
         private System.Windows.Forms.ToolStripStatusLabel altitudeLabel;
+        private System.Windows.Forms.CheckBox clockSynchronizationCheckBox;
     }
 }

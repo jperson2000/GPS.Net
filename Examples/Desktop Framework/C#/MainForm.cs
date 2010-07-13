@@ -395,6 +395,11 @@ namespace Diagnostics
             Devices.IsOnlyFirstDeviceDetected = firstDeviceCheckBox.Checked;
         }
 
+        private void clockSynchronizationCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Devices.IsClockSynchronizationEnabled = clockSynchronizationCheckBox.Checked;
+        }
+
         #endregion
 
         #region Unhandled Exception Events

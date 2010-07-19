@@ -1288,7 +1288,7 @@ namespace GeoFramework.Gps
             {
                 // Yes. Only update the system clock if it's at least 1 second off;
                 // otherwise, we'll end up updating the clock several times each second
-                if (DateTime.UtcNow.Subtract(_utcDateTime).TotalSeconds > 1)
+                if (DateTime.UtcNow.Subtract(_utcDateTime).Duration().TotalSeconds > 1)
                 {
                     // Note: Setting the system clock to UTC will still respect local time zone and DST settings
                     NativeMethods.SYSTEMTIME time = NativeMethods.SYSTEMTIME.FromDateTime(_utcDateTime);

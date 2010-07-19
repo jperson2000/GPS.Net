@@ -1952,14 +1952,25 @@ namespace GeoFramework.Gps
                     OnConnectionLost(ex);
 
                     // Stop and reconnect
-                    OnStopping();
+                    Reset();
 
-                    // Dispose of this connection
-                    if (_Device != null)
-                        _Device.Reset();
+                    // Are we automatically reconnecting?
+                    if (QueryReconnectAllowed())
+                        continue;
+                    else
+                        return;
+                }
+                catch (UnauthorizedAccessException ex)
+                {
+                    /* This exception usually indicates that the stream is no longer valid.
+                     * Try to close the stream, and start again.
+                     */
 
-                    // Signal the stop
-                    OnStopped();
+                    // Explain the error
+                    OnConnectionLost(ex);
+
+                    // Stop and reconnect
+                    Reset();
 
                     // Are we automatically reconnecting?
                     if (QueryReconnectAllowed())
@@ -1984,6 +1995,22 @@ namespace GeoFramework.Gps
                 _IsParsingThreadAlive = false;
             }
 #endif
+        }
+
+        /// <summary>
+        /// Forces the current device to a closed state without disposing the underlying stream.
+        /// </summary>
+        private void Reset()
+        {
+            // Signal that we're stopping
+            OnStopping();
+
+            // Dispose of this connection
+            if (_Device != null)
+                _Device.Reset();
+
+            // Signal the stop
+            OnStopped();
         }
 
         /// <summary>

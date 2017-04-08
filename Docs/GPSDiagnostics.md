@@ -1,6 +1,6 @@
 ## GPS Diagnostics for .NET
 
-[GPS Diagnostics Screen Shots](ScreenShots.md#GPS-Diagnostics)
+[GPS Diagnostics Screen Shots](ScreenShots.md#gps-diagnostics)
 
 GPS.NET 3.0 includes source code for a project which is used to detect and resolve common GPS connectivity issues.  After running GeoFrameworks for four years, I found that customers ran into a small list of connectivity issues:
 
